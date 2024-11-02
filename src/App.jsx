@@ -1,15 +1,13 @@
-import './App.css'
-import { Button } from "./components/ui/button"
+import '@/App.css'
+import Index from '@/router/Index'
 
-function App() {
+export default function App() {
 
-  return (
-    <>
-      <div>
-        <Button>Click me</Button>
-      </div>
-    </>
-  )
+    return (
+        <>
+            <div>
+                <Index />
+            </div>
+        </>
+    )
 }
-
-export default App
