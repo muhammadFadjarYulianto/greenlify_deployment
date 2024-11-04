@@ -23,7 +23,7 @@ To set up this project in your local environment, follow these steps:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/username/trashure.git
+   git clone https://github.com/damar-glh/trashure.git
    cd trashure
    ```
 
