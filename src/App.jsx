@@ -6,7 +6,6 @@ export default function App() {
 		<>
 			<div>
 				<Index />
-				awdaw[dawda]
 			</div>
 		</>
 	);
