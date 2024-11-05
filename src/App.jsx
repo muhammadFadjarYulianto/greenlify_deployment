@@ -1,4 +1,4 @@
-import "@/App.css";
+import "@/styles/App.css";
 import Index from "@/router/Index";
 
 export default function App() {

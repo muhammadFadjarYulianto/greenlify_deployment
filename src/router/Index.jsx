@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import Home from "@/view/Home";
-import About from "@/view/About";
-import Contact from "@/view/Contact";
-import Errors from "@/view/Errors";
+import Home from "@/pages/Home";
+import About from "@/pages/About";
+import Contact from "@/pages/Contact";
+import Errors from "@/pages/Errors";
 
 export default function Index() {
 	return (
