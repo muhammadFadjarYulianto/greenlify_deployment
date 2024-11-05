@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import Home from "@/view/Home";
 import About from "@/view/About";
 import Contact from "@/view/Contact";
+import Errors from "@/view/Errors";
 
 export default function Index() {
 	return (
@@ -11,7 +12,7 @@ export default function Index() {
 			<Route path="/home" element={<Navigate to="/" />} />
 			<Route path="/about" element={<About />} />
 			<Route path="/contact" element={<Contact />} />
-			<Route path={"*"} element={<h1>Not Found</h1>} />
+			<Route path={"*"} element={<Errors />} />
 		</Routes>
 	);
 }
