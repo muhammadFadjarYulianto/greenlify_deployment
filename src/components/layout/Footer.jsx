@@ -1,102 +1,120 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import Logo from "@/assets/images/logo.svg";
+import LogoWhite from "../../assets/images/logo-white.svg";
+import { Typography } from "@/components/ui/Typography";
 
-export default function Footer() {
+const navigationLinks = [
+	{ id: 1, name: "Beranda", path: "/" },
+	{ id: 2, name: "Statistik", path: "/statistik" },
+	{ id: 3, name: "Prediksi", path: "/prediksi" },
+	{ id: 4, name: "Produk", path: "/produk" },
+];
+
+const communityLinks = [{ id: 1, name: "Tentang Kami", path: "/tentang-kami" }];
+
+const socialLinks = [
+	{ id: 1, name: "Discord", url: "https://discord.com/" },
+	{ id: 2, name: "Instagram", url: "https://www.instagram.com/" },
+	{ id: 3, name: "Twitter", url: "https://x.com/" },
+	{ id: 4, name: "Facebook", url: "https://www.facebook.com/" },
+];
+
+const Footer = () => {
 	return (
-		<footer className="w-full h-[480px] bg-emerald-600 flex flex-col items-center justify-between py-10 mt-[66px] relative">
-			<div className="w-11/12 max-w-[1200px] flex flex-col lg:flex-row justify-between gap-10">
-				<div className="flex flex-col items-start gap-4">
-					<div className="flex items-center gap-4">
-						<img src={Logo} alt="Logo" className="w-full h-full object-cover" />
-						<span className="text-[#fdfaf1] text-lg font-medium">
-							Transformasikan sampah menjadi manfaat
-						</span>
+		<footer className="w-full bg-emerald-600 flex flex-col items-center justify-between p-6 sm:p-8 md:p-12 lg:px-[71px] mt-16">
+			<div className="w-full flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-10">
+				<div className="flex flex-col items-start gap-4 w-full lg:w-1/4">
+					<img
+						src={LogoWhite}
+						alt="GreenLify"
+						className="h-16 lg:h-24 object-cover"
+					/>
+					<Typography variant="blockquote" className="text-background">
+						Transformasikan sampah menjadi manfaat
+					</Typography>
+				</div>
+				<div className="flex flex-col md:flex-row w-full lg:w-1/2 justify-between gap-8 md:gap-[80px] lg:gap-[160px]">
+					<div className="flex flex-col gap-4 lg:gap-5 w-full md:w-1/3">
+						<Typography variant="h4" className="text-background">
+							Navigation
+						</Typography>
+						{navigationLinks.map((link) => (
+							<Link key={link.id} to={link.path}>
+								<Typography
+									variant="p"
+									className="text-background text-sm lg:text-base hover:text-sky-50 transition-colors"
+								>
+									{link.name}
+								</Typography>
+							</Link>
+						))}
 					</div>
-					<div className="flex gap-4"></div>
-				</div>
-
-				<div className="flex flex-col gap-5">
-					<h4 className="text-[#fdfaf1] text-xl font-bold">Navigation</h4>
-					<Link to="/" className="text-[#fdfaf1] text-base font-medium">
-						Beranda
-					</Link>
-					<Link
-						to="/statistik"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Statistik
-					</Link>
-					<Link to="/prediksi" className="text-[#fdfaf1] text-base font-medium">
-						Prediksi
-					</Link>
-					<Link to="/produk" className="text-[#fdfaf1] text-base font-medium">
-						Produk
-					</Link>
-				</div>
-
-				{/* Community */}
-				<div className="flex flex-col gap-5">
-					<h4 className="text-[#fdfaf1] text-xl font-bold">Community</h4>
-					<Link
-						to="/tentang-kami"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Tentang Kami
-					</Link>
-				</div>
-
-				{/* Social Links */}
-				<div className="flex flex-col gap-5">
-					<h4 className="text-[#fdfaf1] text-xl font-bold">Socials</h4>
-					<a
-						href="https://discord.com/"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Discord
-					</a>
-					<a
-						href="https://www.instagram.com/"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Instagram
-					</a>
-					<a
-						href="https://x.com/"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Twitter
-					</a>
-					<a
-						href="https://www.facebook.com/"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Facebook
-					</a>
+					<div className="flex flex-col gap-4 lg:gap-5 w-full md:w-1/3">
+						<h4 className="text-[#fdfaf1] text-lg lg:text-xl font-bold">
+							Community
+						</h4>
+						{communityLinks.map((link) => (
+							<Link key={link.id} to={link.path}>
+								<Typography
+									variant="p"
+									className="text-background text-sm lg:text-base hover:text-sky-50 transition-colors"
+								>
+									{link.name}
+								</Typography>
+							</Link>
+						))}
+					</div>
+					<div className="flex flex-col gap-4 lg:gap-5 w-full md:w-1/3">
+						<h4 className="text-[#fdfaf1] text-lg lg:text-xl font-bold">
+							Socials
+						</h4>
+						{socialLinks.map((link) => (
+							<a
+								key={link.id}
+								href={link.url}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Typography
+									variant="p"
+									className="text-background text-sm lg:text-base hover:text-sky-50 transition-colors"
+								>
+									{link.name}
+								</Typography>
+							</a>
+						))}
+					</div>
 				</div>
 			</div>
-
-			<div className="w-11/12 border-t-2 border-[#fdfaf1]" />
-
-			{/* Bottom Section */}
-			<div className="w-11/12 max-w-[1200px] flex flex-col lg:flex-row items-center justify-between gap-4">
-				<div className="text-[#fdfaf1] text-base font-medium">
+			<div className="w-full border-t-2 border-white my-6 lg:my-8" />
+			<div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
+				<Typography
+					variant="p-semibold"
+					className="text-background text-sm lg:text-base font-medium text-center md:text-left"
+				>
 					©2024 ErsTalent. All rights reserved
-				</div>
+				</Typography>
 				<div className="flex gap-4">
-					<Link
-						to="/privacy-policy"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Privacy & Policy
+					<Link to="/privacy-policy">
+						<Typography
+							variant="p-semibold"
+							className="text-background text-sm lg:text-base hover:text-slate-50 transition-colors"
+						>
+							Privacy & Policy
+						</Typography>
 					</Link>
-					<Link
-						to="/terms-condition"
-						className="text-[#fdfaf1] text-base font-medium"
-					>
-						Terms & Condition
+					<Link to="/terms-condition">
+						<Typography
+							variant="p-semibold"
+							className="text-background text-sm lg:text-base hover:text-slate-50 transition-colors"
+						>
+							Terms & Condition
+						</Typography>
 					</Link>
 				</div>
 			</div>
 		</footer>
 	);
-}
+};
+
+export default Footer;

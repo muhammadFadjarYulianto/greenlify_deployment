@@ -184,14 +184,17 @@ const Home = () => {
 				</div>
 			</div>
 			<div
-				className="w-full h-[298px] mt-[66px] mbb-[66px] relative bg-cover bg-center"
+				className="w-full h-[298px] sm:h-[200px] md:h-[250px] lg:h-[298px] mt-[66px] sm:mt-[40px] md:mt-[50px] mb-[66px] sm:mb-[40px] md:mb-[50px] relative bg-cover bg-center"
 				style={{
 					backgroundImage: "url('https://via.placeholder.com/1090x298')",
 				}}
 			>
 				<div className="w-full h-full absolute bg-black opacity-40" />
-				<div className="w-full max-w-5xl absolute text-center px-6 top-[95px] left-1/2 transform -translate-x-1/2">
-					<Typography variant="h3" className="text-white">
+				<div className="w-full max-w-5xl absolute text-center px-4 sm:px-6 md:px-8 lg:px-6 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2">
+					<Typography
+						variant="h3"
+						className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl"
+					>
 						Setiap sampah yang kita hasilkan adalah keputusan yang diambil dalam
 						ketidaktahuan kita terhadap dampaknya. Mari beralih menjadi lebih
 						bijaksana, agar bumi tetap bisa menyambut kita dengan keindahan yang
