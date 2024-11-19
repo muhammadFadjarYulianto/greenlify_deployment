@@ -13,7 +13,7 @@
     "format:check": "biome format --check ./src",
     "fix": "npm run lint && npm run format",
     "prepare": "husky && chmod +x ./node_modules/.bin/biome",
-    "lucid": "npm install lucide",
+    "lucid": "npm install lucide-react",
     "setup": "npm install && npm run prepare && npm run lucid"
   },
   "dependencies": {
