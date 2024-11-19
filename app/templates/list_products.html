@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Produk</title>
+</head>
+<body>
+    <h1>Daftar Produk</h1>
+    
+    <a href="/products/form">Tambah Produk</a>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Admin ID</th>
+                <th>Kategori ID</th>
+                <th>Nama Produk</th>
+                <th>Judul</th>
+                <th>Ringkasan</th>
+                <th>Deskripsi</th>
+                <th>Harga</th>
+                <th>Kontak</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.admin_id }}</td>
+                    <td>{{ product.category_id }}</td>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.title }}</td>
+                    <td>{{ product.summary }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.contact }}</td>
+                    <td>
+                        <a href="/products/edit/{{ product.id }}">Edit</a> | 
+                        <a href="/products/delete/{{ product.id }}">Hapus</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Produk</title>
+</head>
+<body>
+    <h1>Form Tambah Produk</h1>
+    <form action="/products/add" method="POST">
+        <label for="admin_id">Admin ID:</label>
+        <select name="admin_id" required>
+            {% for admin in admins %}
+                <option value="{{ admin.id }}">{{ admin.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="category_id">Category ID:</label>
+        <select name="category_id" required>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.category_name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="product_name">Nama Produk:</label>
+        <input type="text" name="product_name" required><br>
+
+        <label for="title">Judul:</label>
+        <input type="text" name="title" required><br>
+
+        <label for="summary">Ringkasan:</label>
+        <input type="text" name="summary" required><br>
+
+        <label for="description">Deskripsi:</label>
+        <textarea name="description" required></textarea><br>
+
+        <label for="price">Harga:</label>
+        <input type="number" name="price" required><br>
+
+        <label for="contact">Kontak:</label>
+        <input type="text" name="contact" required><br>
+
+        <button type="submit">Tambah Produk</button>
+    </form>
+</body>
+</html>

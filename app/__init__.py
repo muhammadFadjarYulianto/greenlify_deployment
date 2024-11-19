@@ -9,4 +9,4 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from app.model import admins, categories, products
-from app import routes
+from app.routes import *
