@@ -1,15 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	font-family: Roboto, sans-serif;
-}
-
 @layer base {
 	:root {
 		--background: #fdfaf1;
-
 		--emerald-50: #d8f3dc;
 		--emerald-100: #b7e4c7;
 		--emerald-200: #95d5b2;
@@ -43,7 +40,7 @@
 
 @layer base {
 	* {
-		@apply font-sans;
+		@apply font-['Roboto'];
 	}
 
 	body {
