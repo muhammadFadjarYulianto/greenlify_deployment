@@ -40,7 +40,6 @@ export default function Products() {
 
 	return (
 		<div>
-			<Header />
 			<div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
 				<div className="relative w-10/12 mx-auto">
 					<img
@@ -255,7 +254,6 @@ export default function Products() {
 					</Pagination>
 				</div>
 			</div>
-			<Footer />
 		</div>
 	);
 }
