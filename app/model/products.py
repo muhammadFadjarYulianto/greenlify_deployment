@@ -5,16 +5,18 @@ from app.model.categories import Categories
 
 class Products(db.Model):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    admin_id = db.Column(db.BigInteger, db.ForeignKey('admins.id'), nullable=False)
+    created_by = db.Column(db.BigInteger, db.ForeignKey('admins.id'), nullable=False)
     category_id = db.Column(db.BigInteger, db.ForeignKey('categories.id'), nullable=False)
-    product_name = db.Column(db.String(250), nullable=False)
-    title = db.Column(db.String(250), nullable=False)
-    summary = db.Column(db.String(500), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    contact = db.Column(db.String(250), nullable=False)
+    product_name = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    price = db.Column(db.Numeric(10, 2), nullable=False)
+    contact = db.Column(db.String(100), nullable=True)
+    img_url = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    admin = db.relationship('Admins', backref=db.backref('products', lazy=True))
+    category = db.relationship('Categories', backref=db.backref('products', lazy=True))
 
     def __repr__(self):
         return '<Products {}>'.format(self.name)
