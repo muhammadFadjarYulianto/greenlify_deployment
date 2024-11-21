@@ -2,9 +2,12 @@ from flask import request
 from app.model.products import Products
 from app.model.admins import Admins
 from app.model.categories import Categories
-from app import response, db
+from app import response, db, uploadconfig, app
+import uuid
+import os
+from werkzeug.utils import secure_filename
 
-def index():
+def indexProduct():
     try:
         products = Products.query.all()
         data = format_array(products)
@@ -25,7 +28,7 @@ def single_object(data):
         'description': data.description,
         'price': str(data.price),
         'contact': data.contact,
-        'img_url': data.img_url,
+        'img_file': data.img_file,
         'created_at': data.created_at,
         'updated_at': data.updated_at
     }
@@ -42,7 +45,7 @@ def detail_product(id):
         print(e)
         return response.badRequest([], "Gagal mengambil detail produk.")
 
-def save():
+def tambahProduct():
     try:
         created_by = request.form.get('created_by')
         category_id = request.form.get('category_id')
@@ -50,7 +53,21 @@ def save():
         description = request.form.get('description')
         price = request.form.get('price')
         contact = request.form.get('contact')
-        img_url = request.form.get('img_url')
+
+        if 'img_file' not in request.files:
+            return response.badRequest([], 'File tidak tersedia')
+        
+        file = request.files['img_file']
+
+        if file.filename == '':
+            return response.badRequest([], 'File tidak tersedia')
+        
+        if file and uploadconfig.allowed_file(file.filename):
+            uid = uuid.uuid4()
+            filename = secure_filename(file.filename)
+            renamefile = "GreenLify-Product-"+str(uid)+filename
+
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -77,7 +94,7 @@ def save():
             description=description,
             price=price,
             contact=contact,
-            img_url=img_url
+            img_file=renamefile
         )
 
         db.session.add(product)
@@ -90,7 +107,7 @@ def save():
         print(e)
         return response.badRequest([], f"Gagal menambahkan produk: {str(e)}")
 
-def ubah(id):
+def ubahProduct(id):
     try:
         product = Products.query.filter_by(id=id).first()
         if not product:
@@ -102,7 +119,15 @@ def ubah(id):
         description = request.form.get('description')
         price = request.form.get('price')
         contact = request.form.get('contact')
-        img_url = request.form.get('img_url')
+        
+        img_file = None
+        if 'img_file' in request.files:
+            file = request.files['img_file']
+            if file.filename != '' and uploadconfig.allowed_file(file.filename):
+                uid = uuid.uuid4()
+                filename = secure_filename(file.filename)
+                img_file = "GreenLify-Product-" + str(uid) + filename
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -113,7 +138,9 @@ def ubah(id):
         product.description = description
         product.price = price
         product.contact = contact
-        product.img_url = img_url
+        
+        if img_file:
+            product.img_file = img_file
 
         db.session.commit()
 
@@ -124,7 +151,7 @@ def ubah(id):
         print(e)
         return response.badRequest([], "Gagal mengubah data produk.")
 
-def hapus(id):
+def hapusProduk(id):
     try:
         product = Products.query.filter_by(id=id).first()
         if not product:

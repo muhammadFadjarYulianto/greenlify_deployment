@@ -11,7 +11,7 @@ class Products(db.Model):
     description = db.Column(db.Text, nullable=True)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     contact = db.Column(db.String(100), nullable=True)
-    img_url = db.Column(db.Text, nullable=True)
+    img_file = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

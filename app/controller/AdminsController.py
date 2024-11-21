@@ -2,9 +2,11 @@ from app.model.admins import Admins
 from app.model.products import Products
 from app import response, db
 from flask import request
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import *
+from datetime import datetime, timedelta
 
-def index():
+def indexAdmin():
     try:
         admins = Admins.query.all()
         data = format_array(admins)
@@ -64,7 +66,7 @@ def single_product(product):
         'contact': product.contact
     }
 
-def save():
+def tambahAdmin():
     try:
         name = request.form.get('name')
         email = request.form.get('email')
@@ -87,15 +89,14 @@ def save():
         if Admins.query.filter_by(phone_number=phone_number).first():
             return response.badRequest([], "Nomor telepon sudah terdaftar.")
 
-        hashed_password = generate_password_hash(password)
 
         admin = Admins(
             name=name,
             email=email,
-            password=hashed_password,
             phone_number=phone_number,
             gender=gender
         )
+        admin.setPassword(password)
         db.session.add(admin)
         db.session.commit()
 
@@ -105,7 +106,7 @@ def save():
         print(e)
         return response.badRequest([], "Gagal menyimpan data admin.")
 
-def ubah(id):
+def ubahAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
@@ -137,7 +138,7 @@ def ubah(id):
         print(e)
         return response.badRequest([], "Gagal mengubah data admin.")
 
-def hapus(id):
+def hapusAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
@@ -151,3 +152,35 @@ def hapus(id):
         db.session.rollback()
         print(e)
         return response.badRequest([], "Gagal menghapus data admin.")
+    
+def loginAdmin():
+    try:
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        admin = Admins.query.filter_by(email=email).first()
+
+        if not admin:
+            return response.badRequest([],'Email tidak terdaftar')
+        
+        if not admin.checkPassword(password):
+            return response.badRequest([], 'Kombinasi password salah')
+        
+        data = single_object(admin)
+
+        expires = timedelta(days=7)
+        expires_refresh = timedelta(days=7)
+
+        access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
+        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
+
+        return response.success({
+            "data" : data,
+            "acces_token" : access_token,
+            "refresh_token" : refresh_token,
+        }, "Sukses Login!")
+    except Exception as e:
+        print(e)
+        return response.badRequest([], "Gagal login")
+        
+

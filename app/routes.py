@@ -1,55 +1,71 @@
-from app import app
+from app import app, response
 from app.controller import AdminsController, CategoriesController, ProductsController
 from flask import request
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
 @app.route('/')
 def index():
     return 'Hello Flask App'
 
+@app.route('/login', methods=['POST'])
+def loginAdmin():
+    return AdminsController.loginAdmin()
+
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_admin = get_jwt_identity()
+    return response.success([current_admin,'Sukses'])
+
 @app.route('/admin', methods=['GET', 'POST'])
-def dosens():
+@jwt_required()
+def admins():
     if request.method == 'GET':
-        return AdminsController.index()
+        return AdminsController.indexAdmin()
     else:
-        return AdminsController.save()
+        return AdminsController.tambahAdmin()
 
 @app.route('/category', methods=['GET', 'POST'])
+@jwt_required()
 def categories():
     if request.method == 'GET':
-        return CategoriesController.index()
+        return CategoriesController.indexCategory()
     else:
-        return CategoriesController.save()
+        return CategoriesController.tambahCategory()
 
 @app.route('/product', methods=['GET', 'POST'])
+@jwt_required()
 def products():
     if request.method == 'GET':
-        return ProductsController.index()
+        return ProductsController.indexProduct()
     else:
-        return ProductsController.save()
+        return ProductsController.tambahProduct()
 
 @app.route('/product/<id>', methods=["GET", "PUT", "DELETE"])
+@jwt_required()
 def productDetail(id):
     if request.method == 'GET':
         return ProductsController.detail_product(id)
     elif request.method == "PUT":
-        return ProductsController.ubah(id)
+        return ProductsController.ubahProduct(id)
     elif request.method == "DELETE":
-        return ProductsController.hapus(id)
+        return ProductsController.hapusProduk(id)
 
 @app.route('/admin/<id>', methods=["GET", "PUT", "DELETE"])
+@jwt_required()
 def adminDetail(id):
     if request.method == 'GET':
         return AdminsController.detail_admin(id)
     elif request.method == "PUT":
-        return AdminsController.ubah(id)
+        return AdminsController.ubahAdmin(id)
     elif request.method == "DELETE":
-        return AdminsController.hapus(id)
+        return AdminsController.hapusAdmin(id)
 
 @app.route('/category/<id>', methods=["GET", "PUT", "DELETE"])
+@jwt_required()
 def categoryDetail(id):
     if request.method == 'GET':
         return CategoriesController.detail_category(id)
     elif request.method == "PUT":
-        return CategoriesController.ubah(id)
+        return CategoriesController.ubahCategory(id)
     elif request.method == "DELETE":
-        return CategoriesController.hapus(id)
+        return CategoriesController.hapusCategory(id)

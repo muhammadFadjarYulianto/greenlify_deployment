@@ -3,7 +3,7 @@ from app.model.categories import Categories
 from app.model.products import Products
 from app import response, db
 
-def index():
+def indexCategory():
     try:
         categories = Categories.query.all()
         data = format_array(categories)
@@ -56,7 +56,7 @@ def single_product(product):
         'contact': product.contact
     }
 
-def save():
+def tambahCategory():
     try:
         category_name = request.form.get('category_name')
 
@@ -80,7 +80,7 @@ def save():
         print(e)
         return response.badRequest([], "Gagal menambahkan kategori.")
 
-def ubah(id):
+def ubahCategory(id):
     try:
         category_name = request.form.get('category_name')
 
@@ -102,7 +102,7 @@ def ubah(id):
         print(e)
         return response.badRequest([], "Gagal mengubah data kategori.")
 
-def hapus(id):
+def hapusCategory(id):
     try:
         category = Categories.query.filter_by(id=id).first()
         if not category:
