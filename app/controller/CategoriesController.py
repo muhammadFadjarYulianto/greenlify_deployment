@@ -48,12 +48,15 @@ def single_detail_category(category, products):
 def single_product(product):
     return {
         'id': product.id,
+        'created_by': product.admin.name,
+        'category_name': product.category.category_name,
         'product_name': product.product_name,
-        'title': product.title,
-        'summary': product.summary,
         'description': product.description,
         'price': str(product.price),
-        'contact': product.contact
+        'contact': product.contact,
+        'img_file': product.img_file,
+        'created_at': product.created_at,
+        'updated_at': product.updated_at
     }
 
 def tambahCategory():

@@ -1,8 +1,8 @@
-"""membuat tabel
+"""menambah table
 
-Revision ID: fa56f359ebe8
+Revision ID: b4d02e8b227f
 Revises: 
-Create Date: 2024-11-21 21:12:31.502483
+Create Date: 2024-11-22 17:10:55.462777
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fa56f359ebe8'
+revision = 'b4d02e8b227f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,7 +45,7 @@ def upgrade():
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('contact', sa.String(length=100), nullable=True),
-    sa.Column('img_url', sa.Text(), nullable=True),
+    sa.Column('img_file', sa.Text(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
