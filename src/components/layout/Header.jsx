@@ -1,64 +1,98 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/images/logo.svg";
+import { X, Menu } from "lucide-react";
 import {
 	NavigationMenu,
-	NavigationMenuList,
 	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
 export default function Header() {
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const menuItems = [
+		{ label: "Beranda", path: "beranda" },
+		{ label: "Statistik", path: "statistik" },
+		{ label: "Prediksi", path: "prediksi" },
+		{ label: "Produk", path: "produk" },
+		{ label: "Tentang Kami", path: "tentangkami" },
+	];
+
 	return (
-		<div className="w-full h-[75px] px-[65px] border-b border-slate-300 justify-between items-center inline-flex">
-			<div className="flex items-center gap-2.5">
+		<div className="relative">
+			<div className="w-full h-[75px] px-4 md:px-[65px] border-b border-slate-300 flex justify-between items-center">
 				<Link to="/">
 					<img src={Logo} alt="Logo" className="h-11" />
 				</Link>
-			</div>
 
-			<div className="hidden md:flex items-center gap-4">
 				<NavigationMenu className="hidden md:block">
-					<NavigationMenuList>
-						{["Beranda", "Statistik", "Prediksi", "Produk", "Tentang Kami"].map(
-							(item) => (
-								<NavigationMenuItem key={item}>
-									<Link
-										to={`/${item.toLowerCase().replace(" ", "")}`}
-										className="px-10 py-2 text-emerald-700 font-semibold hover:text-emerald-800"
-									>
-										{item}
-									</Link>
-								</NavigationMenuItem>
-							),
-						)}
+					<NavigationMenuList className="justify-between gap-10">
+						{menuItems.map(({ label, path }) => (
+							<NavigationMenuItem key={label}>
+								<NavigationMenuLink
+									asChild
+									className={navigationMenuTriggerStyle()}
+								>
+									<Link to={`/${path}`}>{label}</Link>
+								</NavigationMenuLink>
+							</NavigationMenuItem>
+						))}
 					</NavigationMenuList>
 				</NavigationMenu>
-			</div>
+				<div className="flex items-center gap-4">
+					<div className="hidden md:flex gap-4">
+						<Button size="lg" asChild>
+							<Link to="/klasifikasi">Klasifikasi</Link>
+						</Button>
+						<Button variant="outline" size="lg" asChild>
+							<Link to="/login">Login</Link>
+						</Button>
+					</div>
 
-			<div className="flex items-center gap-4">
-				<Button size="lg">Klasifikasi</Button>
-				<div className="md:hidden">
-					<Button className="p-2 bg-emerald-500 text-white">
-						<svg
-							aria-label="Toggle Menu"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<title>Toggle Menu</title>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M4 6h16M4 12h16M4 18h16"
-							/>
-						</svg>
+					<Button
+						onClick={() => setIsMobileMenuOpen(true)}
+						className="md:hidden p-2 bg-emerald-500 text-white"
+					>
+						<Menu />
 					</Button>
 				</div>
 			</div>
+			{isMobileMenuOpen && (
+				<div className="fixed inset-0 z-50 md:hidden bg-background p-4">
+					<div className="flex flex-col space-y-4">
+						<div className="flex justify-between items-center">
+							<Link to="/">
+								<img src={Logo} alt="Logo" className="h-11" />
+							</Link>
+							<Button
+								onClick={() => setIsMobileMenuOpen(false)}
+								className="p-2"
+							>
+								<X />
+							</Button>
+						</div>
+						{menuItems.map(({ label, path }) => (
+							<Link
+								key={label}
+								to={`/${path}`}
+								onClick={() => setIsMobileMenuOpen(false)}
+								className="text-emerald-700 font-semibold text-xl py-2 rounded"
+							>
+								{label}
+							</Link>
+						))}
+						<Button size="lg" asChild>
+							<Link to="/klasifikasi">Klasifikasi</Link>
+						</Button>
+						<Button variant="outline" size="lg" asChild>
+							<Link to="/login">Login</Link>
+						</Button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

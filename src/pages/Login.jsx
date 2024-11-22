@@ -19,7 +19,7 @@ export default function Login() {
 						alt="GreenLify Logo"
 						className="absolute inset-0 w-full h-full object-cover"
 					/>
-					<div className="absolute inset-0 bg-black opacity-50"></div>
+					<div className="absolute inset-0 bg-black opacity-50" />
 				</div>
 				<div className="flex items-center justify-center w-full lg:w-1/2 p-6">
 					<Card className="w-full max-w-xl">
