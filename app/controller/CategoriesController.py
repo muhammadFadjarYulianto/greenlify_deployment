@@ -1,32 +1,25 @@
+from flask import request
 from app.model.categories import Categories
 from app.model.products import Products
+from app import response, db
 
-from app import response, app, db
-from flask import request
-
-def index():
+def indexCategory():
     try:
-        category = Categories.query.all()
-        data = formatarray(category)
+        categories = Categories.query.all()
+        data = format_array(categories)
         return response.success(data, "success")
     except Exception as e:
         print(e)
+        return response.badRequest([], "Gagal mengambil data kategori.")
 
-def formatarray(datas):
-    array = []
+def format_array(datas):
+    return [single_object(data) for data in datas]
 
-    for i in datas:
-        array.append(singleObject(i))
-    
-    return array
-
-def singleObject(data):
-    data = {
-        'id' : data.id,
-        'category_name' : data.category_name,
+def single_object(data):
+    return {
+        'id': data.id,
+        'category_name': data.category_name
     }
-
-    return data
 
 def detail_category(id):
     try:
@@ -37,24 +30,23 @@ def detail_category(id):
 
         products = Products.query.filter_by(category_id=id).all()
 
-        data = singleDetailCategory(category, products)
+        data = single_detail_category(category, products)
 
         return response.success(data, "success")
     
     except Exception as e:
         print(e)
+        return response.badRequest([], "Gagal mengambil detail kategori.")
 
-def singleDetailCategory(category, products):
-    data = {
+def single_detail_category(category, products):
+    return {
         'id': category.id,
         'category_name': category.category_name,
-        'products': [singleProduct(product) for product in products]  # Menyertakan produk yang terkait kategori
+        'products': [single_product(product) for product in products]
     }
 
-    return data
-
-def singleProduct(product):
-    data = {
+def single_product(product):
+    return {
         'id': product.id,
         'product_name': product.product_name,
         'title': product.title,
@@ -64,49 +56,64 @@ def singleProduct(product):
         'contact': product.contact
     }
 
-    return data
-
-def save():
+def tambahCategory():
     try:
-        category_name = request.form.get('category_name')      
+        category_name = request.form.get('category_name')
 
-        categories = Categories(category_name=category_name)
-        db.session.add(categories)
+        if not category_name:
+            return response.badRequest([], "Nama kategori wajib diisi.")
+
+        if len(category_name) < 3:
+            return response.badRequest([], "Nama kategori harus terdiri dari minimal 3 karakter.")
+
+        if Categories.query.filter_by(category_name=category_name).first():
+            return response.badRequest([], "Nama kategori sudah ada.")
+
+        category = Categories(category_name=category_name)
+        db.session.add(category)
         db.session.commit()
 
-        return response.success('', 'Sukses Menambahkan Data Category')
+        return response.success(single_object(category), 'Sukses Menambahkan Data Category')
+    
     except Exception as e:
+        db.session.rollback()
         print(e)
+        return response.badRequest([], "Gagal menambahkan kategori.")
 
-def ubah(id):
+def ubahCategory(id):
     try:
-        category_name = request.form.get('category_name')      
+        category_name = request.form.get('category_name')
 
-        input = [
-            {
-                'category_name' : category_name,
-            }
-        ] 
+        if not category_name:
+            return response.badRequest([], "Nama kategori wajib diisi.")
 
         category = Categories.query.filter_by(id=id).first()
 
-        category.category_name = category_name
+        if not category:
+            return response.badRequest([], "Kategori tidak ditemukan.")
 
+        category.category_name = category_name
         db.session.commit()
 
-        return response.success(input, 'Sukses update data!')
+        return response.success(single_object(category), 'Sukses update data kategori!')
+    
     except Exception as e:
+        db.session.rollback()
         print(e)
+        return response.badRequest([], "Gagal mengubah data kategori.")
 
-def hapus(id):
+def hapusCategory(id):
     try:
         category = Categories.query.filter_by(id=id).first()
         if not category:
-            return response.badRequest([], 'Data Category Kosong...')
-        
+            return response.badRequest([], 'Kategori tidak ditemukan.')
+
         db.session.delete(category)
         db.session.commit()
 
-        return response.success('', 'Berhasil menghapus data!')
+        return response.success('', 'Berhasil menghapus kategori!')
+    
     except Exception as e:
+        db.session.rollback()
         print(e)
+        return response.badRequest([], "Gagal menghapus kategori.")

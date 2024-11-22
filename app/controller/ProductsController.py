@@ -1,161 +1,168 @@
+from flask import request
 from app.model.products import Products
 from app.model.admins import Admins
 from app.model.categories import Categories
+from app import response, db, uploadconfig, app
+import uuid
+import os
+from werkzeug.utils import secure_filename
 
-from app import response, app, db
-from flask import request
-
-def index():
+def indexProduct():
     try:
-        product = Products.query.all()
-        data = formatarray(product)
-        return response.success(data, "success")
+        products = Products.query.all()
+        data = format_array(products)
+        return response.success(data, "Success")
     except Exception as e:
         print(e)
+        return response.badRequest([], "Gagal mengambil data produk.")
 
-def formatarray(datas):
-    array = []
+def format_array(datas):
+    return [single_object(data) for data in datas]
 
-    for i in datas:
-        array.append(singleObject(i))
-    
-    return array
-
-def singleObject(data):
-    data = {
-        'id' : data.id,
-        'admin_id' : data.admin_id,
-        'category_id' : data.category_id,
-        'product_name' : data.product_name,
-        'title' : data.title,
-        'summary' : data.summary,
-        'description' : data.description,
-        'price' : data.price,
-        'contact' : data.contact
+def single_object(data):
+    return {
+        'id': data.id,
+        'created_by': data.admin.name,
+        'category_name': data.category.category_name,
+        'product_name': data.product_name,
+        'description': data.description,
+        'price': str(data.price),
+        'contact': data.contact,
+        'img_file': data.img_file,
+        'created_at': data.created_at,
+        'updated_at': data.updated_at
     }
-
-    return data
 
 def detail_product(id):
     try:
         product = Products.query.filter_by(id=id).first()
-
         if not product:
             return response.badRequest([], 'Produk tidak ditemukan')
 
-        admin = product.admin
-        category = product.category
-
-        data = singleDetailProduct(product, admin, category)
-
-        return response.success(data, "success")
-    
+        data = single_object(product)
+        return response.success(data, "Success")
     except Exception as e:
         print(e)
+        return response.badRequest([], "Gagal mengambil detail produk.")
 
-def singleDetailProduct(product, admin, category):
-    data = {
-        'id': product.id,
-        'product_name': product.product_name,
-        'title': product.title,
-        'summary': product.summary,
-        'description': product.description,
-        'price': str(product.price),
-        'contact': product.contact,
-        'admin': singleAdmin(admin),
-        'category': singleCategory(category)
-    }
-
-    return data
-
-def singleAdmin(admin):
-    data = {
-        'id': admin.id,
-        'name': admin.name,
-        'email': admin.email,
-        'phone_number': admin.phone_number,
-        'gender': admin.gender
-    }
-
-    return data
-
-def singleCategory(category):
-    data = {
-        'id': category.id,
-        'category_name': category.category_name
-    }
-
-    return data
-
-def save():
+def tambahProduct():
     try:
-        admin_id = request.form.get('admin_id')      
-        category_id = request.form.get('category_id')      
-        product_name = request.form.get('product_name')      
-        title = request.form.get('title')      
-        summary = request.form.get('summary')      
-        description = request.form.get('description')      
-        price = request.form.get('price')      
-        contact = request.form.get('contact')      
+        created_by = request.form.get('created_by')
+        category_id = request.form.get('category_id')
+        product_name = request.form.get('product_name')
+        description = request.form.get('description')
+        price = request.form.get('price')
+        contact = request.form.get('contact')
 
-        products = Products(admin_id=admin_id, category_id=category_id, product_name=product_name, title=title, summary=summary, description=description, price=price, contact=contact)
-        db.session.add(products)
+        if 'img_file' not in request.files:
+            return response.badRequest([], 'File tidak tersedia')
+        
+        file = request.files['img_file']
+
+        if file.filename == '':
+            return response.badRequest([], 'File tidak tersedia')
+        
+        if file and uploadconfig.allowed_file(file.filename):
+            uid = uuid.uuid4()
+            filename = secure_filename(file.filename)
+            renamefile = "GreenLify-Product-"+str(uid)+filename
+
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
+
+        if not all([created_by, category_id, product_name, price]):
+            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+
+        admin = Admins.query.filter_by(id=created_by).first()
+        if not admin:
+            return response.badRequest([], "Admin ID tidak valid.")
+
+        category = Categories.query.filter_by(id=category_id).first()
+        if not category:
+            return response.badRequest([], "Category ID tidak valid.")
+
+        try:
+            price = float(price)
+            if price <= 0:
+                return response.badRequest([], "Harga harus lebih besar dari 0.")
+        except ValueError:
+            return response.badRequest([], "Harga harus berupa angka.")
+
+        product = Products(
+            created_by=created_by,
+            category_id=category_id,
+            product_name=product_name,
+            description=description,
+            price=price,
+            contact=contact,
+            img_file=renamefile
+        )
+
+        db.session.add(product)
         db.session.commit()
 
-        return response.success('', 'Sukses Menambahkan Data Product')
+        return response.success(single_object(product), 'Sukses Menambahkan Data Produk')
+
     except Exception as e:
+        db.session.rollback()
         print(e)
+        return response.badRequest([], f"Gagal menambahkan produk: {str(e)}")
 
-def ubah(id):
-    try:
-        admin_id = request.form.get('admin_id')    
-        category_id = request.form.get('category_id')    
-        product_name = request.form.get('product_name')    
-        title = request.form.get('title')    
-        summary = request.form.get('summary')   
-        description = request.form.get('description')   
-        price = request.form.get('price')   
-        contact = request.form.get('contact')   
-
-        input = [
-            {
-                'admin_id' : admin_id,
-                'category_id' : category_id,
-                'product_name' : product_name,
-                'title' : title,
-                'summary' : summary,
-                'description' : description,
-                'price' : price,
-                'contact' : contact
-            }
-        ] 
-
-        product = Products.query.filter_by(id=id).first()
-
-        product.admin_id = admin_id
-        product.category_id = category_id
-        product.product_name = product_name
-        product.title = title
-        product.summary = summary
-        product.description = description
-        product.price = price
-        product.contact = contact
-
-        db.session.commit()
-
-        return response.success(input, 'Sukses update data!')
-    except Exception as e:
-        print(e)
-
-def hapus(id):
+def ubahProduct(id):
     try:
         product = Products.query.filter_by(id=id).first()
         if not product:
-            return response.badRequest([], 'Data Product Kosong...')
+            return response.badRequest([], "Produk tidak ditemukan.")
+
+        created_by = request.form.get('created_by')
+        category_id = request.form.get('category_id')
+        product_name = request.form.get('product_name')
+        description = request.form.get('description')
+        price = request.form.get('price')
+        contact = request.form.get('contact')
         
+        img_file = None
+        if 'img_file' in request.files:
+            file = request.files['img_file']
+            if file.filename != '' and uploadconfig.allowed_file(file.filename):
+                uid = uuid.uuid4()
+                filename = secure_filename(file.filename)
+                img_file = "GreenLify-Product-" + str(uid) + filename
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
+
+        if not all([created_by, category_id, product_name, price]):
+            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+
+        product.created_by = created_by
+        product.category_id = category_id
+        product.product_name = product_name
+        product.description = description
+        product.price = price
+        product.contact = contact
+        
+        if img_file:
+            product.img_file = img_file
+
+        db.session.commit()
+
+        return response.success(single_object(product), 'Sukses update data produk!')
+
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return response.badRequest([], "Gagal mengubah data produk.")
+
+def hapusProduk(id):
+    try:
+        product = Products.query.filter_by(id=id).first()
+        if not product:
+            return response.badRequest([], "Produk tidak ditemukan.")
+
         db.session.delete(product)
         db.session.commit()
 
-        return response.success('', 'Berhasil menghapus data!')
+        return response.success('', 'Sukses menghapus produk!')
+
     except Exception as e:
+        db.session.rollback()
         print(e)
+        return response.badRequest([], "Gagal menghapus produk.")
