@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useProductStore from "@/store/productStore";
+import useProductDetailsStore from "@/store/useProductDetailsStore";
 import ProductDetail from "@/components/layout/ProductDetail";
-import Errors from "@/pages/Errors.jsx";
+import NoProduct from "@/pages/Produk/NoProduct";
 
 function ProductDetails() {
 	const { id } = useParams();
 	const { selectedProduct, setSelectedProduct, resetSelectedProduct } =
-		useProductStore();
+		useProductDetailsStore();
 
 	useEffect(() => {
 		setSelectedProduct(id);
@@ -17,7 +17,7 @@ function ProductDetails() {
 	}, [id, setSelectedProduct, resetSelectedProduct]);
 
 	if (!selectedProduct) {
-		return <Errors />;
+		return <NoProduct />;
 	}
 
 	return <ProductDetail product={selectedProduct} />;

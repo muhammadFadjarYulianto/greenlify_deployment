@@ -2,7 +2,7 @@ import { create } from "zustand";
 // @ts-ignore
 import productsData from "@/data/productdetails.json";
 
-const useProductStore = create((set) => ({
+const useProductDetailsStore = create((set) => ({
 	products: productsData,
 	selectedProduct: null,
 
@@ -18,4 +18,4 @@ const useProductStore = create((set) => ({
 	},
 }));
 
-export default useProductStore;
+export default useProductDetailsStore;
