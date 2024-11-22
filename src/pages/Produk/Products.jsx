@@ -1,10 +1,8 @@
 import React from "react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Product from "@/components/layout/product";
+import Product from "@/components/layout/Product";
 import products from "@/data/product.json";
 import useProductFilterStore, {
 	ProductType,
@@ -21,12 +19,12 @@ import {
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
 	PaginationItem,
 	PaginationLink,
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Link } from "react-router-dom";
 
 export default function Products() {
 	const {
@@ -216,14 +214,16 @@ export default function Products() {
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 w-10/12 mt-[33px]">
 					{products.map((product) => (
-						<Product
-							key={product.id}
-							image={product.image}
-							price={product.price}
-							title={product.title}
-							rating={product.rating}
-							description={product.description}
-						/>
+						<Link to={`/produk/${product.id}`} key={product.id}>
+							<Product
+								key={product.id}
+								image={product.image}
+								price={product.price}
+								title={product.title}
+								rating={product.rating}
+								description={product.description}
+							/>
+						</Link>
 					))}
 				</div>
 				<div className="w-10/12 mt-8 sm:mt-[33px]">

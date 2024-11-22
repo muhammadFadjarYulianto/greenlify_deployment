@@ -1,5 +1,4 @@
 import React from "react";
-import { useMemo } from "react";
 import {
 	Card,
 	CardContent,
@@ -14,14 +13,6 @@ import { Button } from "@/components/ui/button";
 const Product = ({ image, price, title, rating, description }) => {
 	const fullStars = Math.floor(rating);
 	const hasHalfStar = rating % 1 !== 0;
-
-	const starsArray = useMemo(
-		() =>
-			Array.from({ length: fullStars }, () =>
-				Math.random().toString(36).substr(2, 9),
-			),
-		[fullStars],
-	);
 
 	return (
 		<Card>

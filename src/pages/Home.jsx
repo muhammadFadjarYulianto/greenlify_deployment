@@ -1,6 +1,4 @@
 import React from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import homeImg from "@/assets/images/home-image.svg";
