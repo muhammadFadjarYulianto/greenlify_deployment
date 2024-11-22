@@ -8,6 +8,7 @@ import Products from "@/pages/Produk/Products.jsx";
 import ProductDetails from "@/pages/Produk/ProductDetails.jsx";
 import About from "@/pages/About";
 import Errors from "@/pages/Errors";
+import Login from "@/pages/Login";
 
 export default function Index() {
 	return (
@@ -22,6 +23,7 @@ export default function Index() {
 				<Route path="/tentangkami" element={<About />} />
 				<Route path={"*"} element={<Errors />} />
 			</Route>
+			<Route path="/login" element={<Login />} />
 		</Routes>
 	);
 }
