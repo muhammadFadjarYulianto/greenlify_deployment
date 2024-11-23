@@ -23,12 +23,12 @@ export default function Index() {
 				<Route path="/produk" element={<Products />} />
 				<Route path="/produk/:id" element={<ProductDetails />} />
 				<Route path="/tentangkami" element={<About />} />
-				<Route path={"*"} element={<Errors />} />
 			</Route>
 			<Route path="/dashboard" element={<LayoutSidebarDashboard />}>
 				<Route path="/dashboard" element={<DashboardHome />} />
 			</Route>
 			<Route path="/login" element={<Login />} />
+			<Route path={"*"} element={<Errors />} />
 		</Routes>
 	);
 }
