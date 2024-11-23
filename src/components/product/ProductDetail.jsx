@@ -4,7 +4,7 @@ import { Typography } from "@/components/ui/Typography";
 import { Badge } from "@/components/ui/badge";
 import { Slash } from "lucide-react";
 import { Star, StarHalf } from "lucide-react";
-import Product from "@/components/layout/Product";
+import Product from "@/components/product/Product.jsx";
 import products from "@/data/product.json";
 
 import {
@@ -193,7 +193,7 @@ function ProductDetail({ product }) {
 			{/*    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 w-10/12 mt-[33px]">*/}
 			{/*        {products.map((product) => (*/}
 			{/*            <Link to={`/produk/${product.id}`}>*/}
-			{/*                <Product*/}
+			{/*                <product*/}
 			{/*                    key={product.id}*/}
 			{/*                    image={product.image}*/}
 			{/*                    price={product.price}*/}

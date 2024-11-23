@@ -9,7 +9,7 @@ import ProductDetails from "@/pages/Produk/ProductDetails";
 import About from "@/pages/About";
 import Errors from "@/pages/Errors";
 import Login from "@/pages/Aunt/Login";
-import LayoutDashboard from "@/components/layout/LayoutDashboard";
+import LayoutSidebarDashboard from "@/components/layout/LayoutSidebarDashboard.jsx";
 import DashboardHome from "@/pages/Dashboard/DashboardHome";
 
 export default function Index() {
@@ -25,7 +25,7 @@ export default function Index() {
 				<Route path="/tentangkami" element={<About />} />
 				<Route path={"*"} element={<Errors />} />
 			</Route>
-			<Route path="/dashboard" element={<LayoutDashboard />}>
+			<Route path="/dashboard" element={<LayoutSidebarDashboard />}>
 				<Route path="/dashboard" element={<DashboardHome />} />
 			</Route>
 			<Route path="/login" element={<Login />} />
