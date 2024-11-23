@@ -71,3 +71,8 @@ def categoryDetail(id):
     elif request.method == "DELETE":
         return CategoriesController.hapusCategory(id)
     return 'Hello Flask App'
+
+#buat rute paging
+@app.route('/api/product/page', methods=['GET'])
+def pagination():
+    return ProductsController.paginate()

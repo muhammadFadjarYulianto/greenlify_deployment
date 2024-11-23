@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify, abort
 from app.model.products import Products
 from app.model.admins import Admins
 from app.model.categories import Categories
@@ -6,6 +6,7 @@ from app import response, db, uploadconfig, app
 import uuid
 import os
 from werkzeug.utils import secure_filename
+import math
 
 def indexProduct():
     try:
@@ -166,3 +167,68 @@ def hapusProduk(id):
         db.session.rollback()
         print(e)
         return response.badRequest([], "Gagal menghapus produk.")
+    
+def get_pagination(clss, url, start, limit):
+    #ambil data select
+    results = clss.query.all()
+    #ubah format
+    data = format_array(results)
+    #hitung jumlah data
+    count = len(data)
+
+    obj = {}
+
+    if count < start:
+        obj['success'] = False
+        obj['message'] = "Page yang dipilih melewati batas total data!"
+        return obj
+    else:
+        obj['success'] = True
+        obj['start_page'] = start
+        obj['per_page'] = limit
+        obj['total_data'] = count
+        obj['total_page'] = math.ceil(count/limit)
+
+        #previous link
+        if start == 1:
+            obj['previous'] = ''
+        else:
+            start_copy = max(1, start-limit)
+            limit_copy = start - 1
+            obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
+
+        #next link
+        if start + limit > count:
+            obj['next'] = ''
+        else:
+            start_copy = start + limit
+            obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
+
+        obj['results'] = data[(start - 1): (start - 1 + limit)]
+        return obj
+    
+#fungsi paging
+def paginate():
+    #ambil parameter get
+    #sample www.google.com?product=baju
+
+    start = request.args.get('start')
+    limit = request.args.get('limit')
+
+    try:
+        if start == None or limit == None:
+            return jsonify(get_pagination(
+                Products,
+                'http://127.0.0.1:5000/api/product/page',
+                start=request.args.get('start', 1),
+                limit = request.args.get('limit', 3)
+            ))
+        else:
+            return jsonify(get_pagination(
+                Products,
+                'http://127.0.0.1:5000/api/product/page',
+                start = int(start),
+                limit = int(limit)
+            ))
+    except Exception as e:
+        print(e)
