@@ -4,16 +4,18 @@ from app import response, db
 from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
+from flask_jwt_extended import get_jwt
 from datetime import datetime, timedelta
+import redis
 
 def indexAdmin():
     try:
         admins = Admins.query.all()
         data = format_array(admins)
-        return response.success(data, "success", code=200)
+        return response.success(data)
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal mengambil data admin.", code=400)
+        return response.serverError([], "Gagal mengambil data admin.")
 
 def format_array(datas):
     return [single_object(data) for data in datas]
@@ -33,15 +35,15 @@ def detail_admin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
-            return response.badRequest([], 'Admin tidak ditemukan', code=404)
+            return response.notFound([], 'Admin tidak ditemukan')
 
-        products = Products.query.filter_by(admin_id=id).all()
+        products = Products.query.filter_by(created_by=id).all()
         data = single_detail_admin(admin, products)
 
-        return response.success(data, "success", code=200)
+        return response.success(data)
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal mengambil detail admin.", code=400)
+        return response.serverError([], "Gagal mengambil detail admin.")
 
 def single_detail_admin(admin, products):
     return {
@@ -78,19 +80,19 @@ def tambahAdmin():
         gender = request.form.get('gender')
 
         if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.", code=400)
+            return response.badRequest([], "Semua kolom wajib diisi.")
 
         if len(password) < 8:
-            return response.badRequest([], "Kata sandi harus terdiri dari minimal 8 karakter.", code=400)
+            return response.badRequest([], "Kata sandi harus terdiri dari minimal 8 karakter.")
 
         if gender not in ["Laki-Laki", "Perempuan"]:
-            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.", code=400)
+            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")
 
         if Admins.query.filter_by(email=email).first():
-            return response.badRequest([], "Email sudah terdaftar.", code=400)
+            return response.badRequest([], "Email sudah terdaftar.")
 
         if Admins.query.filter_by(phone_number=phone_number).first():
-            return response.badRequest([], "Nomor telepon sudah terdaftar.", code=400)
+            return response.badRequest([], "Nomor telepon sudah terdaftar.")
 
 
         admin = Admins(
@@ -103,17 +105,17 @@ def tambahAdmin():
         db.session.add(admin)
         db.session.commit()
 
-        return response.success(single_object(admin), 'Sukses Menambahkan Data Admin', code=201)
+        return response.created([], 'Sukses Menambahkan Data Admin')
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal menyimpan data admin.", code=400)
+        return response.serverError([], "Gagal menyimpan data admin.")
 
 def ubahAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
-            return response.badRequest([], "Admin tidak ditemukan.", code=404)
+            return response.notFound([], "Admin tidak ditemukan.")
 
         name = request.form.get('name')
         email = request.form.get('email')
@@ -122,10 +124,10 @@ def ubahAdmin(id):
         gender = request.form.get('gender')
 
         if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.", code=400)
+            return response.badRequest([], "Semua kolom wajib diisi.")
 
         if gender not in ["Laki-Laki", "Perempuan"]:
-            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.", code=400)
+            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")
 
         admin.name = name
         admin.email = email
@@ -135,26 +137,26 @@ def ubahAdmin(id):
 
         db.session.commit()
 
-        return response.success(single_object(admin), "Sukses update data!", code=200)
+        return response.success(single_object(admin))
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal mengubah data admin.", code=400)
+        return response.serverError([], "Gagal mengubah data admin.")
 
 def hapusAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
-            return response.badRequest([], "Data admin tidak ditemukan.", code=404)
+            return response.notFound([], "Data admin tidak ditemukan.")
 
         db.session.delete(admin)
         db.session.commit()
 
-        return response.success('', 'Berhasil menghapus data!', code=200)
+        return response.success('Sukses menghapus admin!')
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal menghapus data admin.", code=400)
+        return response.serverError([], "Gagal menghapus data admin.")
     
 def loginAdmin():
     try:
@@ -163,13 +165,50 @@ def loginAdmin():
 
         admin = Admins.query.filter_by(email=email).first()
 
-        if not admin or not check_password_hash(admin.password, password):
-            return response.badRequest([], "Email atau password salah.", code=401)
+        if not email or not password:
+            return response.badRequest([],'Email dan password wajib diisi')
 
-        access_token = create_access_token(identity=admin.id, expires_delta=timedelta(days=1))
+        if not admin:
+            return response.notFound([],'Email tidak terdaftar')
+        
+        if not admin.checkPassword(password):
+            return response.unauthorized([], 'Kombinasi password salah')
+        
+        data = single_object(admin)
 
-        return response.success({'access_token': access_token}, "Login sukses!", code=200)
-    
+        expires = timedelta(hours=12)
+        expires_refresh = timedelta(hours=12)
+
+        access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
+        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
+
+        return response.success({
+            "data" : data,
+            "acces_token" : access_token,
+            "refresh_token" : refresh_token,
+        })
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal login.", code=400)
+        return response.serverError([], "Gagal login")
+
+# Setup Redis 
+redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+
+def logoutAdmin():
+    try:
+        # Mengambil identitas pengguna dari token JWT yang sedang digunakan
+        identity = get_jwt_identity()
+
+        # Mendapatkan JWT ID (jti) yang unik untuk token yang sedang digunakan
+        jti = get_jwt()['jti']
+
+        # Menambahkan jti ke dalam Redis untuk menandakan bahwa token ini tidak valid
+        # Mengatur waktu kedaluwarsa (misalnya 12 jam)
+        redis_client.setex(jti, timedelta(hours=12), "revoked")  # Token ini tidak dapat digunakan lagi setelah logout
+
+        # Mengirim respons sukses
+        return response.success("Sukses logout, token telah dinonaktifkan.")
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal melakukan logout.")
+

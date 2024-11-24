@@ -11,12 +11,6 @@ def index():
 def loginAdmin():
     return AdminsController.loginAdmin()
 
-@app.route('/protected', methods=['GET'])
-@jwt_required()
-def protected():
-    current_admin = get_jwt_identity()
-    return response.success([current_admin,'Sukses'])
-
 @app.route('/admin', methods=['GET', 'POST'])
 @jwt_required()
 def admins():
@@ -70,8 +64,12 @@ def categoryDetail(id):
         return CategoriesController.ubahCategory(id)
     elif request.method == "DELETE":
         return CategoriesController.hapusCategory(id)
-    return 'Hello Flask App'
 
 @app.route('/api/product/page', methods=['GET'])
 def pagination():
     return ProductsController.paginate()
+
+@app.route('/logout', methods=['POST'])
+@jwt_required()  
+def logout():
+    return AdminsController.logoutAdmin()
