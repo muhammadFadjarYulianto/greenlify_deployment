@@ -90,7 +90,7 @@ const About = () => {
             <strong className="text-emerald-700">Tentang</strong> Kami
           </Typography>
         </div>
-        <div className="text-center lg:max-w-4xl md:max-w-2xl">
+        <div className="text-justify md:text-center md:max-w-4xl lg:max-w-6xl">
           <Typography variant="p" className="p-4 md:p-0">
             GreenLify adalah solusi berbasis teknologi yang memanfaatkan
             kecerdasan buatan (Al) dan visi komputer untuk mendeteksi dan

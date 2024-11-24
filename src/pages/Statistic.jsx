@@ -54,7 +54,7 @@ const Statistic = () => {
             <strong className="text-emerald-700">Statistik</strong> Sampah
           </Typography>
         </div>
-        <div className="max-w-4xl text-center lg:text-center">
+        <div className="md:max-w-4xl lg:max-w-7xl p-4 md:p-0 text-justify md:text-center">
           <Typography variant="p">
             Tahukah Anda bahwa setiap harinya, jutaan ton sampah dihasilkan dan
             sebagian besar berakhir mencemari alam? Di sini, kami menampilkan
