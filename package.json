@@ -13,10 +13,12 @@
     "format:check": "biome format --check ./src",
     "fix": "npm run lint && npm run format",
     "prepare": "husky && chmod +x ./node_modules/.bin/biome",
-    "setup": "npm install && npm run prepare"
+    "lucid": "npm install lucide-react",
+    "setup": "npm install && npm run prepare && npm run lucid"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
+    "@material-tailwind/react": "^2.1.10",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -29,11 +31,13 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@vitejs/plugin-react": "^4.3.3",
+    "apexcharts": "^4.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "lucide-react": "^0.454.0",
     "react": "^18.3.1",
+    "react-apexcharts": "^1.6.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "recharts": "^2.13.3",
