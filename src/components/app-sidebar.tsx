@@ -46,7 +46,7 @@ const data = {
 		},
 		{
 			title: "Manajemen Produk",
-			url: "#",
+			url: "/dashboard/produk",
 			icon: StoreIcon,
 		},
 		{
