@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Typography } from "@/components/ui/Typography";
 import Logo from "@/assets/images/logo.svg";
+import LoginImg from "@/assets/images/img-login.svg";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export default function Login() {
@@ -15,11 +16,11 @@ export default function Login() {
 			<div className="flex items-stretch w-full h-full">
 				<div className="hidden relative lg:flex lg:w-1/2 p-12">
 					<img
-						src="https://img.freepik.com/premium-vector/go-green-no-plastic_100843-42.jpg?w=740"
+						src={LoginImg}
 						alt="GreenLify Logo"
 						className="absolute inset-0 w-full h-full object-cover"
 					/>
-					<div className="absolute inset-0 bg-black opacity-50" />
+					{/*<div className="absolute inset-0 bg-black opacity-50" />*/}
 				</div>
 				<div className="flex items-center justify-center w-full lg:w-1/2 p-6">
 					<Card className="w-full max-w-xl">

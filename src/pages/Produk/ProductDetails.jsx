@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useProductDetailsStore from "@/store/useProductDetailsStore";
-import ProductDetail from "@/components/layout/ProductDetail";
+import ProductDetail from "@/components/product/ProductDetail";
 import NoProduct from "@/pages/Produk/NoProduct";
 
 function ProductDetails() {

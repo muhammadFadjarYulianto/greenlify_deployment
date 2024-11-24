@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Product from "@/components/layout/Product";
+import Product from "@/components/product/Product.jsx";
 import products from "@/data/product.json";
 import useProductFilterStore, {
 	ProductType,

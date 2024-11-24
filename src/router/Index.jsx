@@ -1,14 +1,18 @@
 import { Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import Layout from "@/components/layout/Layout.jsx";
-import Home from "@/pages/Home.jsx";
+import Layout from "@/components/layout/Layout";
+import Home from "@/pages/Home";
 import Statistic from "@/pages/Statistic";
 import Prediction from "@/pages/Prediction";
-import Products from "@/pages/Produk/Products.jsx";
-import ProductDetails from "@/pages/Produk/ProductDetails.jsx";
+import Products from "@/pages/Produk/Products";
+import ProductDetails from "@/pages/Produk/ProductDetails";
 import About from "@/pages/About";
 import Errors from "@/pages/Errors";
-import Login from "@/pages/Login";
+import Login from "@/pages/Aunt/Login";
+import LayoutSidebarDashboard from "@/components/layout/LayoutSidebarDashboard.jsx";
+import DashboardHome from "@/pages/Dashboard/DashboardHome";
+import DashboardCategory from "@/pages/Dashboard/DashboardCategory";
+import DashboardProduct from "@/pages/Dashboard/DashboardProduct";
 
 export default function Index() {
 	return (
@@ -21,9 +25,14 @@ export default function Index() {
 				<Route path="/produk" element={<Products />} />
 				<Route path="/produk/:id" element={<ProductDetails />} />
 				<Route path="/tentangkami" element={<About />} />
-				<Route path={"*"} element={<Errors />} />
+			</Route>
+			<Route path="/dashboard" element={<LayoutSidebarDashboard />}>
+				<Route path="/dashboard" element={<DashboardHome />} />
+				<Route path="/dashboard/category" element={<DashboardCategory />} />
+				<Route path="/dashboard/produk" element={<DashboardProduct />} />
 			</Route>
 			<Route path="/login" element={<Login />} />
+			<Route path={"*"} element={<Errors />} />
 		</Routes>
 	);
 }
