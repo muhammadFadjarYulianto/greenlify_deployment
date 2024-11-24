@@ -43,11 +43,18 @@ export default function DashboardHome() {
 					<Breadcrumb>
 						<BreadcrumbList>
 							<BreadcrumbItem className="hidden md:block">
-								<BreadcrumbLink href="/">Beranda</BreadcrumbLink>
+								<BreadcrumbLink
+									href="/"
+									className="text-[16px] font-normal leading-[28px]"
+								>
+									Beranda
+								</BreadcrumbLink>
 							</BreadcrumbItem>
 							<BreadcrumbSeparator className="hidden md:block" />
 							<BreadcrumbItem>
-								<BreadcrumbPage>Dashboard</BreadcrumbPage>
+								<BreadcrumbPage className="text-[16px] font-normal leading-[28px]">
+									Dashboard
+								</BreadcrumbPage>
 							</BreadcrumbItem>
 						</BreadcrumbList>
 					</Breadcrumb>
