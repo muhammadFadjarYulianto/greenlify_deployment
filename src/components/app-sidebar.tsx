@@ -6,6 +6,7 @@ import {
 	LayoutDashboardIcon,
 	StoreIcon,
 	TableOfContents,
+	Tags,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -43,6 +44,11 @@ const data = {
 			title: "Manajemen AI",
 			url: "#",
 			icon: Bot,
+		},
+		{
+			title: "Manajemen Category",
+			url: "/dashboard/category",
+			icon: Tags,
 		},
 		{
 			title: "Manajemen Produk",

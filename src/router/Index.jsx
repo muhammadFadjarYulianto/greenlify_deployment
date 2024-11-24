@@ -11,6 +11,7 @@ import Errors from "@/pages/Errors";
 import Login from "@/pages/Aunt/Login";
 import LayoutSidebarDashboard from "@/components/layout/LayoutSidebarDashboard.jsx";
 import DashboardHome from "@/pages/Dashboard/DashboardHome";
+import DashboardCategory from "@/pages/Dashboard/DashboardCategory";
 import DashboardProduct from "@/pages/Dashboard/DashboardProduct";
 
 export default function Index() {
@@ -27,6 +28,7 @@ export default function Index() {
 			</Route>
 			<Route path="/dashboard" element={<LayoutSidebarDashboard />}>
 				<Route path="/dashboard" element={<DashboardHome />} />
+				<Route path="/dashboard/category" element={<DashboardCategory />} />
 				<Route path="/dashboard/produk" element={<DashboardProduct />} />
 			</Route>
 			<Route path="/login" element={<Login />} />
