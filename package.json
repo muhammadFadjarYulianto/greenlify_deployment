@@ -13,7 +13,8 @@
     "format:check": "biome format --check ./src",
     "fix": "npm run lint && npm run format",
     "prepare": "husky && chmod +x ./node_modules/.bin/biome",
-    "setup": "npm install && npm run prepare"
+    "lucid": "npm install lucide-react",
+    "setup": "npm install && npm run prepare && npm run lucid"
   },
   "dependencies": {
     "@radix-ui/react-icons": "^1.3.1",
