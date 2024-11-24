@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import pieChartDataByYear from "../../public/data/pieChartData.js";
-import compositionData from "../../public/data/CompositionData.js";
+import compositionData from "../../public/data/compositionData.js";
 import rubbishData from "../../public/data/rubbishData.js";
 import barChartDataByYear from "../../public/data/barChartData.js";
 
@@ -39,7 +39,7 @@ const Statistic = () => {
   const [selectedOption, setSelectedOption] = useState("10");
   const options = ["10", "25", "50", "100"];
 
-  const numericYear = parseInt(selectedYear.replace("Tahun ", ""), 10);
+  const numericYear = Number.parseInt(selectedYear.replace("Tahun ", ""), 10);
 
   const pieChartData = pieChartDataByYear[numericYear] || {
     series: [],

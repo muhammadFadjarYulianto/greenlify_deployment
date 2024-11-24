@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@/components/ui/Typography";
-import trashImage from "@/assets/images/trash.svg";
+import trashImage from "@/assets/images/img-about.svg";
 
 const partners = [
   { id: 1, name: "KLHK", imageSrc: "/src/assets/images/KLHK.svg" },
@@ -10,8 +10,8 @@ const partners = [
     imageSrc: "/src/assets/images/waste4change.svg",
   },
   { id: 3, name: "Greenpeace", imageSrc: "/src/assets/images/Greenpeace.svg" },
-  { id: 4, name: "Kehati", imageSrc: "/src/assets/images/kehati.svg" },
-  { id: 5, name: "Avani", imageSrc: "/src/assets/images/avani.svg" },
+  { id: 4, name: "Kehati", imageSrc: "/src/assets/images/Kehati.svg" },
+  { id: 5, name: "Avani", imageSrc: "/src/assets/images/Avani.svg" },
 ];
 
 const teamMembers = [
@@ -91,7 +91,7 @@ const About = () => {
           </Typography>
         </div>
         <div className="text-center lg:max-w-4xl md:max-w-2xl">
-          <Typography variant="p">
+          <Typography variant="p" className="p-4 md:p-0">
             GreenLify adalah solusi berbasis teknologi yang memanfaatkan
             kecerdasan buatan (Al) dan visi komputer untuk mendeteksi dan
             mengklasifikasikan jenis sampah melalui gambar. Hal ini membantu
@@ -102,7 +102,7 @@ const About = () => {
         <img
           src={trashImage}
           alt="trashImage"
-          className="w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52"
+          className="hidden md:block w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52"
         />
       </div>
 
@@ -146,7 +146,7 @@ const About = () => {
           </Typography>
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-6">
+        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-16">
           {partners.map((partner) => (
             <img
               key={partner.id}
@@ -170,18 +170,18 @@ const About = () => {
             solusi inovatif dalam pengelolaan sampah dan pelestarian lingkungan.
           </Typography>
         </div>
-        <div className="w-full mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-8">
+        <div className="w-full mt-[33px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-5">
           {teamMembers.map((member, index) => (
             <div
               key={member.id}
-              className={`flex flex-col items-center space-y-4 ${
+              className={`flex flex-col items-center justify-center space-y-4 ${
                 index === 8 ? "lg:col-start-2" : ""
               } ${index === 9 ? "lg:col-start-3" : ""}`}
             >
               <img
                 src={member.imageSrc}
                 alt={member.name}
-                className="w-40 h-40 object-cover rounded-lg shadow-md"
+                className="w-80 h-80 object-cover rounded-lg shadow-md"
               />
               <Typography variant="p-semibold" className="text-center">
                 {member.name}
