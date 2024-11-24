@@ -12,10 +12,10 @@ def indexProduct():
     try:
         products = Products.query.all()
         data = format_array(products)
-        return response.success(data, "Success")
+        return response.success(data, "Success", code=200)
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal mengambil data produk.")
+        return response.badRequest([], "Gagal mengambil data produk.", code=400)
 
 def format_array(datas):
     return [single_object(data) for data in datas]
@@ -38,13 +38,13 @@ def detail_product(id):
     try:
         product = Products.query.filter_by(id=id).first()
         if not product:
-            return response.badRequest([], 'Produk tidak ditemukan')
+            return response.badRequest([], 'Produk tidak ditemukan', code=404)
 
         data = single_object(product)
-        return response.success(data, "Success")
+        return response.success(data, "Success", code=200)
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal mengambil detail produk.")
+        return response.badRequest([], "Gagal mengambil detail produk.", code=400)
 
 def tambahProduct():
     try:
@@ -56,12 +56,12 @@ def tambahProduct():
         contact = request.form.get('contact')
 
         if 'img_file' not in request.files:
-            return response.badRequest([], 'File tidak tersedia')
+            return response.badRequest([], 'File tidak tersedia', code=400)
         
         file = request.files['img_file']
 
         if file.filename == '':
-            return response.badRequest([], 'File tidak tersedia')
+            return response.badRequest([], 'File tidak tersedia', code=400)
         
         if file and uploadconfig.allowed_file(file.filename):
             uid = uuid.uuid4()
@@ -71,22 +71,22 @@ def tambahProduct():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
 
         if not all([created_by, category_id, product_name, price]):
-            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.", code=400)
 
         admin = Admins.query.filter_by(id=created_by).first()
         if not admin:
-            return response.badRequest([], "Admin ID tidak valid.")
+            return response.badRequest([], "Admin ID tidak valid.", code=404)
 
         category = Categories.query.filter_by(id=category_id).first()
         if not category:
-            return response.badRequest([], "Category ID tidak valid.")
+            return response.badRequest([], "Category ID tidak valid.", code=404)
 
         try:
             price = float(price)
             if price <= 0:
-                return response.badRequest([], "Harga harus lebih besar dari 0.")
+                return response.badRequest([], "Harga harus lebih besar dari 0.", code=400)
         except ValueError:
-            return response.badRequest([], "Harga harus berupa angka.")
+            return response.badRequest([], "Harga harus berupa angka.", code=400)
 
         product = Products(
             created_by=created_by,
@@ -101,18 +101,18 @@ def tambahProduct():
         db.session.add(product)
         db.session.commit()
 
-        return response.success(single_object(product), 'Sukses Menambahkan Data Produk')
+        return response.success(single_object(product), 'Sukses Menambahkan Data Produk', code=201)
 
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], f"Gagal menambahkan produk: {str(e)}")
+        return response.badRequest([], f"Gagal menambahkan produk: {str(e)}", code=400)
 
 def ubahProduct(id):
     try:
         product = Products.query.filter_by(id=id).first()
         if not product:
-            return response.badRequest([], "Produk tidak ditemukan.")
+            return response.badRequest([], "Produk tidak ditemukan.", code=404)
 
         created_by = request.form.get('created_by')
         category_id = request.form.get('category_id')
@@ -131,7 +131,7 @@ def ubahProduct(id):
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
 
         if not all([created_by, category_id, product_name, price]):
-            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.", code=400)
 
         product.created_by = created_by
         product.category_id = category_id
@@ -145,35 +145,37 @@ def ubahProduct(id):
 
         db.session.commit()
 
-        return response.success(single_object(product), 'Sukses update data produk!')
+        return response.success(single_object(product), 'Sukses update data produk!', code=200)
 
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal mengubah data produk.")
+        return response.badRequest([], "Gagal mengubah data produk.", code=400)
 
-def hapusProduk(id):
+def hapusProduct(id):
     try:
         product = Products.query.filter_by(id=id).first()
+        
         if not product:
-            return response.badRequest([], "Produk tidak ditemukan.")
+            return response.badRequest([], "Produk tidak ditemukan.", code=404)
+
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.img_file)
+
+        if os.path.exists(image_path):
+            os.remove(image_path)
 
         db.session.delete(product)
         db.session.commit()
-
-        return response.success('', 'Sukses menghapus produk!')
+        return response.success('', 'Sukses menghapus produk!', code=200)
 
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal menghapus produk.")
+        return response.badRequest([], "Gagal menghapus produk.", code=400)
     
 def get_pagination(clss, url, start, limit):
-    #ambil data select
     results = clss.query.all()
-    #ubah format
     data = format_array(results)
-    #hitung jumlah data
     count = len(data)
 
     obj = {}
@@ -181,7 +183,7 @@ def get_pagination(clss, url, start, limit):
     if count < start:
         obj['success'] = False
         obj['message'] = "Page yang dipilih melewati batas total data!"
-        return obj
+        return response.badRequest([], obj['message'], code=400)
     else:
         obj['success'] = True
         obj['start_page'] = start
@@ -189,7 +191,7 @@ def get_pagination(clss, url, start, limit):
         obj['total_data'] = count
         obj['total_page'] = math.ceil(count/limit)
 
-        #previous link
+    
         if start == 1:
             obj['previous'] = ''
         else:
@@ -197,7 +199,6 @@ def get_pagination(clss, url, start, limit):
             limit_copy = start - 1
             obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
 
-        #next link
         if start + limit > count:
             obj['next'] = ''
         else:
@@ -205,12 +206,9 @@ def get_pagination(clss, url, start, limit):
             obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
 
         obj['results'] = data[(start - 1): (start - 1 + limit)]
-        return obj
+        return response.success(obj, 'Data berhasil didapat', code=200)
     
-#fungsi paging
 def paginate():
-    #ambil parameter get
-    #sample www.google.com?product=baju
 
     start = request.args.get('start')
     limit = request.args.get('limit')
@@ -222,13 +220,14 @@ def paginate():
                 'http://127.0.0.1:5000/api/product/page',
                 start=request.args.get('start', 1),
                 limit = request.args.get('limit', 3)
-            ))
+            )), 200
         else:
             return jsonify(get_pagination(
                 Products,
                 'http://127.0.0.1:5000/api/product/page',
                 start = int(start),
                 limit = int(limit)
-            ))
+            )), 200
     except Exception as e:
         print(e)
+        return response.badRequest([], "Gagal mengambil data produk.", code=500)

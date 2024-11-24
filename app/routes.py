@@ -49,7 +49,7 @@ def productDetail(id):
     elif request.method == "PUT":
         return ProductsController.ubahProduct(id)
     elif request.method == "DELETE":
-        return ProductsController.hapusProduk(id)
+        return ProductsController.hapusProduct(id)
 
 @app.route('/admin/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
@@ -72,7 +72,6 @@ def categoryDetail(id):
         return CategoriesController.hapusCategory(id)
     return 'Hello Flask App'
 
-#buat rute paging
 @app.route('/api/product/page', methods=['GET'])
 def pagination():
     return ProductsController.paginate()

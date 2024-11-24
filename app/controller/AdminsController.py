@@ -10,10 +10,10 @@ def indexAdmin():
     try:
         admins = Admins.query.all()
         data = format_array(admins)
-        return response.success(data, "success")
+        return response.success(data, "success", code=200)
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal mengambil data admin.")
+        return response.badRequest([], "Gagal mengambil data admin.", code=400)
 
 def format_array(datas):
     return [single_object(data) for data in datas]
@@ -33,15 +33,15 @@ def detail_admin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
-            return response.badRequest([], 'Admin tidak ditemukan')
+            return response.badRequest([], 'Admin tidak ditemukan', code=404)
 
         products = Products.query.filter_by(admin_id=id).all()
         data = single_detail_admin(admin, products)
 
-        return response.success(data, "success")
+        return response.success(data, "success", code=200)
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal mengambil detail admin.")
+        return response.badRequest([], "Gagal mengambil detail admin.", code=400)
 
 def single_detail_admin(admin, products):
     return {
@@ -78,19 +78,19 @@ def tambahAdmin():
         gender = request.form.get('gender')
 
         if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.")
+            return response.badRequest([], "Semua kolom wajib diisi.", code=400)
 
         if len(password) < 8:
-            return response.badRequest([], "Kata sandi harus terdiri dari minimal 8 karakter.")
+            return response.badRequest([], "Kata sandi harus terdiri dari minimal 8 karakter.", code=400)
 
         if gender not in ["Laki-Laki", "Perempuan"]:
-            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")
+            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.", code=400)
 
         if Admins.query.filter_by(email=email).first():
-            return response.badRequest([], "Email sudah terdaftar.")
+            return response.badRequest([], "Email sudah terdaftar.", code=400)
 
         if Admins.query.filter_by(phone_number=phone_number).first():
-            return response.badRequest([], "Nomor telepon sudah terdaftar.")
+            return response.badRequest([], "Nomor telepon sudah terdaftar.", code=400)
 
 
         admin = Admins(
@@ -103,17 +103,17 @@ def tambahAdmin():
         db.session.add(admin)
         db.session.commit()
 
-        return response.success(single_object(admin), 'Sukses Menambahkan Data Admin')
+        return response.success(single_object(admin), 'Sukses Menambahkan Data Admin', code=201)
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal menyimpan data admin.")
+        return response.badRequest([], "Gagal menyimpan data admin.", code=400)
 
 def ubahAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
-            return response.badRequest([], "Admin tidak ditemukan.")
+            return response.badRequest([], "Admin tidak ditemukan.", code=404)
 
         name = request.form.get('name')
         email = request.form.get('email')
@@ -122,10 +122,10 @@ def ubahAdmin(id):
         gender = request.form.get('gender')
 
         if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.")
+            return response.badRequest([], "Semua kolom wajib diisi.", code=400)
 
         if gender not in ["Laki-Laki", "Perempuan"]:
-            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")
+            return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.", code=400)
 
         admin.name = name
         admin.email = email
@@ -135,26 +135,26 @@ def ubahAdmin(id):
 
         db.session.commit()
 
-        return response.success(single_object(admin), "Sukses update data!")
+        return response.success(single_object(admin), "Sukses update data!", code=200)
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal mengubah data admin.")
+        return response.badRequest([], "Gagal mengubah data admin.", code=400)
 
 def hapusAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
-            return response.badRequest([], "Data admin tidak ditemukan.")
+            return response.badRequest([], "Data admin tidak ditemukan.", code=404)
 
         db.session.delete(admin)
         db.session.commit()
 
-        return response.success('', 'Berhasil menghapus data!')
+        return response.success('', 'Berhasil menghapus data!', code=200)
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.badRequest([], "Gagal menghapus data admin.")
+        return response.badRequest([], "Gagal menghapus data admin.", code=400)
     
 def loginAdmin():
     try:
@@ -163,27 +163,13 @@ def loginAdmin():
 
         admin = Admins.query.filter_by(email=email).first()
 
-        if not admin:
-            return response.badRequest([],'Email tidak terdaftar')
-        
-        if not admin.checkPassword(password):
-            return response.badRequest([], 'Kombinasi password salah')
-        
-        data = single_object(admin)
+        if not admin or not check_password_hash(admin.password, password):
+            return response.badRequest([], "Email atau password salah.", code=401)
 
-        expires = timedelta(days=7)
-        expires_refresh = timedelta(days=7)
+        access_token = create_access_token(identity=admin.id, expires_delta=timedelta(days=1))
 
-        access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
-        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
-
-        return response.success({
-            "data" : data,
-            "acces_token" : access_token,
-            "refresh_token" : refresh_token,
-        }, "Sukses Login!")
+        return response.success({'access_token': access_token}, "Login sukses!", code=200)
+    
     except Exception as e:
         print(e)
-        return response.badRequest([], "Gagal login")
-        
-
+        return response.badRequest([], "Gagal login.", code=400)
