@@ -1,6 +1,4 @@
 import React from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import homeImg from "@/assets/images/home-image.svg";
@@ -61,7 +59,6 @@ const benefits = [
 const Home = () => {
 	return (
 		<main>
-			<Header />
 			<div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
 				<div className="w-full flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0">
 					<div className="max-w-3xl text-center lg:text-left">
@@ -202,7 +199,6 @@ const Home = () => {
 					</Typography>
 				</div>
 			</div>
-			<Footer />
 		</main>
 	);
 };

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,7 +48,6 @@ const Statistic = () => {
 
   return (
     <main>
-      <Header />
       <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
         <div className="max-w-3x1 text-center lg:text-center">
           <Typography variant="title">
@@ -141,8 +138,8 @@ const Statistic = () => {
                     key={index}
                     className={`${
                       index % 2 === 0
-                        ? "bg-emerald-700 bg-opacity-0"
-                        : "bg-emerald-700 bg-opacity-10"
+                        ? "bg-background"
+                        : "bg-emerald-50"
                     }`}
                   >
                     <TableCell>{selectedYear}</TableCell>
@@ -259,8 +256,8 @@ const Statistic = () => {
                         key={index}
                         className={`${
                           index % 2 === 0
-                            ? "bg-emerald-700 bg-opacity-0"
-                            : "bg-emerald-700 bg-opacity-10"
+                        ? "bg-background"
+                        : "bg-emerald-50"
                         }`}
                       >
                         <TableCell className="text-center px-2 py-3 border border-gray-300">
@@ -299,7 +296,6 @@ const Statistic = () => {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 };

@@ -1,6 +1,4 @@
 import React from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import { Typography } from "@/components/ui/Typography";
 import trashImage from "@/assets/images/trash.svg";
 
@@ -86,7 +84,6 @@ const teamMembers = [
 const About = () => {
   return (
     <main>
-      <Header />
       <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
         <div className="max-w-3x1 text-center lg:text-center">
           <Typography variant="title">
@@ -195,7 +192,6 @@ const About = () => {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 };

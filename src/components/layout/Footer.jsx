@@ -10,8 +10,6 @@ const navigationLinks = [
 	{ id: 4, name: "Produk", path: "/produk" },
 ];
 
-const communityLinks = [{ id: 1, name: "Tentang Kami", path: "/tentang-kami" }];
-
 const socialLinks = [
 	{ id: 1, name: "Discord", url: "https://discord.com/" },
 	{ id: 2, name: "Instagram", url: "https://www.instagram.com/" },
@@ -53,16 +51,14 @@ const Footer = () => {
 						<h4 className="text-[#fdfaf1] text-lg lg:text-xl font-bold">
 							Community
 						</h4>
-						{communityLinks.map((link) => (
-							<Link key={link.id} to={link.path}>
-								<Typography
-									variant="p"
-									className="text-background text-sm lg:text-base hover:text-sky-50 transition-colors"
-								>
-									{link.name}
-								</Typography>
-							</Link>
-						))}
+						<Link to="/tentang-kami">
+							<Typography
+								variant="p"
+								className="text-background text-sm lg:text-base hover:text-sky-50 transition-colors"
+							>
+								Tentang Kami
+							</Typography>
+						</Link>
 					</div>
 					<div className="flex flex-col gap-4 lg:gap-5 w-full md:w-1/3">
 						<h4 className="text-[#fdfaf1] text-lg lg:text-xl font-bold">
