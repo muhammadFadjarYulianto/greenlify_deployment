@@ -1,7 +1,8 @@
 from app import app, response
 from app.controller import AdminsController, CategoriesController, ProductsController
 from flask import request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.controller.ProductsController import Products, format_array
 
 @app.route('/')
 def index():
@@ -32,10 +33,11 @@ def categories():
     else:
         return CategoriesController.tambahCategory()
 
-@app.route('/product', methods=['GET', 'POST'])
+@app.route('/product', methods=['GET', 'POST', 'OPTIONS'])
 @jwt_required()
 def products():
-    if request.method == 'GET':
+    # print(request.headers)  
+    if request.method == 'GET' or request.method == 'OPTIONS':
         return ProductsController.indexProduct()
     else:
         return ProductsController.tambahProduct()
