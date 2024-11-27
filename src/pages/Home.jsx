@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ImagePlus } from "lucide-react";
 import { Upload, ScanLine, MessageSquareMore } from "lucide-react";
 import {LazyLoadImage} from "react-lazy-load-image-component";
+import {Link} from "react-router-dom";
 
 const steps = [
 	{
@@ -77,7 +78,7 @@ const Home = () => {
 						</Typography>
 						<div className="mt-4">
 							<Button variant="outline" size="lg">
-								Lihat lebih banyak
+								<Link to="/prediksi">Lihat lebih banyak</Link>
 							</Button>
 						</div>
 					</div>
