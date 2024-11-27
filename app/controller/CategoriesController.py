@@ -60,7 +60,7 @@ def single_product(product):
 
 def tambahCategory():
     try:
-        category_name = request.form.get('category_name')
+        category_name = request.form.get('category_name') or request.form.json('category_name')
         if not category_name:
             return response.badRequest([], "Nama kategori wajib diisi.")
         if len(category_name) < 3:
@@ -79,7 +79,7 @@ def tambahCategory():
 
 def ubahCategory(id):
     try:
-        category_name = request.form.get('category_name')
+        category_name = request.form.get('category_name') or request.form.json('category_name')
         if not category_name:
             return response.badRequest([], "Nama kategori wajib diisi.")
 

@@ -1,7 +1,7 @@
 from app import app, response
 from app.controller import AdminsController, CategoriesController, ProductsController
 from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 @app.route('/')
 def index():
@@ -10,6 +10,11 @@ def index():
 @app.route('/login', methods=['POST'])
 def loginAdmin():
     return AdminsController.loginAdmin()
+
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token():
+    return AdminsController.refreshToken()
 
 @app.route('/admin', methods=['GET', 'POST'])
 @jwt_required()
