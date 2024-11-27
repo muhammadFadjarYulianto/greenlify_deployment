@@ -1,9 +1,7 @@
 import React from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import { Typography } from "@/components/ui/Typography";
 import { Button } from "@/components/ui/button";
-import homeImg from "@/assets/images/home-image.svg";
+import homeImg from "@/assets/images/img-home.svg";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ImagePlus } from "lucide-react";
 import { Upload, ScanLine, MessageSquareMore } from "lucide-react";
@@ -46,7 +44,8 @@ const benefits = [
 		description:
 			"Dengan klasifikasi sampah yang tepat, kita dapat mengurangi dampak negatif sampah terhadap lingkungan, mengoptimalkan daur ulang, dan memastikan sampah dikelola dengan cara yang lebih ramah lingkungan",
 		badge: "Advantages #1",
-		image: "https://via.placeholder.com/894x596",
+		image:
+			"https://img.freepik.com/free-photo/couple-collects-garbage-garbage-bags-park_1157-27406.jpg?t=st=1732365623~exp=1732369223~hmac=005a0557a7abec95f2b7bbafe44652636470a3c476437dfb70dce845acb22d12&w=1380",
 	},
 	{
 		id: 2,
@@ -54,18 +53,18 @@ const benefits = [
 		description:
 			"Kami berkomitmen untuk menciptakan solusi inovatif yang ramah lingkungan, efisien, dan didukung teknologi terkini, untuk memastikan pengelolaan sampah yang lebih baik dan berkelanjutan demi masa depan yang lebih hijau.",
 		badge: "Advantages #2",
-		image: "https://via.placeholder.com/1166x777",
+		image:
+			"https://img.freepik.com/free-photo/group-asian-diverse-people-volunteer-teamwork-environment-conservationvolunteer-help-picking-plastic-foam-garbage-park-areavolunteering-world-environment-day_640221-307.jpg?t=st=1732365722~exp=1732369322~hmac=5efd3b061905cda330f4f872b39af44fe2784c9d6d87ca82819068f00ce9f92b&w=1380",
 	},
 ];
 
 const Home = () => {
 	return (
 		<main>
-			<Header />
 			<div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
 				<div className="w-full flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0">
 					<div className="max-w-3xl text-center lg:text-left">
-						<Typography variant="title">
+						<Typography variant="title" className="text-5xl md:text-7xl">
 							Transformasi <strong className="text-emerald-600">Sampah</strong>,
 							Ciptakan <strong className="text-emerald-600">Manfaat</strong>
 						</Typography>
@@ -85,7 +84,7 @@ const Home = () => {
 				<img
 					src={homeImg}
 					alt="Home"
-					className="w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52"
+					className="hidden md:block w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52"
 				/>
 				<div className="w-full flex flex-col-reverse lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0">
 					<div className="max-w-3xl text-center lg:text-left">
@@ -186,10 +185,11 @@ const Home = () => {
 			<div
 				className="w-full h-[298px] sm:h-[200px] md:h-[250px] lg:h-[298px] mt-[66px] sm:mt-[40px] md:mt-[50px] mb-[66px] sm:mb-[40px] md:mb-[50px] relative bg-cover bg-center"
 				style={{
-					backgroundImage: "url('https://via.placeholder.com/1090x298')",
+					backgroundImage:
+						"url('https://images.pexels.com/photos/5029862/pexels-photo-5029862.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
 				}}
 			>
-				<div className="w-full h-full absolute bg-black opacity-40" />
+				<div className="w-full h-full absolute bg-black opacity-60" />
 				<div className="w-full max-w-5xl absolute text-center px-4 sm:px-6 md:px-8 lg:px-6 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2">
 					<Typography
 						variant="h3"
@@ -202,7 +202,6 @@ const Home = () => {
 					</Typography>
 				</div>
 			</div>
-			<Footer />
 		</main>
 	);
 };
