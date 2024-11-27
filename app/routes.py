@@ -1,7 +1,7 @@
 from app import app, response
 from app.controller import AdminsController, CategoriesController, ProductsController
 from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 @app.route('/')
 def index():
