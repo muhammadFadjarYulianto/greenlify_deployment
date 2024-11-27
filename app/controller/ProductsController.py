@@ -48,12 +48,12 @@ def detail_product(id):
 
 def tambahProduct():
     try:
-        created_by = request.form.get('created_by') or request.form.json('created_by')
-        category_id = request.form.get('category_id') or request.form.json('category_id')
-        product_name = request.form.get('product_name') or request.form.json('product_name')
-        description = request.form.get('description') or request.form.json('description')
-        price = request.form.get('price') or request.form.json('price')
-        contact = request.form.get('contact') or request.form.json('contact')
+        created_by = request.form.get('created_by') or request.json.get('created_by')
+        category_id = request.form.get('category_id') or request.json.get('category_id')
+        product_name = request.form.get('product_name') or request.json.get('product_name')
+        description = request.form.get('description') or request.json.get('description')
+        price = request.form.get('price') or request.json.get('price')
+        contact = request.form.get('contact') or request.json.get('contact')
 
         if 'img_file' not in request.files:
             return response.badRequest([], 'File tidak tersedia')
@@ -114,12 +114,12 @@ def ubahProduct(id):
         if not product:
             return response.notFound([], "Produk tidak ditemukan.")
 
-        created_by = request.form.get('created_by') or request.form.json('created_by')
-        category_id = request.form.get('category_id') or request.form.json('category_id')
-        product_name = request.form.get('product_name') or request.form.json('product_name')
-        description = request.form.get('description') or request.form.json('description')
-        price = request.form.get('price') or request.form.json('price')
-        contact = request.form.get('contact') or request.form.json('contact')
+        created_by = request.form.get('created_by') or request.json.get('created_by')
+        category_id = request.form.get('category_id') or request.json.get('category_id')
+        product_name = request.form.get('product_name') or request.json.get('product_name')
+        description = request.form.get('description') or request.json.get('description')
+        price = request.form.get('price') or request.json.get('price')
+        contact = request.form.get('contact') or request.json.get('contact')
         
         img_file = None
         if 'img_file' in request.files:

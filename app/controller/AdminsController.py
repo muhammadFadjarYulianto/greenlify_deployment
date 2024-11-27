@@ -72,11 +72,11 @@ def single_product(product):
 
 def tambahAdmin():
     try:
-        name = request.form.get('name') or request.form.json('name')
-        email = request.form.get('email') or request.form.json('email')
-        password = request.form.get('password') or request.form.json('password')
-        phone_number = request.form.get('phone_number') or request.form.json('phone_number')
-        gender = request.form.get('gender') or request.form.json('gender')
+        name = request.form.get('name') or request.json.get('name')
+        email = request.form.get('email') or request.json.get('email')
+        password = request.form.get('password') or request.json.get('password')
+        phone_number = request.form.get('phone_number') or request.json.get('phone_number')
+        gender = request.form.get('gender') or request.json.get('gender')
 
         if not all([name, email, password, phone_number, gender]):
             return response.badRequest([], "Semua kolom wajib diisi.")
@@ -116,11 +116,11 @@ def ubahAdmin(id):
         if not admin:
             return response.notFound([], "Admin tidak ditemukan.")
 
-        name = request.form.get('name') or request.form.json('name')
-        email = request.form.get('email') or request.form.json('email')
-        password = request.form.get('password') or request.form.json('password')
-        phone_number = request.form.get('phone_number') or request.form.json('phone_number')
-        gender = request.form.get('gender') or request.form.json('gender')
+        name = request.form.get('name') or request.json.get('name')
+        email = request.form.get('email') or request.json.get('email')
+        password = request.form.get('password') or request.json.get('password')
+        phone_number = request.form.get('phone_number') or request.json.get('phone_number')
+        gender = request.form.get('gender') or request.json.get('gender')
 
         if not all([name, email, password, phone_number, gender]):
             return response.badRequest([], "Semua kolom wajib diisi.")
@@ -159,10 +159,8 @@ def hapusAdmin(id):
     
 def loginAdmin():
     try:
-        email = request.form.get('email') or request.form.json('email')
-        password = request.form.get('password') or request.form.json('password')
-
-        admin = Admins.query.filter_by(email=email).first()
+        email = request.form.get('email') or request.json.get('email')
+        password = request.form.get('password') or request.json.get('password')
 
         if not email or not password:
             return response.badRequest([],'Email dan password wajib diisi')
