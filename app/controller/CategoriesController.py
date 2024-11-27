@@ -1,7 +1,7 @@
 from flask import request
 from app.model.categories import Categories
 from app.model.products import Products
-from app import response, db
+from app import response, db, app
 
 def indexCategory():
     try:

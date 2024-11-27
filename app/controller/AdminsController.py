@@ -1,6 +1,6 @@
 from app.model.admins import Admins
 from app.model.products import Products
-from app import response, db
+from app import response, db, app
 from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
@@ -160,13 +160,13 @@ def hapusAdmin(id):
     
 def loginAdmin():
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        admin = Admins.query.filter_by(email=email).first()
+        email = request.form.get('email') or request.json.get('email')
+        password = request.form.get('password') or request.json.get('password')
 
         if not email or not password:
             return response.badRequest([],'Email dan password wajib diisi')
+
+        admin = Admins.query.filter_by(email=email).first()
 
         if not admin:
             return response.notFound([],'Email tidak terdaftar')
@@ -177,7 +177,7 @@ def loginAdmin():
         data = single_object(admin)
 
         expires = timedelta(hours=12)
-        expires_refresh = timedelta(hours=12)
+        expires_refresh = timedelta(days=7)
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
@@ -185,7 +185,7 @@ def loginAdmin():
         return response.success({
             "data" : data,
             "acces_token" : access_token,
-            "refresh_token" : refresh_token,
+            "refresh_token" : refresh_token
         })
     except Exception as e:
         print(e)
