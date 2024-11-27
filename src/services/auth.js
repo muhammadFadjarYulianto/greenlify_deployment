@@ -1,57 +1,73 @@
 import axios from 'axios';
-import { API_BASE_URL, LOGIN_ENDPOINT } from "@/constants/apiRoutes";
+import {API_BASE_URL, LOGIN_ENDPOINT} from "@/constants/apiRoutes";
+
+axios.defaults.withCredentials = true;
 
 export default class AuthServices {
     /**
-     * Sends a login request to the server.
-     * @param {string} email - User's email address.
-     * @param {string} password - User's password.
-     * @returns {Promise<object>} - Response data from the server.
-     * @throws {Error} - Throws error if request fails or validation fails.
+     * Mengirim permintaan login ke server.
+     * @param {string} email - Email pengguna.
+     * @param {string} password - Kata sandi pengguna.
+     * @returns {Promise<object>} - Data respons dari server.
+     * @throws {Error} - Error jika permintaan gagal atau validasi gagal.
      */
     static async login(email, password) {
         try {
-            if (!email || !password) {
-                throw new Error('Both email and password are required.');
-            }
-            if (!this.isValidEmail(email)) {
-                throw new Error('Invalid email format.');
-            }
+            this.validateLoginInputs(email, password);
+            const response = await axios.post(
+                `${API_BASE_URL}${LOGIN_ENDPOINT}`,
+                {email, password},
+                {
+                    headers: {'Content-Type': 'application/json'},
+                    timeout: 3000,
+                }
+            );
 
-            const response = await axios.post(`${API_BASE_URL}${LOGIN_ENDPOINT}`, {
-                email,
-                password
-            }, { headers: { 'Content-Type': 'application/json' } });
-
-            if (response.data && response.data.status === 'success') {
-                const { access_token, refresh_token, data } = response.data;
-
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('refresh_token', refresh_token);
-
-                localStorage.setItem('user', JSON.stringify(data));
-
-                return { access_token, refresh_token, user: data };
-            } else {
-                throw new Error('Login failed. Please check your credentials.');
-            }
+            return this.handleLoginResponse(response.data);
         } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-            } else if (error.request) {
-                console.error('No Response from Server:', error.request);
-            } else {
-                console.error('Request Error:', error.message);
+            const message = 'Login gagal. Periksa kembali kredensial Anda.';
+
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error Details:', error.response || error.message);
             }
 
-            throw error;
+            throw new Error(message);
         }
     }
 
     /**
-     * Validates an email address.
-     * @param {string} email - The email address to validate.
-     * @returns {boolean} - True if valid, false otherwise.
+     * Menangani respons login.
+     * @param {object} data - Data respons dari server.
+     * @returns {object} - Data pengguna jika berhasil login.
+     * @throws {Error} - Error jika login gagal.
+     */
+    static handleLoginResponse(data) {
+        if (data?.status === 'success') {
+            return {user: data.data};
+        } else {
+            throw new Error(data?.message || 'Login gagal.');
+        }
+    }
+
+    /**
+     * Validasi input login.
+     * @param {string} email - Email pengguna.
+     * @param {string} password - Kata sandi pengguna.
+     * @throws {Error} - Error jika input tidak valid.
+     */
+    static validateLoginInputs(email, password) {
+        if (!email || !password) {
+            throw new Error('Email dan password harus diisi.');
+        }
+        if (!this.isValidEmail(email)) {
+            throw new Error('Format email tidak valid.');
+        }
+    }
+
+    /**
+     * Validasi format email.
+     * @param {string} email - Email yang akan divalidasi.
+     * @returns {boolean} - True jika format valid, false jika tidak.
      */
     static isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

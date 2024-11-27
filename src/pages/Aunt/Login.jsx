@@ -46,11 +46,12 @@ export default function Login() {
     return (
         <div className="w-full h-screen">
             <div className="flex items-stretch w-full h-full">
-                <div className="hidden relative lg:flex lg:w-1/2 p-12">
+                <div className="hidden relative lg:flex lg:w-10/12 p-12">
                     <img
                         src={LoginImg}
                         alt="GreenLify Logo"
                         className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
                     />
                     {/*<div className="absolute inset-0 bg-black opacity-50" />*/}
                 </div>
@@ -145,9 +146,16 @@ export default function Login() {
                                 <Button
                                     type="submit"
                                     className="w-full bg-emerald-600 hover:bg-emerald-700"
-                                    disabled={loading}
+                                    disabled={loading || !email || !password}
                                 >
-                                    {loading ? "Memuat..." : "Masuk"}
+                                    {loading ? (
+                                        <>
+                                            Memuat...
+                                            <span className="loader inline-block ml-2"></span>
+                                        </>
+                                    ) : (
+                                        "Masuk"
+                                    )}
                                 </Button>
                             </form>
 
