@@ -5,7 +5,7 @@ import {Card, CardContent} from "@/components/ui/card";
 import {Label} from "@/components/ui/label";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Typography} from "@/components/ui/Typography";
-import Logo from "@/assets/images/logo.svg";
+import Logo from "@/assets/logo/logo.svg";
 import LoginImg from "@/assets/images/img-login.svg";
 import {EyeIcon, EyeOffIcon} from "lucide-react";
 import authServices from "@/services/auth";

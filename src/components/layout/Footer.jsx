@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import LogoWhite from "../../assets/images/logo-white.svg";
+import LogoWhite from "../../assets/logo/logo-white.svg";
 import { Typography } from "@/components/ui/Typography";
 
 const navigationLinks = [

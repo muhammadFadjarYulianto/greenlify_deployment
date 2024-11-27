@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Send } from "lucide-react";
 // @ts-ignore
-import Logo from "@/assets/images/logo.svg";
+import Logo from "@/assets/logo/logo.svg";
 import { Link } from "react-router-dom";
 
 const data = {

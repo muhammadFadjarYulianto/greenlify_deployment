@@ -5,15 +5,15 @@ import {LazyLoadImage} from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const partners = [
-    {id: 1, name: "KLHK", imageSrc: "/src/assets/images/KLHK.svg"},
+    {id: 1, name: "KLHK", imageSrc: "/src/assets/partners/KLHK.svg"},
     {
         id: 2,
         name: "Waste4Change",
-        imageSrc: "/src/assets/images/waste4change.svg",
+        imageSrc: "/src/assets/partners/waste4change.svg",
     },
-    {id: 3, name: "Greenpeace", imageSrc: "/src/assets/images/Greenpeace.svg"},
-    {id: 4, name: "Kehati", imageSrc: "/src/assets/images/Kehati.svg"},
-    {id: 5, name: "Avani", imageSrc: "/src/assets/images/Avani.svg"},
+    {id: 3, name: "Greenpeace", imageSrc: "/src/assets/partners/Greenpeace.svg"},
+    {id: 4, name: "Kehati", imageSrc: "/src/assets/partners/Kehati.svg"},
+    {id: 5, name: "Avani", imageSrc: "/src/assets/partners/Avani.svg"},
 ];
 
 const teamMembers = [
