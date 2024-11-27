@@ -25,6 +25,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Link } from "react-router-dom";
+import {LazyLoadImage} from 'react-lazy-load-image-component';
 
 export default function Products() {
 	const {
@@ -40,7 +41,7 @@ export default function Products() {
 		<div>
 			<div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
 				<div className="relative w-10/12 mx-auto">
-					<img
+					<LazyLoadImage
 						src="https://images.pexels.com/photos/3737672/pexels-photo-3737672.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 						alt="Home"
 						className="w-full h-[481px] object-cover rounded-[20px]"
@@ -70,7 +71,7 @@ export default function Products() {
 				</div>
 				<div className="grid grid-cols-2 gap-4 w-10/12 p-4">
 					<div className="relative col-span-1 row-span-2 overflow-hidden rounded-lg">
-						<img
+						<LazyLoadImage
 							src="https://images.pexels.com/photos/6193131/pexels-photo-6193131.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 							alt="Produk Terbaru"
 							className="w-full h-full object-cover"
@@ -85,7 +86,7 @@ export default function Products() {
 						</div>
 					</div>
 					<div className="relative col-span-1 overflow-hidden rounded-lg">
-						<img
+						<LazyLoadImage
 							src="https://images.pexels.com/photos/3737576/pexels-photo-3737576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 							alt="Keranjang Anyaman"
 							className="w-full h-full object-cover"
@@ -100,7 +101,7 @@ export default function Products() {
 						</div>
 					</div>
 					<div className="relative col-span-1 overflow-hidden rounded-lg">
-						<img
+						<LazyLoadImage
 							src="https://images.pexels.com/photos/3737672/pexels-photo-3737672.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 							alt="Cangkir Kertas"
 							className="w-full h-full object-cover"

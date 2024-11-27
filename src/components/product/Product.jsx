@@ -9,6 +9,7 @@ import {
 import { Typography } from "@/components/ui/Typography";
 import { Star, StarHalf } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {LazyLoadImage} from 'react-lazy-load-image-component';
 
 const Product = ({ image, price, title, rating, description }) => {
 	const fullStars = Math.floor(rating);
@@ -17,7 +18,7 @@ const Product = ({ image, price, title, rating, description }) => {
 	return (
 		<Card>
 			<div className="rounded-md overflow-hidden">
-				<img src={image} alt={title} className="w-full h-80 object-cover" />
+				<LazyLoadImage src={image} alt={title} className="w-full h-80 object-cover" />
 			</div>
 			<CardHeader>
 				<Typography variant="large" className="text-emerald-600 font-bold">

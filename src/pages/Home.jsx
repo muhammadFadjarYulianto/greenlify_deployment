@@ -5,6 +5,7 @@ import homeImg from "@/assets/images/img-home.svg";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ImagePlus } from "lucide-react";
 import { Upload, ScanLine, MessageSquareMore } from "lucide-react";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 const steps = [
 	{
@@ -81,7 +82,7 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-				<img
+				<LazyLoadImage
 					src={homeImg}
 					alt="Home"
 					className="hidden md:block w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52"
