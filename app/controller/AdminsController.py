@@ -4,7 +4,6 @@ from app import response, db
 from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
-from flask_jwt_extended import get_jwt
 from datetime import datetime, timedelta
 import redis
 
@@ -73,11 +72,11 @@ def single_product(product):
 
 def tambahAdmin():
     try:
-        name = request.form.get('name')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        phone_number = request.form.get('phone_number')
-        gender = request.form.get('gender')
+        name = request.form.get('name') or request.form.json('name')
+        email = request.form.get('email') or request.form.json('email')
+        password = request.form.get('password') or request.form.json('password')
+        phone_number = request.form.get('phone_number') or request.form.json('phone_number')
+        gender = request.form.get('gender') or request.form.json('gender')
 
         if not all([name, email, password, phone_number, gender]):
             return response.badRequest([], "Semua kolom wajib diisi.")
@@ -117,11 +116,11 @@ def ubahAdmin(id):
         if not admin:
             return response.notFound([], "Admin tidak ditemukan.")
 
-        name = request.form.get('name')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        phone_number = request.form.get('phone_number')
-        gender = request.form.get('gender')
+        name = request.form.get('name') or request.form.json('name')
+        email = request.form.get('email') or request.form.json('email')
+        password = request.form.get('password') or request.form.json('password')
+        phone_number = request.form.get('phone_number') or request.form.json('phone_number')
+        gender = request.form.get('gender') or request.form.json('gender')
 
         if not all([name, email, password, phone_number, gender]):
             return response.badRequest([], "Semua kolom wajib diisi.")
@@ -145,7 +144,7 @@ def ubahAdmin(id):
 
 def hapusAdmin(id):
     try:
-        admin = Admins.query.filter_by(id=id).first()
+        admin = Admins.query.filter_by(id=id).first()   
         if not admin:
             return response.notFound([], "Data admin tidak ditemukan.")
 
@@ -160,8 +159,8 @@ def hapusAdmin(id):
     
 def loginAdmin():
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
+        email = request.form.get('email') or request.form.json('email')
+        password = request.form.get('password') or request.form.json('password')
 
         admin = Admins.query.filter_by(email=email).first()
 
@@ -177,7 +176,7 @@ def loginAdmin():
         data = single_object(admin)
 
         expires = timedelta(hours=12)
-        expires_refresh = timedelta(hours=12)
+        expires_refresh = timedelta(days=3)
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
@@ -190,6 +189,21 @@ def loginAdmin():
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal login")
+    
+def refreshToken():
+    try:
+        current_user = get_jwt_identity()
+
+        expires = timedelta(hours=12)
+        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires)
+
+        return response.success({
+            "access_token": new_access_token
+        })
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal memperbarui token")
+
 
 # Setup Redis 
 redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)

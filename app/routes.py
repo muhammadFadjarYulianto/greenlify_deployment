@@ -11,6 +11,11 @@ def index():
 def loginAdmin():
     return AdminsController.loginAdmin()
 
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token():
+    return AdminsController.refreshToken()
+
 @app.route('/admin', methods=['GET', 'POST'])
 @jwt_required()
 def admins():
