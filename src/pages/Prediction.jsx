@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import UploadIcon from "../assets/images/upload-cloud.svg";
+import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/Typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -68,6 +69,16 @@ const Prediction = () => {
 	const [imagePreview, setImagePreview] = useState(null);
 	const [isError, setIsError] = useState(false);
 	const [isPrediction, setIsPrediction] = useState(false); //test tampilan
+
+	const webcamRef = useRef(null);
+	const [imgSrc, setImgSrc] = useState(null);
+
+	// create a capture function
+	const capture = useCallback(() => {
+		const imageSrc = webcamRef.current.getScreenshot();
+		// console.log(imageSrc);
+		setImgSrc(imageSrc);
+	}, []);
 
 	// Fungsi untuk menangani perubahan file
 	const handleFileChange = (event) => {
@@ -173,42 +184,37 @@ const Prediction = () => {
 						</TabsContent>
 						{/* Camera */}
 						<TabsContent value="camera">
-							{/* Alert Error */}
-							{isError && (
-								<Alert variant="destructive" className="mb-5">
-									<AlertCircle className="h-4 w-4" />
-									<AlertTitle>Error</AlertTitle>
-									<AlertDescription>
-										Ukuran file gambar anda melebihi batas maksimal 2mb
-									</AlertDescription>
-								</Alert>
-							)}
-
-							<div className="relative border-2 border-dashed border-emerald-500 rounded-lg p-8 flex flex-col md:flex-row items-center justify-center gap-4 bg-[#EAF0E4] transition hover:bg-[rgb(221,230,212)] w-5xl w-full md:w-[1312px] h-[426px]">
-								{/* Preview Image */}
-								{imagePreview && (
-									<div className="mt-4">
-										<img
-											src={imagePreview}
-											alt="Preview"
-											className="max-w-32 md:max-w-40 rounded-lg"
-										/>
-									</div>
-								)}
-								<div className="flex flex-col items-center justify-center">
-									<div className="text-emerald-500 text-xl">
-										<img src={UploadIcon} alt="Upload Icon" />
-									</div>
-									<p className="text-center text-emerald-600 mt-4">
-										Klik untuk <span className="font-semibold">
-											camera
-										</span>{" "}
-									</p>
+							<div className="relative border-2 border-dashed border-emerald-500 rounded-lg p-8 flex flex-col md:flex-row items-center justify-center gap-4 bg-[#EAF0E4] transition hover:bg-[rgb(221,230,212)] w-5xl w-full md:w-[1312px] ">
+								<div className="h-full">
+									{imgSrc ? (
+										<img src={imgSrc} alt="webcam" />
+									) : (
+										<>
+											<Webcam
+												ref={webcamRef}
+												className="h-full rounded-md"
+												screenshotFormat="image/jpeg"
+												screenshotQuality={0.8}
+												videoConstraints={{
+													facingMode: "environment",
+												}}
+											/>
+											<div className="flex justify-center mt-2">
+												<Button
+													variant="outline"
+													onClick={capture}
+													type="button"
+												>
+													Capture Photo
+												</Button>
+											</div>
+										</>
+									)}
 								</div>
 							</div>
 						</TabsContent>
 					</Tabs>
-					<Button size="md" className="max-w-fit px-8 ">
+					<Button size="md" className="max-w-fit px-8 " type="submit">
 						Prediksi
 					</Button>
 				</form>
