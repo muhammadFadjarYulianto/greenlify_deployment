@@ -14,7 +14,6 @@ import { Pencil, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import dataProduct from "@/data/product.json";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -30,16 +29,6 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const categories = [
-	...new Set(dataProduct.map((product) => product.category)),
-].map((category) => ({
-	id: category.toLowerCase().replace(/\s+/g, "-"),
-	name: category,
-	productCount: dataProduct.filter((product) => product.category === category)
-		.length,
-	createdAt: "24 November 2024",
-	status: "Aktif",
-}));
 
 export default function CategoryManagement() {
 	const limitedCategories = categories.slice(0, 5);
