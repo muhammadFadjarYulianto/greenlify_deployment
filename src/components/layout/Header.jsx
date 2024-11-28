@@ -57,19 +57,19 @@ export default function Header() {
         if (isLoggedIn) {
             return (
                 <>
-                    <Button size="lg" className="w-full" onClick={() => window.location.href = "/dashboard"}>
-                        <User className="mr-2 h-6 w-6"/>
+                    <Button size="md" className="w-full" onClick={() => window.location.href = "/dashboard"}>
+                        <User className="mr-2 h-4 w-4"/>
                         Dashboard
                     </Button>
-                    <Button variant="destructive" size="lg" className="w-full mt-4" onClick={handleLogout}>
-                        <LogOut className="mr-2 h-6 w-6"/>
+                    <Button variant="destructive" size="md" className="w-full mt-4" onClick={handleLogout}>
+                        <LogOut className="mr-2 h-4 w-4"/>
                         Logout
                     </Button>
                 </>
             );
         }
         return (
-            <Button variant="outline" size="lg" asChild className="w-full">
+            <Button variant="outline" size="md" asChild className="w-full">
                 <Link to="/login">Login</Link>
             </Button>
         );
@@ -96,7 +96,7 @@ export default function Header() {
                             <User className="mr-2 h-6 w-6"/>
                             <Typography variant="p-semibold" className="text-white">Dashboard</Typography>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+                        <DropdownMenuItem onClickCapture={handleLogout} className="cursor-pointer">
                             <LogOut className="mr-2 h-6 w-6"/>
                             <Typography variant="p-semibold" className="text-white">Logout</Typography>
                         </DropdownMenuItem>
@@ -171,7 +171,7 @@ export default function Header() {
                             </Link>
                         ))}
 
-                        <Button size="lg" asChild>
+                        <Button size="md" asChild>
                             <Link to="/klasifikasi">Klasifikasi</Link>
                         </Button>
 
