@@ -47,8 +47,9 @@ def detail_product(id):
         return response.serverError([], "Gagal mengambil detail produk.")
 
 def indexGuest():
-    try:
-        products = Products.query.all()
+    try:    
+        products = Products.query.all()        
+        
         data = [
             {
                 'id': product.id,
@@ -61,7 +62,8 @@ def indexGuest():
             }
             for product in products
         ]
-        return response.success(data, "Berhasil mengambil data produk untuk guest.")
+        
+        return response.success({"data": data, "message": "Berhasil mengambil data produk untuk guest."})
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data produk untuk guest.")
