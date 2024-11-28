@@ -203,51 +203,52 @@ def get_pagination(clss, url, start, limit):
     if count < start:
         obj['success'] = False
         obj['message'] = "Page yang dipilih melewati batas total data!"
-        return response.badRequest([], obj['message'])
+        return obj  # Kembalikan dictionary mentah untuk diproses di luar
+
+    obj['success'] = True
+    obj['start_page'] = start
+    obj['per_page'] = limit
+    obj['total_data'] = count
+    obj['total_page'] = math.ceil(count / limit)
+
+    if start == 1:
+        obj['previous'] = ''
     else:
-        obj['success'] = True
-        obj['start_page'] = start
-        obj['per_page'] = limit
-        obj['total_data'] = count
-        obj['total_page'] = math.ceil(count/limit)
+        start_copy = max(1, start - limit)
+        limit_copy = start - 1
+        obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
 
-    
-        if start == 1:
-            obj['previous'] = ''
-        else:
-            start_copy = max(1, start-limit)
-            limit_copy = start - 1
-            obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
+    if start + limit > count:
+        obj['next'] = ''
+    else:
+        start_copy = start + limit
+        obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
 
-        if start + limit > count:
-            obj['next'] = ''
-        else:
-            start_copy = start + limit
-            obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
+    obj['results'] = data[(start - 1): (start - 1 + limit)]
+    return obj  # Kembalikan dictionary mentah untuk diproses di luar
 
-        obj['results'] = data[(start - 1): (start - 1 + limit)]
-        return response.success(obj, 'Data berhasil didapat')
-    
+
 def paginate():
-
     start = request.args.get('start')
     limit = request.args.get('limit')
 
     try:
-        if start == None or limit == None:
-            return jsonify(get_pagination(
+        print(f"Start: {start}, Limit: {limit}")
+        if start is None or limit is None:
+            pagination_data = get_pagination(
                 Products,
                 'http://127.0.0.1:5000/api/product/page',
-                start=request.args.get('start', 1),
-                limit = request.args.get('limit', 3)
-            ))
+                start=int(request.args.get('start', 1)),
+                limit=int(request.args.get('limit', 3))
+            )
         else:
-            return jsonify(get_pagination(
+            pagination_data = get_pagination(
                 Products,
                 'http://127.0.0.1:5000/api/product/page',
-                start = int(start),
-                limit = int(limit)
-            ))
+                start=int(start),
+                limit=int(limit)
+            )
+        return response.success(pagination_data)  # Bungkus dalam response.success
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data produk.")
