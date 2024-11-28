@@ -6,11 +6,21 @@ from app import response, db, app
 def indexCategory():
     try:
         categories = Categories.query.all()
-        data = format_array(categories)
+
+        data = [
+            {
+                'id': category.id,
+                'category_name': category.category_name,
+                'product_count': len(category.products)
+            }
+            for category in categories
+        ]
+
         return response.success(data)
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data kategori.")
+
 
 def format_array(datas):
     return [single_object(data) for data in datas]
