@@ -8,16 +8,16 @@ from app.controller.ProductsController import Products, format_array
 def index():
     return 'Hello Flask App'
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def loginAdmin():
     return AdminsController.loginAdmin()
 
-@app.route('/refresh', methods=['POST'])
+@app.route('/api/refresh', methods=['POST'])
 @jwt_required(refresh=True)
 def refresh_token():
     return AdminsController.refreshToken()
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/api/admin', methods=['GET', 'POST'])
 @jwt_required()
 def admins():
     if request.method == 'GET':
@@ -25,7 +25,7 @@ def admins():
     else:
         return AdminsController.tambahAdmin()
 
-@app.route('/category', methods=['GET', 'POST'])
+@app.route('/api/category', methods=['GET', 'POST'])
 @jwt_required()
 def categories():
     if request.method == 'GET':
@@ -33,16 +33,20 @@ def categories():
     else:
         return CategoriesController.tambahCategory()
 
-@app.route('/product', methods=['GET', 'POST', 'OPTIONS'])
+@app.route('/api/product/guest', methods=['GET'])
+def guestProduct():
+    return ProductsController.indexGuest()
+
+@app.route('/api/product', methods=['GET', 'POST'])
 @jwt_required()
 def products():
     # print(request.headers)  
-    if request.method == 'GET' or request.method == 'OPTIONS':
+    if request.method == 'GET':
         return ProductsController.indexProduct()
     else:
         return ProductsController.tambahProduct()
 
-@app.route('/product/<id>', methods=["GET", "PUT", "DELETE"])
+@app.route('/api/product/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
 def productDetail(id):
     if request.method == 'GET':
@@ -52,7 +56,7 @@ def productDetail(id):
     elif request.method == "DELETE":
         return ProductsController.hapusProduct(id)
 
-@app.route('/admin/<id>', methods=["GET", "PUT", "DELETE"])
+@app.route('/api/admin/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
 def adminDetail(id):
     if request.method == 'GET':
@@ -62,7 +66,7 @@ def adminDetail(id):
     elif request.method == "DELETE":
         return AdminsController.hapusAdmin(id)
 
-@app.route('/category/<id>', methods=["GET", "PUT", "DELETE"])
+@app.route('/api/category/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
 def categoryDetail(id):
     if request.method == 'GET':
@@ -76,7 +80,7 @@ def categoryDetail(id):
 def pagination():
     return ProductsController.paginate()
 
-@app.route('/logout', methods=['POST'])
+@app.route('/api/logout', methods=['POST'])
 @jwt_required()  
 def logout():
     return AdminsController.logoutAdmin()

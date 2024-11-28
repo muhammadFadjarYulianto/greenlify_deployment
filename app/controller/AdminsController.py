@@ -1,6 +1,6 @@
 from app.model.admins import Admins
 from app.model.products import Products
-from app import response, db, app
+from app import response, db
 from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
@@ -162,10 +162,10 @@ def loginAdmin():
         email = request.form.get('email') or request.json.get('email')
         password = request.form.get('password') or request.json.get('password')
 
+        admin = Admins.query.filter_by(email=email).first()
+
         if not email or not password:
             return response.badRequest([],'Email dan password wajib diisi')
-
-        admin = Admins.query.filter_by(email=email).first()
 
         if not admin:
             return response.notFound([],'Email tidak terdaftar')
@@ -183,8 +183,8 @@ def loginAdmin():
 
         return response.success({
             "data" : data,
-            "access_token" : access_token,
-            "refresh_token" : refresh_token
+            "acces_token" : access_token,
+            "refresh_token" : refresh_token,
         })
     except Exception as e:
         print(e)

@@ -46,6 +46,26 @@ def detail_product(id):
         print(e)
         return response.serverError([], "Gagal mengambil detail produk.")
 
+def indexGuest():
+    try:
+        products = Products.query.all()
+        data = [
+            {
+                'id': product.id,
+                'category_name': product.category.category_name,
+                'product_name': product.product_name,
+                'description': product.description,
+                'price': str(product.price),
+                'contact': product.contact,
+                'img_file': product.img_file
+            }
+            for product in products
+        ]
+        return response.success(data, "Berhasil mengambil data produk untuk guest.")
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal mengambil data produk untuk guest.")
+
 def tambahProduct():
     try:
         created_by = request.form.get('created_by') or request.json.get('created_by')
@@ -54,21 +74,22 @@ def tambahProduct():
         description = request.form.get('description') or request.json.get('description')
         price = request.form.get('price') or request.json.get('price')
         contact = request.form.get('contact') or request.json.get('contact')
+        img_file = request.form.get('img_file') or request.json.get('img_file')
 
-        if 'img_file' not in request.files:
-            return response.badRequest([], 'File tidak tersedia')
+        # if 'img_file' not in request.files:
+        #     return response.badRequest([], 'File tidak tersedia')
 
-        file = request.files['img_file']
+        # file = request.files['img_file']
 
-        if file.filename == '':
-            return response.badRequest([], 'File tidak tersedia')
+        # if file.filename == '':
+        #     return response.badRequest([], 'File tidak tersedia')
         
-        if file and uploadconfig.allowed_file(file.filename):
-            uid = uuid.uuid4()
-            filename = secure_filename(file.filename)
-            renamefile = "GreenLify-Product-"+str(uid)+filename
+        # if file and uploadconfig.allowed_file(file.filename):
+        #     uid = uuid.uuid4()
+        #     filename = secure_filename(file.filename)
+        #     renamefile = "GreenLify-Product-"+str(uid)+filename
 
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
+        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -95,7 +116,7 @@ def tambahProduct():
             description=description,
             price=price,
             contact=contact,
-            img_file=renamefile
+            img_file=img_file
         )
 
         db.session.add(product)
@@ -120,15 +141,16 @@ def ubahProduct(id):
         description = request.form.get('description') or request.json.get('description')
         price = request.form.get('price') or request.json.get('price')
         contact = request.form.get('contact') or request.json.get('contact')
-        
-        img_file = None
-        if 'img_file' in request.files:
-            file = request.files['img_file']
-            if file.filename != '' and uploadconfig.allowed_file(file.filename):
-                uid = uuid.uuid4()
-                filename = secure_filename(file.filename)
-                img_file = "GreenLify-Product-" + str(uid) + filename
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
+        img_file = request.form.get('img_file') or request.json.get('img_file')
+
+        # img_file = None
+        # if 'img_file' in request.files:
+        #     file = request.files['img_file']
+        #     if file.filename != '' and uploadconfig.allowed_file(file.filename):
+        #         uid = uuid.uuid4()
+        #         filename = secure_filename(file.filename)
+        #         img_file = "GreenLify-Product-" + str(uid) + filename
+        #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -139,9 +161,7 @@ def ubahProduct(id):
         product.description = description
         product.price = price
         product.contact = contact
-        
-        if img_file:
-            product.img_file = img_file
+        product.img_file = img_file
 
         db.session.commit()
 
@@ -159,10 +179,10 @@ def hapusProduct(id):
         if not product:
             return response.notFound([], "Produk tidak ditemukan.")
 
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.img_file)
+        # image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.img_file)
 
-        if os.path.exists(image_path):
-            os.remove(image_path)
+        # if os.path.exists(image_path):
+        #     os.remove(image_path)
 
         db.session.delete(product)
         db.session.commit()
