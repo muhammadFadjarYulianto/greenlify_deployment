@@ -2,13 +2,6 @@ import axios from "axios";
 import {LOGIN, LOGOUT, REFRESH} from "@/constants/routesAPI";
 
 export default class AuthServices {
-    /**
-     * Login pengguna dan menyimpan access serta refresh token di localStorage.
-     * @param {string} email - Email pengguna.
-     * @param {string} password - Kata sandi pengguna.
-     * @returns {Promise<object>} - Data respons dari server.
-     * @throws {Error} - Error jika login gagal.
-     */
     static async login(email, password) {
         try {
             this.validateLoginInputs(email, password);
@@ -20,9 +13,9 @@ export default class AuthServices {
 
             const {access_token, refresh_token} = response.data.data;
 
-            // Simpan token di localStorage
             localStorage.setItem("access_token", access_token);
             localStorage.setItem("refresh_token", refresh_token);
+            localStorage.setItem("user_email", email);
 
             return response.data;
         } catch (error) {
@@ -31,10 +24,6 @@ export default class AuthServices {
         }
     }
 
-    /**
-     * Logout pengguna, menghapus token dari localStorage.
-     * @returns {Promise<void>} - Promise selesai ketika logout berhasil.
-     */
     static async logout() {
         try {
             await axios.post(LOGOUT, {}, {withCredentials: true});
@@ -46,10 +35,6 @@ export default class AuthServices {
         }
     }
 
-    /**
-     * Refresh access token menggunakan refresh token.
-     * @returns {Promise<string>} - Access token baru.
-     */
     static async refreshAccessToken() {
         const refreshToken = localStorage.getItem("refresh_token");
 
@@ -64,7 +49,6 @@ export default class AuthServices {
 
             const {access_token} = response.data;
 
-            // Simpan access token baru di localStorage
             localStorage.setItem("access_token", access_token);
 
             return access_token;
@@ -89,28 +73,15 @@ export default class AuthServices {
         }
     }
 
-    /**
-     * Validasi format email.
-     * @param {string} email - Email yang akan divalidasi.
-     * @returns {boolean} - True jika format valid, false jika tidak.
-     */
     static isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
 
-    /**
-     * Mendapatkan access token dari localStorage.
-     * @returns {string|null} - Access token, atau null jika tidak ada.
-     */
     static getAccessToken() {
         return localStorage.getItem("access_token");
     }
 
-    /**
-     * Memeriksa apakah access token valid.
-     * @returns {boolean} - True jika valid, false jika tidak.
-     */
     static isAccessTokenValid() {
         const token = this.getAccessToken();
         if (!token) return false;
@@ -140,7 +111,6 @@ axios.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        // Jika token kadaluarsa (401)
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
@@ -150,7 +120,7 @@ axios.interceptors.response.use(
                 return axios(originalRequest);
             } catch (refreshError) {
                 console.error("Refresh token gagal, logout pengguna.");
-                AuthServices.logout();
+                await AuthServices.logout();
                 window.location.href = "/login";
             }
         }
