@@ -17,7 +17,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
-    const [rememberMe, setRememberMe] = React.useState(false); // New state for "remember me"
+    const [rememberMe, setRememberMe] = React.useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -138,7 +138,7 @@ export default function Login() {
 
                                 <div className="flex items-center space-x-4 my-4">
                                     <Checkbox id="remember" className="bg-emerald-600" checked={rememberMe}
-                                              onChange={() => setRememberMe(!rememberMe)}/>
+                                              onCheckedChange={() => setRememberMe(!rememberMe)}/>
                                     <Typography variant="small" className="text-gray-500">
                                         <label
                                             htmlFor="remember"

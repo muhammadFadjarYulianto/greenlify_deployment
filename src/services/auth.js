@@ -58,12 +58,6 @@ export default class AuthServices {
         }
     }
 
-    /**
-     * Validasi input login.
-     * @param {string} email - Email pengguna.
-     * @param {string} password - Kata sandi pengguna.
-     * @throws {Error} - Error jika input tidak valid.
-     */
     static validateLoginInputs(email, password) {
         if (!email || !password) {
             throw new Error("Email dan password harus diisi.");
