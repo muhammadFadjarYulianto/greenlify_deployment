@@ -63,10 +63,79 @@ def indexGuest():
             for product in products
         ]
         
-        return response.success({"data": data, "message": "Berhasil mengambil data produk untuk guest."})
+        return response.success(data)
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data produk untuk guest.")
+
+def filterProducts():
+    try:
+        category_name = request.args.get('category_name', type=str)
+        min_price = request.args.get('min_price', type=float)
+        max_price = request.args.get('max_price', type=float)
+
+        if not category_name and min_price is None and max_price is None:
+            return response.badRequest([], "Silakan masukkan salah satu filter: category_name atau min_price & max_price.")
+
+        query = Products.query
+
+        if category_name:
+            category = Categories.query.filter_by(category_name=category_name).first()
+            if not category:
+                return response.notFound([], "Kategori tidak ditemukan.")
+            query = query.filter_by(category_id=category.id)
+
+        if min_price is not None and max_price is not None:
+            if min_price < 0 or max_price < 0:
+                return response.badRequest([], "Harga tidak boleh bernilai negatif.")
+            if min_price > max_price:
+                return response.badRequest([], "Harga minimum tidak boleh lebih besar dari harga maksimum.")
+            query = query.filter(Products.price.between(min_price, max_price))
+        elif min_price is not None:
+            if min_price < 0:
+                return response.badRequest([], "Harga minimum tidak boleh bernilai negatif.")
+            query = query.filter(Products.price > min_price)
+        elif max_price is not None:
+            if max_price < 0:
+                return response.badRequest([], "Harga maksimum tidak boleh bernilai negatif.")
+            query = query.filter(Products.price < max_price)
+
+        products = query.all()
+
+        if not products:
+            return response.notFound([], "Tidak ada produk yang ditemukan dengan kriteria yang diberikan.")
+
+        data = format_array(products)
+        return response.success(data)
+
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal memfilter produk.")
+
+def searchProducts():
+    try:
+        keyword = request.args.get('keyword', type=str)
+
+        if not keyword:
+            return response.badRequest([], "Silakan masukkan kata kunci untuk pencarian.")
+
+        keyword = f"%{keyword}%"
+
+        products = Products.query.filter(
+            Products.product_name.ilike(keyword) | 
+            Products.description.ilike(keyword)
+        ).all()
+
+        if not products:
+            return response.notFound([], "Tidak ada produk yang ditemukan sesuai kata kunci.")
+
+        data = format_array(products)
+        return response.success(data)
+
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal mencari produk.")
+
 
 def tambahProduct():
     try:

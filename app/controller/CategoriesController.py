@@ -46,6 +46,24 @@ def detail_category(id):
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail kategori.")
+    
+def filterCategory(category_name):
+    try:
+        category = Categories.query.filter_by(category_name=category_name).first()
+
+        if not category:
+            return response.notFound([], 'Kategori tidak ditemukan.')
+        products = Products.query.filter_by(category_id=category.id).all()
+
+        if not products:
+                return response.notFound([], "Tidak ada produk yang ditemukan dalam kategori ini.")
+
+        data = single_detail_category(category, products)
+
+        return response.success(data)
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal memfilter produk berdasarkan kategori.")
 
 def single_detail_category(category, products):
     return {

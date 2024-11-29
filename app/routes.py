@@ -32,15 +32,31 @@ def categories():
         return CategoriesController.indexCategory()
     else:
         return CategoriesController.tambahCategory()
+    
+@app.route('/api/category/<string:category_name>', methods=['GET'])
+@jwt_required
+def filterCategory(category_name):
+    return CategoriesController.filterCategory(category_name)
 
 @app.route('/api/product/guest', methods=['GET'])
 def guestProduct():
     return ProductsController.indexGuest()
 
+@app.route('/api/product/guest/filter', methods=['GET'])
+def filterByPriceRange():
+    return ProductsController.filterProducts()
+
+@app.route('/api/product/guest/search', methods=['GET'])
+def searchRoute():
+    return ProductsController.searchProducts()
+
+@app.route('/api/product/guest/page', methods=['GET'])
+def pagination():
+    return ProductsController.paginate()
+
 @app.route('/api/product', methods=['GET', 'POST'])
 @jwt_required()
 def products():
-    # print(request.headers)  
     if request.method == 'GET':
         return ProductsController.indexProduct()
     else:
@@ -75,10 +91,6 @@ def categoryDetail(id):
         return CategoriesController.ubahCategory(id)
     elif request.method == "DELETE":
         return CategoriesController.hapusCategory(id)
-
-@app.route('/api/product/page', methods=['GET'])
-def pagination():
-    return ProductsController.paginate()
 
 @app.route('/api/logout', methods=['POST'])
 @jwt_required()  

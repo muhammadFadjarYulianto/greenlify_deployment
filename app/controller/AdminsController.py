@@ -205,24 +205,31 @@ def refreshToken():
         return response.serverError([], "Gagal memperbarui token")
 
 
-# Setup Redis 
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+# # Setup Redis 
+# redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+
+# def logoutAdmin():
+#     try:
+#         # Mengambil identitas pengguna dari token JWT yang sedang digunakan
+#         identity = get_jwt_identity()
+
+#         # Mendapatkan JWT ID (jti) yang unik untuk token yang sedang digunakan
+#         jti = get_jwt()['jti']
+
+#         # Menambahkan jti ke dalam Redis untuk menandakan bahwa token ini tidak valid
+#         # Mengatur waktu kedaluwarsa (misalnya 12 jam)
+#         redis_client.setex(jti, timedelta(hours=12), "revoked")  # Token ini tidak dapat digunakan lagi setelah logout
+
+#         # Mengirim respons sukses
+#         return response.success("Sukses logout, token telah dinonaktifkan.")
+#     except Exception as e:
+#         print(e)
+#         return response.serverError([], "Gagal melakukan logout.")
 
 def logoutAdmin():
     try:
-        # Mengambil identitas pengguna dari token JWT yang sedang digunakan
         identity = get_jwt_identity()
-
-        # Mendapatkan JWT ID (jti) yang unik untuk token yang sedang digunakan
-        jti = get_jwt()['jti']
-
-        # Menambahkan jti ke dalam Redis untuk menandakan bahwa token ini tidak valid
-        # Mengatur waktu kedaluwarsa (misalnya 12 jam)
-        redis_client.setex(jti, timedelta(hours=12), "revoked")  # Token ini tidak dapat digunakan lagi setelah logout
-
-        # Mengirim respons sukses
-        return response.success("Sukses logout, token telah dinonaktifkan.")
+        return response.success([],"Sukses logout. Token dihapus dari frontend.")
     except Exception as e:
         print(e)
-        return response.serverError([], "Gagal melakukan logout.")
-
+        return response.serverError([],"Gagal melakukan logout.")
