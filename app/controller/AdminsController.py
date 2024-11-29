@@ -163,6 +163,8 @@ def loginAdmin():
         password = request.form.get('password') or request.json.get('password')
         remember_me = request.form.get('remember_me') or request.json.get('remember_me')
 
+        remember_me = bool(remember_me) if remember_me is not None else False
+
         admin = Admins.query.filter_by(email=email).first()
 
         if not email or not password:
@@ -176,8 +178,8 @@ def loginAdmin():
         
         data = single_object(admin)
 
-        expires = timedelta(days=3) if remember_me == 'true' else timedelta(hours=12)
-        expires_refresh = timedelta(days=7)
+        expires = timedelta(hours=12)
+        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
@@ -204,33 +206,3 @@ def refreshToken():
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal memperbarui token")
-
-
-# # Setup Redis 
-# redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
-
-# def logoutAdmin():
-#     try:
-#         # Mengambil identitas pengguna dari token JWT yang sedang digunakan
-#         identity = get_jwt_identity()
-
-#         # Mendapatkan JWT ID (jti) yang unik untuk token yang sedang digunakan
-#         jti = get_jwt()['jti']
-
-#         # Menambahkan jti ke dalam Redis untuk menandakan bahwa token ini tidak valid
-#         # Mengatur waktu kedaluwarsa (misalnya 12 jam)
-#         redis_client.setex(jti, timedelta(hours=12), "revoked")  # Token ini tidak dapat digunakan lagi setelah logout
-
-#         # Mengirim respons sukses
-#         return response.success("Sukses logout, token telah dinonaktifkan.")
-#     except Exception as e:
-#         print(e)
-#         return response.serverError([], "Gagal melakukan logout.")
-
-def logoutAdmin():
-    try:
-        identity = get_jwt_identity()
-        return response.success([],"Sukses logout. Token dihapus dari frontend.")
-    except Exception as e:
-        print(e)
-        return response.serverError([],"Gagal melakukan logout.")

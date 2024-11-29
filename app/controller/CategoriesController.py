@@ -11,7 +11,8 @@ def indexCategory():
             {
                 'id': category.id,
                 'category_name': category.category_name,
-                'product_count': len(category.products)
+                'product_count': len(category.products),
+                'created_at': category.created_at
             }
             for category in categories
         ]
@@ -28,7 +29,8 @@ def format_array(datas):
 def single_object(data):
     return {
         'id': data.id,
-        'category_name': data.category_name
+        'category_name': data.category_name,
+        'created_at': data.created_at
     }
 
 # def detail_category(id):

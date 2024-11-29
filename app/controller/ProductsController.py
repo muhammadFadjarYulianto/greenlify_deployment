@@ -112,6 +112,29 @@ def filterProducts():
         print(e)
         return response.serverError([], "Gagal memfilter produk.")
 
+def searchProductsManage():
+    try:
+        keyword = request.args.get('keyword', type=str)
+
+        if not keyword:
+            return response.badRequest([], "Silakan masukkan kata kunci untuk pencarian.")
+
+        keyword = f"%{keyword}%"
+
+        products = Products.query.filter(
+            Products.product_name.ilike(keyword)
+        ).all()
+
+        if not products:
+            return response.notFound([], "Tidak ada produk yang ditemukan sesuai kata kunci.")
+
+        data = format_array(products)
+        return response.success(data)
+
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal mencari produk.")
+    
 def searchProducts():
     try:
         keyword = request.args.get('keyword', type=str)
@@ -135,7 +158,6 @@ def searchProducts():
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mencari produk.")
-
 
 def tambahProduct():
     try:

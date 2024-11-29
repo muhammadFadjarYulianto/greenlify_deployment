@@ -63,6 +63,16 @@ def products():
         return ProductsController.indexProduct()
     else:
         return ProductsController.tambahProduct()
+    
+@app.route('/api/product/filter', methods=['GET'])
+@jwt_required()
+def filterByPriceRange():
+    return ProductsController.filterProducts()
+
+@app.route('/api/product/search', methods=['GET'])
+@jwt_required()
+def searchRoute():
+    return ProductsController.searchProductsManage()
         
 @app.route('/api/product/guest', methods=['GET'])
 def guestProduct():
@@ -90,8 +100,3 @@ def productDetail(id):
     elif request.method == "DELETE":
         return ProductsController.hapusProduct(id)
 
-
-@app.route('/api/logout', methods=['POST'])
-@jwt_required()  
-def logout():
-    return AdminsController.logoutAdmin()
