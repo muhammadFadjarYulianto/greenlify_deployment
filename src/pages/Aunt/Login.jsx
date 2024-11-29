@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Card, CardContent} from "@/components/ui/card";
@@ -43,6 +43,13 @@ export default function Login() {
         document.getElementById('email').focus();
     }, []);
 
+    useEffect(() => {
+       const token = localStorage.getItem("access_token");
+       if (token) {
+           navigate("/dashboard");
+       }
+   }, []);
+
     return (
         <div className="w-full h-screen">
             <div className="flex items-stretch w-full h-full">
@@ -60,7 +67,7 @@ export default function Login() {
                         <CardContent className="space-y-8 p-8">
                             <div className="w-full flex gap-3 items-center mb-[66px]">
                                 <ArrowLeft className="h-4 w-4 text-emerald-700" />
-                                <Link to={-1}>
+                                <Link to={'/'}>
                                     <Typography variant="p" className="hover:underline text-emerald-700">Kembali</Typography>
                                 </Link>
                             </div>

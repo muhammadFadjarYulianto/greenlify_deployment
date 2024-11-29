@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Typography } from "@/components/ui/Typography";
-import { Card, CardContent } from "@/components/ui/card";
+import React, {useState, useEffect} from "react";
+import {Typography} from "@/components/ui/Typography";
+import {Card, CardContent} from "@/components/ui/card";
 import {
     Table,
     TableBody,
@@ -9,10 +9,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Pencil, Trash2, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+import {Pencil, Trash2, Plus} from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {SidebarTrigger} from "@/components/ui/sidebar";
+import {Separator} from "@/components/ui/separator";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -34,9 +34,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {useToast} from "@/hooks/use-toast";
 
 import {
     getCategoriesManagement,
@@ -51,7 +51,7 @@ export default function CategoryManagement() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
-    const { toast } = useToast();
+    const {toast} = useToast();
 
     const fetchCategories = async () => {
         try {
@@ -110,7 +110,7 @@ export default function CategoryManagement() {
                 description: "Kategori telah diperbarui",
             });
             setIsEditModalOpen(false);
-            await fetchCategories(); // Refresh the table immediately
+            await fetchCategories();
         } catch (error) {
             toast({
                 title: "Error",
@@ -127,7 +127,7 @@ export default function CategoryManagement() {
                 title: "Berhasil",
                 description: "Kategori telah dihapus",
             });
-            await fetchCategories(); // Refresh the table immediately
+            await fetchCategories();
         } catch (error) {
             toast({
                 title: "Error",
@@ -140,6 +140,20 @@ export default function CategoryManagement() {
     useEffect(() => {
         fetchCategories();
     }, []);
+
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        const day = days[date.getDay()];
+        const dateNum = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+
+        return `${day}, ${dateNum} ${month} ${year}`;
+    };
 
     const limitedCategories = categories.slice(0, 20);
 
@@ -201,11 +215,13 @@ export default function CategoryManagement() {
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Tambah Kategori Baru</DialogTitle>
+                                <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Tambah
+                                    Kategori Baru</DialogTitle>
                             </DialogHeader>
                             <form onSubmit={handleAddCategory} className="space-y-4">
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor="categoryName" className="text-[16px] font-normal leading-[28px]">Nama Kategori</Label>
+                                    <Label htmlFor="categoryName" className="text-[16px] font-normal leading-[28px]">Nama
+                                        Kategori</Label>
                                     <Input
                                         id="categoryName"
                                         name="categoryName"
@@ -240,7 +256,7 @@ export default function CategoryManagement() {
                                                 <TableCell className="text-center">{category.category_name}</TableCell>
                                                 <TableCell
                                                     className="text-center">{category.product_count} Produk</TableCell>
-                                                <TableCell className="text-center">{category.created_at}</TableCell>
+                                                <TableCell className="text-center">{formatDate(category.created_at)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <TooltipProvider>
                                                         <div className="flex justify-end gap-2">
@@ -292,11 +308,13 @@ export default function CategoryManagement() {
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Edit Kategori</DialogTitle>
+                        <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Edit
+                            Kategori</DialogTitle>
                     </DialogHeader>
                     <form onSubmit={handleEditCategory} className="space-y-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="categoryName" className="text-[16px] font-normal leading-[28px]">Nama Kategori</Label>
+                            <Label htmlFor="categoryName" className="text-[16px] font-normal leading-[28px]">Nama
+                                Kategori</Label>
                             <Input
                                 id="categoryName"
                                 name="categoryName"

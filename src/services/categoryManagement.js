@@ -15,8 +15,6 @@ export async function getCategoriesManagement() {
             },
         });
 
-        console.log("Full response:", response);
-
         if (response.data && response.data.data) {
             return response.data.data;
         } else {

@@ -46,6 +46,7 @@ export default function Header() {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("user_email");
+        localStorage.removeItem("id");
 
         setIsLoggedIn(false);
         setUserEmail("");
