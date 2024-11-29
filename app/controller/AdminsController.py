@@ -161,6 +161,7 @@ def loginAdmin():
     try:
         email = request.form.get('email') or request.json.get('email')
         password = request.form.get('password') or request.json.get('password')
+        remember_me = request.form.get('remember_me') or request.json.get('remember_me')
 
         admin = Admins.query.filter_by(email=email).first()
 
@@ -175,8 +176,8 @@ def loginAdmin():
         
         data = single_object(admin)
 
-        expires = timedelta(hours=12)
-        expires_refresh = timedelta(days=3)
+        expires = timedelta(days=3) if remember_me == 'true' else timedelta(hours=12)
+        expires_refresh = timedelta(days=7)
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
