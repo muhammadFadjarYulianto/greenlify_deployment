@@ -71,7 +71,7 @@ def filterProductManage():
 
 @app.route('/api/product/search', methods=['GET'])
 @jwt_required()
-def searchRoute():
+def searchProductManage():
     return ProductsController.searchProductsManage()
         
 @app.route('/api/product/guest', methods=['GET'])
@@ -83,7 +83,7 @@ def filterByPriceRange():
     return ProductsController.filterProducts()
 
 @app.route('/api/product/guest/search', methods=['GET'])
-def searchRoute():
+def searchProduct():
     return ProductsController.searchProducts()
 
 @app.route('/api/product/guest/page', methods=['GET'])
