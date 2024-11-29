@@ -79,7 +79,7 @@ def guestProduct():
     return ProductsController.indexGuest()
 
 @app.route('/api/product/guest/filter', methods=['GET'])
-def filterByPriceRange():
+def filterProduct():
     return ProductsController.filterProducts()
 
 @app.route('/api/product/guest/search', methods=['GET'])

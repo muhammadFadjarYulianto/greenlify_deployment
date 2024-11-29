@@ -15,8 +15,8 @@ class Products(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    admin = db.relationship('Admins', backref=db.backref('products', lazy=True))
-    category = db.relationship('Categories', backref=db.backref('products', lazy=True))
+    admin = db.relationship('Admins', backref=db.backref('products', lazy=True, cascade="all, delete-orphan"))
+    category = db.relationship('Categories', backref=db.backref('products', lazy=True, cascade="all, delete-orphan"))
 
     def __repr__(self):
-        return '<Products {}>'.format(self.name)
+        return '<Products {}>'.format(self.product_name)
