@@ -46,29 +46,121 @@ def detail_product(id):
         print(e)
         return response.serverError([], "Gagal mengambil detail produk.")
 
+def indexGuest():
+    try:    
+        products = Products.query.all()        
+        
+        data = [
+            {
+                'id': product.id,
+                'category_name': product.category.category_name,
+                'product_name': product.product_name,
+                'description': product.description,
+                'price': str(product.price),
+                'contact': product.contact,
+                'img_file': product.img_file
+            }
+            for product in products
+        ]
+        
+        return response.success(data)
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal mengambil data produk untuk guest.")
+
+def filterProducts():
+    try:
+        category_name = request.args.get('category_name', type=str)
+        min_price = request.args.get('min_price', type=float)
+        max_price = request.args.get('max_price', type=float)
+
+        if not category_name and min_price is None and max_price is None:
+            return response.badRequest([], "Silakan masukkan salah satu filter: category_name atau min_price & max_price.")
+
+        query = Products.query
+
+        if category_name:
+            category = Categories.query.filter_by(category_name=category_name).first()
+            if not category:
+                return response.notFound([], "Kategori tidak ditemukan.")
+            query = query.filter_by(category_id=category.id)
+
+        if min_price is not None and max_price is not None:
+            if min_price < 0 or max_price < 0:
+                return response.badRequest([], "Harga tidak boleh bernilai negatif.")
+            if min_price > max_price:
+                return response.badRequest([], "Harga minimum tidak boleh lebih besar dari harga maksimum.")
+            query = query.filter(Products.price.between(min_price, max_price))
+        elif min_price is not None:
+            if min_price < 0:
+                return response.badRequest([], "Harga minimum tidak boleh bernilai negatif.")
+            query = query.filter(Products.price > min_price)
+        elif max_price is not None:
+            if max_price < 0:
+                return response.badRequest([], "Harga maksimum tidak boleh bernilai negatif.")
+            query = query.filter(Products.price < max_price)
+
+        products = query.all()
+
+        if not products:
+            return response.notFound([], "Tidak ada produk yang ditemukan dengan kriteria yang diberikan.")
+
+        data = format_array(products)
+        return response.success(data)
+
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal memfilter produk.")
+
+def searchProducts():
+    try:
+        keyword = request.args.get('keyword', type=str)
+
+        if not keyword:
+            return response.badRequest([], "Silakan masukkan kata kunci untuk pencarian.")
+
+        keyword = f"%{keyword}%"
+
+        products = Products.query.filter(
+            Products.product_name.ilike(keyword) | 
+            Products.description.ilike(keyword)
+        ).all()
+
+        if not products:
+            return response.notFound([], "Tidak ada produk yang ditemukan sesuai kata kunci.")
+
+        data = format_array(products)
+        return response.success(data)
+
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal mencari produk.")
+
+
 def tambahProduct():
     try:
-        created_by = request.form.get('created_by') or request.form.json('created_by')
-        category_id = request.form.get('category_id') or request.form.json('category_id')
-        product_name = request.form.get('product_name') or request.form.json('product_name')
-        description = request.form.get('description') or request.form.json('description')
-        price = request.form.get('price') or request.form.json('price')
-        contact = request.form.get('contact') or request.form.json('contact')
+        created_by = request.form.get('created_by') or request.json.get('created_by')
+        category_id = request.form.get('category_id') or request.json.get('category_id')
+        product_name = request.form.get('product_name') or request.json.get('product_name')
+        description = request.form.get('description') or request.json.get('description')
+        price = request.form.get('price') or request.json.get('price')
+        contact = request.form.get('contact') or request.json.get('contact')
+        img_file = request.form.get('img_file') or request.json.get('img_file')
 
-        if 'img_file' not in request.files:
-            return response.badRequest([], 'File tidak tersedia')
+        # if 'img_file' not in request.files:
+        #     return response.badRequest([], 'File tidak tersedia')
 
-        file = request.files['img_file']
+        # file = request.files['img_file']
 
-        if file.filename == '':
-            return response.badRequest([], 'File tidak tersedia')
+        # if file.filename == '':
+        #     return response.badRequest([], 'File tidak tersedia')
         
-        if file and uploadconfig.allowed_file(file.filename):
-            uid = uuid.uuid4()
-            filename = secure_filename(file.filename)
-            renamefile = "GreenLify-Product-"+str(uid)+filename
+        # if file and uploadconfig.allowed_file(file.filename):
+        #     uid = uuid.uuid4()
+        #     filename = secure_filename(file.filename)
+        #     renamefile = "GreenLify-Product-"+str(uid)+filename
 
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
+        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -95,7 +187,7 @@ def tambahProduct():
             description=description,
             price=price,
             contact=contact,
-            img_file=renamefile
+            img_file=img_file
         )
 
         db.session.add(product)
@@ -114,21 +206,22 @@ def ubahProduct(id):
         if not product:
             return response.notFound([], "Produk tidak ditemukan.")
 
-        created_by = request.form.get('created_by') or request.form.json('created_by')
-        category_id = request.form.get('category_id') or request.form.json('category_id')
-        product_name = request.form.get('product_name') or request.form.json('product_name')
-        description = request.form.get('description') or request.form.json('description')
-        price = request.form.get('price') or request.form.json('price')
-        contact = request.form.get('contact') or request.form.json('contact')
-        
-        img_file = None
-        if 'img_file' in request.files:
-            file = request.files['img_file']
-            if file.filename != '' and uploadconfig.allowed_file(file.filename):
-                uid = uuid.uuid4()
-                filename = secure_filename(file.filename)
-                img_file = "GreenLify-Product-" + str(uid) + filename
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
+        created_by = request.form.get('created_by') or request.json.get('created_by')
+        category_id = request.form.get('category_id') or request.json.get('category_id')
+        product_name = request.form.get('product_name') or request.json.get('product_name')
+        description = request.form.get('description') or request.json.get('description')
+        price = request.form.get('price') or request.json.get('price')
+        contact = request.form.get('contact') or request.json.get('contact')
+        img_file = request.form.get('img_file') or request.json.get('img_file')
+
+        # img_file = None
+        # if 'img_file' in request.files:
+        #     file = request.files['img_file']
+        #     if file.filename != '' and uploadconfig.allowed_file(file.filename):
+        #         uid = uuid.uuid4()
+        #         filename = secure_filename(file.filename)
+        #         img_file = "GreenLify-Product-" + str(uid) + filename
+        #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], img_file))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -139,9 +232,7 @@ def ubahProduct(id):
         product.description = description
         product.price = price
         product.contact = contact
-        
-        if img_file:
-            product.img_file = img_file
+        product.img_file = img_file
 
         db.session.commit()
 
@@ -159,10 +250,10 @@ def hapusProduct(id):
         if not product:
             return response.notFound([], "Produk tidak ditemukan.")
 
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.img_file)
+        # image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.img_file)
 
-        if os.path.exists(image_path):
-            os.remove(image_path)
+        # if os.path.exists(image_path):
+        #     os.remove(image_path)
 
         db.session.delete(product)
         db.session.commit()
@@ -183,51 +274,52 @@ def get_pagination(clss, url, start, limit):
     if count < start:
         obj['success'] = False
         obj['message'] = "Page yang dipilih melewati batas total data!"
-        return response.badRequest([], obj['message'])
+        return obj  # Kembalikan dictionary mentah untuk diproses di luar
+
+    obj['success'] = True
+    obj['start_page'] = start
+    obj['per_page'] = limit
+    obj['total_data'] = count
+    obj['total_page'] = math.ceil(count / limit)
+
+    if start == 1:
+        obj['previous'] = ''
     else:
-        obj['success'] = True
-        obj['start_page'] = start
-        obj['per_page'] = limit
-        obj['total_data'] = count
-        obj['total_page'] = math.ceil(count/limit)
+        start_copy = max(1, start - limit)
+        limit_copy = start - 1
+        obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
 
-    
-        if start == 1:
-            obj['previous'] = ''
-        else:
-            start_copy = max(1, start-limit)
-            limit_copy = start - 1
-            obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
+    if start + limit > count:
+        obj['next'] = ''
+    else:
+        start_copy = start + limit
+        obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
 
-        if start + limit > count:
-            obj['next'] = ''
-        else:
-            start_copy = start + limit
-            obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
+    obj['results'] = data[(start - 1): (start - 1 + limit)]
+    return obj  # Kembalikan dictionary mentah untuk diproses di luar
 
-        obj['results'] = data[(start - 1): (start - 1 + limit)]
-        return response.success(obj, 'Data berhasil didapat')
-    
+
 def paginate():
-
     start = request.args.get('start')
     limit = request.args.get('limit')
 
     try:
-        if start == None or limit == None:
-            return jsonify(get_pagination(
+        print(f"Start: {start}, Limit: {limit}")
+        if start is None or limit is None:
+            pagination_data = get_pagination(
                 Products,
                 'http://127.0.0.1:5000/api/product/page',
-                start=request.args.get('start', 1),
-                limit = request.args.get('limit', 3)
-            ))
+                start=int(request.args.get('start', 1)),
+                limit=int(request.args.get('limit', 3))
+            )
         else:
-            return jsonify(get_pagination(
+            pagination_data = get_pagination(
                 Products,
                 'http://127.0.0.1:5000/api/product/page',
-                start = int(start),
-                limit = int(limit)
-            ))
+                start=int(start),
+                limit=int(limit)
+            )
+        return response.success(pagination_data)  # Bungkus dalam response.success
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data produk.")

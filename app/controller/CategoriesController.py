@@ -6,11 +6,21 @@ from app import response, db, app
 def indexCategory():
     try:
         categories = Categories.query.all()
-        data = format_array(categories)
+
+        data = [
+            {
+                'id': category.id,
+                'category_name': category.category_name,
+                'product_count': len(category.products)
+            }
+            for category in categories
+        ]
+
         return response.success(data)
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data kategori.")
+
 
 def format_array(datas):
     return [single_object(data) for data in datas]
@@ -36,6 +46,24 @@ def detail_category(id):
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail kategori.")
+    
+def filterCategory(category_name):
+    try:
+        category = Categories.query.filter_by(category_name=category_name).first()
+
+        if not category:
+            return response.notFound([], 'Kategori tidak ditemukan.')
+        products = Products.query.filter_by(category_id=category.id).all()
+
+        if not products:
+                return response.notFound([], "Tidak ada produk yang ditemukan dalam kategori ini.")
+
+        data = single_detail_category(category, products)
+
+        return response.success(data)
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal memfilter produk berdasarkan kategori.")
 
 def single_detail_category(category, products):
     return {
@@ -60,7 +88,7 @@ def single_product(product):
 
 def tambahCategory():
     try:
-        category_name = request.form.get('category_name') or request.form.json('category_name')
+        category_name = request.form.get('category_name') or request.json.get('category_name')
         if not category_name:
             return response.badRequest([], "Nama kategori wajib diisi.")
         if len(category_name) < 3:
@@ -79,7 +107,7 @@ def tambahCategory():
 
 def ubahCategory(id):
     try:
-        category_name = request.form.get('category_name') or request.form.json('category_name')
+        category_name = request.form.get('category_name') or request.json.get('category_name')
         if not category_name:
             return response.badRequest([], "Nama kategori wajib diisi.")
 
