@@ -96,7 +96,7 @@ export default function Header() {
                             <User className="mr-2 h-6 w-6"/>
                             <Typography variant="p-semibold" className="text-white">Dashboard</Typography>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClickCapture={handleLogout} className="cursor-pointer">
+                        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                             <LogOut className="mr-2 h-6 w-6"/>
                             <Typography variant="p-semibold" className="text-white">Logout</Typography>
                         </DropdownMenuItem>
