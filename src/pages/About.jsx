@@ -87,7 +87,7 @@ const About = () => {
       <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
         <div className="max-w-3x1 text-center lg:text-center">
           <Typography variant="title">
-            <strong className="text-emerald-700">Tentang</strong> Kami
+            <strong className="text-emerald-600">Tentang</strong> Kami
           </Typography>
         </div>
         <div className="text-justify md:text-center md:max-w-4xl lg:max-w-6xl">
@@ -134,7 +134,7 @@ const About = () => {
         </div>
         <div className="max-w-2x1 text-center lg:text-left">
           <Typography variant="h1">
-            <strong className="text-emerald-700">Misi</strong>
+            <strong className="text-emerald-600">Misi</strong>
           </Typography>
         </div>
       </div>
@@ -142,7 +142,7 @@ const About = () => {
       <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px] px-4">
         <div className="max-w-3xl text-center">
           <Typography variant="h1">
-            Kerja <strong className="text-emerald-700">Sama</strong>
+            Kerja <strong className="text-emerald-600">Sama</strong>
           </Typography>
         </div>
 
@@ -161,7 +161,7 @@ const About = () => {
       <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
         <div className="max-w-3x1 text-center lg:text-center">
           <Typography variant="title">
-            <strong className="text-emerald-700">Profile Tim</strong>
+            <strong className="text-emerald-600">Profile Tim</strong>
           </Typography>
         </div>
         <div className="max-w-2xl text-center lg:text-center-full">
@@ -181,9 +181,9 @@ const About = () => {
               <img
                 src={member.imageSrc}
                 alt={member.name}
-                className="w-80 h-80 object-cover rounded-lg shadow-md"
+                className="w-40 h-40 object-cover rounded-lg shadow-md"
               />
-              <Typography variant="p-semibold" className="text-center">
+              <Typography variant="small" className="text-center, font-semibold">
                 {member.name}
               </Typography>
               <Typography variant="p">{member.role}</Typography>
