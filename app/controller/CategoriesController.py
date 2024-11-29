@@ -31,60 +31,62 @@ def single_object(data):
         'category_name': data.category_name
     }
 
-def detail_category(id):
-    try:
-        category = Categories.query.filter_by(id=id).first()
+# def detail_category(id):
+#     try:
+#         category = Categories.query.filter_by(id=id).first()
 
-        if not category:
-            return response.notFound([], 'Kategori tidak ditemukan.')
-        products = Products.query.filter_by(category_id=id).all()
+#         if not category:
+#             return response.notFound([], 'Kategori tidak ditemukan.')
+#         products = Products.query.filter_by(category_id=id).all()
 
-        data = single_detail_category(category, products)
+#         data = single_detail_category(category, products)
 
-        return response.success(data)
+#         return response.success(data)
     
-    except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal mengambil detail kategori.")
+#     except Exception as e:
+#         print(e)
+#         return response.serverError([], "Gagal mengambil detail kategori.")
     
-def filterCategory(category_name):
-    try:
-        category = Categories.query.filter_by(category_name=category_name).first()
+# def filterCategory():
+#     try:
+#         category_name = request.args.get('category_name', type=str)
 
-        if not category:
-            return response.notFound([], 'Kategori tidak ditemukan.')
-        products = Products.query.filter_by(category_id=category.id).all()
+#         category = Categories.query.filter_by(category_name=category_name).first()
 
-        if not products:
-                return response.notFound([], "Tidak ada produk yang ditemukan dalam kategori ini.")
+#         if not category:
+#             return response.notFound([], 'Kategori tidak ditemukan.')
+#         products = Products.query.filter_by(category_id=category.id).all()
 
-        data = single_detail_category(category, products)
+#         if not products:
+#                 return response.notFound([], "Tidak ada produk yang ditemukan dalam kategori ini.")
 
-        return response.success(data)
-    except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal memfilter produk berdasarkan kategori.")
+#         data = single_detail_category(category, products)
 
-def single_detail_category(category, products):
-    return {
-        'id': category.id,
-        'category_name': category.category_name,
-        'products': [single_product(product) for product in products]
-    }
+#         return response.success(data)
+#     except Exception as e:
+#         print(e)
+#         return response.serverError([], "Gagal memfilter produk berdasarkan kategori.")
 
-def single_product(product):
-    return {
-        'id': product.id,
-        'created_by': product.admin.name,
-        'category_name': product.category.category_name,
-        'product_name': product.product_name,
-        'description': product.description,
-        'price': str(product.price),
-        'contact': product.contact,
-        'img_file': product.img_file,
-        'created_at': product.created_at,
-        'updated_at': product.updated_at
-    }
+# def single_detail_category(category, products):
+#     return {
+#         'id': category.id,
+#         'category_name': category.category_name,
+#         'products': [single_product(product) for product in products]
+#     }
+
+# def single_product(product):
+#     return {
+#         'id': product.id,
+#         'created_by': product.admin.name,
+#         'category_name': product.category.category_name,
+#         'product_name': product.product_name,
+#         'description': product.description,
+#         'price': str(product.price),
+#         'contact': product.contact,
+#         'img_file': product.img_file,
+#         'created_at': product.created_at,
+#         'updated_at': product.updated_at
+#     }
 
 def tambahCategory():
     try:
