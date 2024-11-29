@@ -7,9 +7,9 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Typography} from "@/components/ui/Typography";
 import Logo from "@/assets/logo/logo.svg";
 import LoginImg from "@/assets/images/img-login.svg";
-import {EyeIcon, EyeOffIcon} from "lucide-react";
+import {ArrowLeft, EyeIcon, EyeOffIcon} from "lucide-react";
 import authServices from "@/services/auth";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = React.useState("");
@@ -58,6 +58,12 @@ export default function Login() {
                 <div className="flex items-center justify-center w-full lg:w-1/2 p-6">
                     <Card className="w-full max-w-xl">
                         <CardContent className="space-y-8 p-8">
+                            <div className="w-full flex gap-3 items-center mb-[66px]">
+                                <ArrowLeft className="h-4 w-4 text-emerald-700" />
+                                <Link to={-1}>
+                                    <Typography variant="p" className="hover:underline text-emerald-700">Kembali</Typography>
+                                </Link>
+                            </div>
                             <div className="space-y-8">
                                 <img src={Logo} alt="GreenLify Logo" className="w-34 mx-auto"/>
                                 <Typography
