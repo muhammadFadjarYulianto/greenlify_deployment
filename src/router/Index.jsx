@@ -1,5 +1,5 @@
-import { lazy } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import {lazy} from "react";
+import {Route, Routes, Navigate} from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import LayoutSidebarDashboard from "@/components/layout/LayoutSidebarDashboard";
 import lazyWrap from "@/router/lazyWrap";
@@ -19,22 +19,22 @@ const DashboardProduct = lazy(() => import("@/pages/Dashboard/DashboardProduct")
 export default function Index() {
     return (
         <Routes>
-            <Route path="/" element={<Layout />}>
-                <Route path="/" element={lazyWrap(Home)()} />
-                <Route path="/beranda" element={<Navigate to="/" />} />
-                <Route path="/statistik" element={lazyWrap(Statistic)()} />
-                <Route path="/prediksi" element={lazyWrap(Prediction)()} />
-                <Route path="/produk" element={lazyWrap(Products)()} />
-                <Route path="/produk/:id" element={lazyWrap(ProductDetails)()} />
-                <Route path="/tentangkami" element={lazyWrap(About)()} />
+            <Route path="/" element={<Layout/>}>
+                <Route path="/" element={lazyWrap(Home)()}/>
+                <Route path="/beranda" element={<Navigate to="/"/>}/>
+                <Route path="/statistik" element={lazyWrap(Statistic)()}/>
+                <Route path="/prediksi" element={lazyWrap(Prediction)()}/>
+                <Route path="/produk" element={lazyWrap(Products)()}/>
+                <Route path="/produk/:id" element={lazyWrap(ProductDetails)()}/>
+                <Route path="/tentangkami" element={lazyWrap(About)()}/>
             </Route>
-            <Route path="/dashboard" element={<LayoutSidebarDashboard />}>
-                <Route path="/dashboard" element={lazyWrap(DashboardHome)()} />
-                <Route path="/dashboard/category" element={lazyWrap(DashboardCategory)()} />
-                <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()} />
+            <Route path="/dashboard" element={<LayoutSidebarDashboard/>}>
+                <Route path="/dashboard" element={lazyWrap(DashboardHome)()}/>
+                <Route path="/dashboard/category" element={lazyWrap(DashboardCategory)()}/>
+                <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()}/>
             </Route>
-            <Route path="/login" element={lazyWrap(Login)()} />
-            <Route path={"*"} element={lazyWrap(Errors)()} />
+            <Route path="/login" element={lazyWrap(Login)()}/>
+            <Route path={"*"} element={lazyWrap(Errors)()}/>
         </Routes>
     );
 }
