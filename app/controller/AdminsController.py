@@ -202,12 +202,13 @@ def refreshToken():
 
         expires_access = timedelta(hours=12)
         expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        additional_claims = {'remember_me': remember_me}
 
         access_token_expiry_time = datetime.utcnow() + expires_access
         refresh_token_expiry_time = datetime.utcnow() + expires_refresh
 
         new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
-        new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh)
+        new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
 
         data = {
             "access_token": new_access_token,
