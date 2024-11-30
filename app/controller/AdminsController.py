@@ -5,7 +5,6 @@ from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
 from datetime import datetime, timedelta
-import redis
 
 def indexAdmin():
     try:
@@ -163,7 +162,8 @@ def loginAdmin():
         password = request.form.get('password') or request.json.get('password')
         remember_me = request.form.get('remember_me') or request.json.get('remember_me')
 
-        remember_me = bool(remember_me) if remember_me is not None else False
+        if not isinstance(remember_me, bool):
+            return response.badRequest([], 'Nilai remember_me harus berupa boolean')
 
         admin = Admins.query.filter_by(email=email).first()
 
@@ -180,9 +180,10 @@ def loginAdmin():
 
         expires = timedelta(hours=12)
         expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        additional_claims = {'remember_me': remember_me}
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
-        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
+        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh, additional_claims=additional_claims)
 
         return response.success({
             "data" : data,
@@ -196,13 +197,41 @@ def loginAdmin():
 def refreshToken():
     try:
         current_user = get_jwt_identity()
+        jwt_claims = get_jwt()
+        remember_me = jwt_claims.get('remember_me', False)
 
-        expires = timedelta(hours=12)
-        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires)
+        expires_access = timedelta(hours=12)
+        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
 
-        return response.success({
-            "access_token": new_access_token
-        })
+        access_token_expiry_time = datetime.utcnow() + expires_access
+        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+
+        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
+        new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh)
+
+        data = {
+            "access_token": new_access_token,
+            "refresh_token": new_refresh_token,
+            "access_token_expiry_time": access_token_expiry_time.isoformat(),
+            "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+        }
+        return response.success(data)
     except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal memperbarui token")
+        return response.serverError([],"Gagal memperbarui token")
+
+def get_me():
+        try:
+            current_user_email = get_jwt_identity()
+
+            admin = Admins.query.filter_by(email=current_user_email).first()
+
+            if not admin:
+                return response.notFound([],"Admin tidak ditemukan")
+
+            data = single_object(admin)
+
+            return response.success(data)
+        
+        except Exception as e:
+            print(e)
+            return response.serverError([],"Gagal mengambil data admin")
