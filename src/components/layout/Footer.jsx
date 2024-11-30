@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import LogoWhite from "../../assets/images/logo-white.svg";
+import LogoWhite from "../../assets/logo/logo-white.svg";
 import { Typography } from "@/components/ui/Typography";
 
 const navigationLinks = [
@@ -51,7 +51,7 @@ const Footer = () => {
 						<h4 className="text-[#fdfaf1] text-lg lg:text-xl font-bold">
 							Community
 						</h4>
-						<Link to="/tentang-kami">
+						<Link to="/tentangkami">
 							<Typography
 								variant="p"
 								className="text-background text-sm lg:text-base hover:text-sky-50 transition-colors"

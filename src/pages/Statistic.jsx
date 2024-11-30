@@ -19,10 +19,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import pieChartDataByYear from "../../public/data/pieChartData.js";
-import compositionData from "../../public/data/compositionData.js";
-import rubbishData from "../../public/data/rubbishData.js";
-import barChartDataByYear from "../../public/data/barChartData.js";
+import pieChartDataByYear from "../data/pieChartData.js";
+import compositionData from "../data/compositionData.js";
+import rubbishData from "../data/rubbishData.js";
+import barChartDataByYear from "../data/barChartData.js";
 
 const Statistic = () => {
   const [selectedYear, setSelectedYear] = useState("Tahun 2023");
@@ -37,7 +37,7 @@ const Statistic = () => {
   }));
 
   const [selectedOption, setSelectedOption] = useState("10");
-  const options = ["10", "25", "50", "100"];
+  const options = ["10", "25", "50", "100", "All"];
 
   const numericYear = Number.parseInt(selectedYear.replace("Tahun ", ""), 10);
 
@@ -51,10 +51,10 @@ const Statistic = () => {
       <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
         <div className="max-w-3x1 text-center lg:text-center">
           <Typography variant="title">
-            <strong className="text-emerald-700">Statistik</strong> Sampah
+            <strong className="text-emerald-600">Statistik</strong> Sampah
           </Typography>
         </div>
-        <div className="md:max-w-4xl lg:max-w-7xl p-4 md:p-0 text-justify md:text-center">
+        <div className="md:max-w-4xl lg:max-w-5xl p-4 md:p-0 text-justify md:text-center">
           <Typography variant="p">
             Tahukah Anda bahwa setiap harinya, jutaan ton sampah dihasilkan dan
             sebagian besar berakhir mencemari alam? Di sini, kami menampilkan
@@ -72,7 +72,7 @@ const Statistic = () => {
         {/* Header */}
         <div className="flex justify-center items-center max-w-4xl px-4">
           <Typography variant="h2" className="text-center">
-            <strong className="text-emerald-700">Data Timbulan Sampah</strong>
+            <strong className="text-emerald-600">Data Timbulan Sampah</strong>
           </Typography>
         </div>
 
@@ -137,9 +137,7 @@ const Statistic = () => {
                   <TableRow
                     key={index}
                     className={`${
-                      index % 2 === 0
-                        ? "bg-background"
-                        : "bg-emerald-50"
+                      index % 2 === 0 ? "bg-background" : "bg-emerald-50"
                     }`}
                   >
                     <TableCell>{selectedYear}</TableCell>
@@ -163,7 +161,7 @@ const Statistic = () => {
         {/* Header */}
         <div className="flex justify-center items-center max-w-4xl px-4 text-center">
           <Typography variant="h2">
-            <strong className="text-emerald-700">
+            <strong className="text-emerald-600">
               Komposisi Sampah Berdasarkan Jenis Sampah
             </strong>
           </Typography>
@@ -174,10 +172,9 @@ const Statistic = () => {
           <PieChartComponent pieChartData={pieChartData} />
         </div>
 
-        {/* Dropdown Menu */}
         <div className="w-full h-auto px-4 md:px-6 py-5">
           {/* Dropdown Menu */}
-          <div className="flex justify-end items-center px-16 ">
+          <div className="flex justify-end items-center px-16">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -211,91 +208,109 @@ const Statistic = () => {
           </div>
 
           {/* Table */}
-          <div className="w-full mt-4 px-4 md:px-6 lg:px-16">
-            <div className="overflow-x-auto">
-              <Table className="table-auto w-full border-collapse border border-gray-200">
-                {/* Table Header */}
-                <TableHeader className="bg-emerald-700 text-white">
-                  <TableRow>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Tahun
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Provinsi
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Kabupaten/Kota
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Sisa Makanan (%)
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Kayu/Ranting (%)
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Kertas/Karton (%)
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Plastik (%)
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Logam (%)
-                    </TableHead>
-                    <TableHead className="text-center px-2 py-3 border border-gray-300">
-                      Lainnya (%)
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
+          <div className="w-full mt-4 px-4 md:px-6 lg:px-16 overflow-x-auto">
+            <Table className="table-fixed w-full border-collapse border border-gray-200">
+              {/* Table Header */}
+              <TableHeader className="bg-emerald-700 text-white">
+                <TableRow>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-24">
+                    Tahun
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-36">
+                    Provinsi
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-36">
+                    Kabupaten/Kota
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-28">
+                    Sisa Makanan (%)
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-28">
+                    Kayu/Ranting (%)
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-28">
+                    Kertas/Karton (%)
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-28">
+                    Plastik (%)
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-28">
+                    Logam (%)
+                  </TableHead>
+                  <TableHead className="text-center px-2 py-3 border border-gray-300 w-28">
+                    Lainnya (%)
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
 
-                {/* Table Body */}
-                <TableBody>
-                  {compositionData[selectedYear]
-                    ?.slice(0, selectedOption)
-                    .map((row, index) => (
-                      <TableRow
-                        key={index}
-                        className={`${
-                          index % 2 === 0
-                        ? "bg-background"
-                        : "bg-emerald-50"
-                        }`}
-                      >
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {selectedYear}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.province}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.kabupaten}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.data.sisaMakanan}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.data.kayuRanting}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.data.kertasKarton}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.data.plastik}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.data.logam}
-                        </TableCell>
-                        <TableCell className="text-center px-2 py-3 border border-gray-300">
-                          {row.data.lainnya}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </div>
+              {/* Table Body */}
+              <TableBody>
+                {compositionData[selectedYear]
+                  ?.slice(
+                    0,
+                    selectedOption === "All"
+                      ? compositionData[selectedYear]?.length 
+                      : parseInt(selectedOption) 
+                  )
+                  .map((row, index) => (
+                    <TableRow
+                      key={index}
+                      className={`${
+                        index % 2 === 0 ? "bg-background" : "bg-emerald-50"
+                      }`}
+                    >
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {selectedYear}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.province}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.kabupaten}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.data.sisaMakanan}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.data.kayuRanting}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.data.kertasKarton}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.data.plastik}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.data.logam}
+                      </TableCell>
+                      <TableCell className="text-center px-2 py-3 border border-gray-300">
+                        {row.data.lainnya}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+
+                {/* Placeholder Rows */}
+                {Array.from({
+                  length:
+                    selectedOption === "All"
+                      ? 0 
+                      : selectedOption -
+                          compositionData[selectedYear]?.length || 0,
+                }).map((_, index) => (
+                  <TableRow key={`placeholder-${index}`} className="bg-gray-50">
+                    <TableCell
+                      colSpan={9}
+                      className="text-center py-3 border border-gray-300"
+                    >
+                      -
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>
-
     </main>
   );
 };

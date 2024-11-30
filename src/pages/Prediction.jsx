@@ -1,6 +1,4 @@
 import React, { useState, useRef, useCallback } from "react";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
 import UploadIcon from "../assets/images/upload-cloud.svg";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
@@ -101,8 +99,6 @@ const Prediction = () => {
 
 	return (
 		<main>
-			{/* Header */}
-			<Header />
 			{/* Title */}
 			<div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
 				<div className="max-w-3x1 text-center lg:text-center">
@@ -485,8 +481,6 @@ const Prediction = () => {
 					))}
 				</div>
 			</div>
-			{/* Footer */}
-			<Footer />
 		</main>
 	);
 };

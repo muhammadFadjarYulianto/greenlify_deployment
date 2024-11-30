@@ -6,7 +6,8 @@
 
 @layer base {
 	:root {
-		--background: #fdfaf1;
+		/*--background: #fdfaf1;*/
+		--background: #fff;
 		--emerald-50: #d8f3dc;
 		--emerald-100: #b7e4c7;
 		--emerald-200: #95d5b2;

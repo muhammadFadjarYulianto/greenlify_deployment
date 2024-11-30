@@ -19,7 +19,8 @@ import {
 import { CaretSortIcon, ComponentPlaceholderIcon } from "@radix-ui/react-icons";
 import React from "react";
 import { Typography } from "@/components/ui/Typography";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AuthServices from "@/services/auth";
 
 export function NavUser({
 	user,
@@ -31,6 +32,17 @@ export function NavUser({
 	};
 }) {
 	const { isMobile } = useSidebar();
+	const navigate = useNavigate();
+
+	const handleLogout = async () => {
+		try {
+			await AuthServices.logout();
+			navigate("/");
+		} catch (error) {
+			console.error("Gagal logout:", error);
+			alert("Gagal logout. Silakan coba lagi.");
+		}
+	};
 
 	return (
 		<SidebarMenu>
@@ -79,13 +91,11 @@ export function NavUser({
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem onClick={handleLogout}>
 							<LogOut />
-							<Link to="/">
-								<Typography variant="p-regular" className="text-white">
-									Log Out
-								</Typography>
-							</Link>
+							<Typography variant="p-regular" className="text-white">
+								Log Out
+							</Typography>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
