@@ -120,7 +120,7 @@ def filterProducts():
         print(e)
         return response.serverError([], "Gagal memfilter produk.")
     
-def filterProducts():
+def filterProductsManage():
     try:
         category_name = request.args.get('category_name', type=str)
         min_price = request.args.get('min_price', type=float)

@@ -72,7 +72,7 @@ def products():
 @app.route('/api/product/filter', methods=['GET'])
 @jwt_required()
 def filterProductManage():
-    return ProductsController.filterProducts()
+    return ProductsController.filterProductsManage()
         
 @app.route('/api/product/guest', methods=['GET'])
 def guestProduct():
