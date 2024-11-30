@@ -17,8 +17,13 @@ def loginAdmin():
 def refresh_token():
     return AdminsController.refreshToken()
 
-@app.route('/api/admin', methods=['GET', 'POST'])
+@app.route('/api/me', methods=['GET'])
 @jwt_required()
+def getMe():
+    return AdminsController.get_me()
+
+@app.route('/api/admin', methods=['GET', 'POST'])
+# @jwt_required()
 def admins():
     if request.method == 'GET':
         return AdminsController.indexAdmin()
@@ -68,11 +73,6 @@ def products():
 @jwt_required()
 def filterProductManage():
     return ProductsController.filterProducts()
-
-@app.route('/api/product/search', methods=['GET'])
-@jwt_required()
-def searchProductManage():
-    return ProductsController.searchProductsManage()
         
 @app.route('/api/product/guest', methods=['GET'])
 def guestProduct():
@@ -81,10 +81,6 @@ def guestProduct():
 @app.route('/api/product/guest/filter', methods=['GET'])
 def filterProduct():
     return ProductsController.filterProducts()
-
-@app.route('/api/product/guest/search', methods=['GET'])
-def searchProduct():
-    return ProductsController.searchProducts()
 
 @app.route('/api/product/guest/page', methods=['GET'])
 def pagination():
