@@ -22,26 +22,26 @@ const teamMembers = [
         name: "I NGURAH KOMANG AGUS SURYADIYATMIKA. S",
         role: "Product Manager",
         imageSrc:
-            "https://ik.imagekit.io/3s8oi0rad/Members/I%20Ngurah%20Komang%20Agus%20Suryadiyatmika.%20S.JPG?updatedAt=1732680256424",
+            "https://ik.imagekit.io/cv0glgi4n/member/I%20Ngurah%20Komang%20Agus%20Suryadiyatmika.%20S.jpg?updatedAt=1732961558534",
     },
     {
         id: 2,
         name: "ANNA BERTTRIA NOVEM BUDIA",
         role: "UI/UX Designer",
-        imageSrc: "https://ik.imagekit.io/3s8oi0rad/Members/Anna%20Berttria.jpg?updatedAt=1732680250697",
+        imageSrc: "https://ik.imagekit.io/cv0glgi4n/member/Anna%20Berttria.jpg?updatedAt=1732961542886",
     },
     {
         id: 3,
         name: "NATASYA HELMALIA PUTRI",
         role: "UI/UX Designer",
         imageSrc:
-            "https://ik.imagekit.io/3s8oi0rad/Members/Natasya%20Helmalia%20Putri.PNG?updatedAt=1732680248804",
+            "https://ik.imagekit.io/cv0glgi4n/member/Natasya%20Helmalia%20Putri.jpg?updatedAt=1732961535098",
     },
     {
         id: 4,
         name: "DAMAR GALIH",
         role: "Front-end Developer",
-        imageSrc: "https://ik.imagekit.io/3s8oi0rad/Members/Damar%20Galih.jpg?updatedAt=1732680113550",
+        imageSrc: "https://ik.imagekit.io/cv0glgi4n/member/Damar%20Galih.jpg?updatedAt=1732961554372",
     },
     {
         id: 5,
@@ -55,32 +55,32 @@ const teamMembers = [
         name: "NAUFAL FAHMI KARTIKA",
         role: "Back-end Developer",
         imageSrc:
-            "https://ik.imagekit.io/3s8oi0rad/Members/Naufal%20Fahmi%20Kartika.png?updatedAt=1732680259709",
+            "https://ik.imagekit.io/cv0glgi4n/member/Naufal%20Fahmi%20Kartika.png?updatedAt=1732961594488",
     },
     {
         id: 7,
         name: "HILHAM YULISTIO",
         role: "Back-end Developer",
-        imageSrc: "https://ik.imagekit.io/3s8oi0rad/Members/Hilham%20Yulistio.png?updatedAt=1732680254765",
+        imageSrc: "https://ik.imagekit.io/cv0glgi4n/member/Hilham%20Yulistio.png?updatedAt=1732961582736",
     },
     {
         id: 8,
         name: "TIFANI AQLICIAN",
         role: "Data Science",
-        imageSrc: "https://ik.imagekit.io/3s8oi0rad/Members/Tivany%20Aqlicia.png?updatedAt=1732680260454",
+        imageSrc: "https://ik.imagekit.io/cv0glgi4n/member/Tivany%20Aqlicia.png?updatedAt=1732961598119",
     },
     {
         id: 9,
         name: "ABDILLAH",
         role: "Data Science",
-        imageSrc: "https://ik.imagekit.io/3s8oi0rad/Members/Abdillah.jpg?updatedAt=1732680248214",
+        imageSrc: "https://ik.imagekit.io/cv0glgi4n/member/Abdillah.jpg?updatedAt=1732961537636",
     },
     {
         id: 10,
         name: "MUHAMMAD FADJAR YULIANTO",
         role: "QA Engineer",
         imageSrc:
-            "https://ik.imagekit.io/3s8oi0rad/Members/Muhammad%20Fadjar%20Yulianto.jpg?updatedAt=1732680248192",
+            "https://ik.imagekit.io/cv0glgi4n/member/Muhammad%20Fadjar%20Yulianto.jpg?updatedAt=1732961534965",
     },
 ];
 const About = () => {

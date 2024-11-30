@@ -16,6 +16,7 @@ export default class AuthServices {
             localStorage.setItem("access_token", access_token);
             localStorage.setItem("refresh_token", refresh_token);
             localStorage.setItem("user_email", email);
+            localStorage.setItem("id", response.data.data.data.id);
 
             return response.data;
         } catch (error) {
