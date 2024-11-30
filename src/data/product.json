@@ -5,7 +5,7 @@
 		"price": 59000,
 		"description": "Botol air ramah lingkungan, dapat digunakan berulang kali untuk mengurangi sampah plastik.",
 		"rating": 5.0,
-		"category": "Peralatan Minum",
+		"category_name": "Plastik",
 		"image": "https://images.pexels.com/photos/1761069/pexels-photo-1761069.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -14,7 +14,7 @@
 		"price": 3000,
 		"description": "Wadah makanan berbahan biodegradable, aman untuk lingkungan dan dapat terurai secara alami.",
 		"rating": 5.0,
-		"category": "Kemasan Makanan",
+		"category_name": "Kertas",
 		"image": "https://images.pexels.com/photos/12725408/pexels-photo-12725408.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -23,7 +23,7 @@
 		"price": 89000,
 		"description": "Tas kain berbahan katun organik, ideal untuk menggantikan kantong plastik saat berbelanja.",
 		"rating": 4.5,
-		"category": "Tas & Kantong",
+		"category_name": "Kain",
 		"image": "https://images.pexels.com/photos/8148587/pexels-photo-8148587.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -32,7 +32,7 @@
 		"price": 79000,
 		"description": "Tote bag multifungsi dari bahan kain yang stylish dan ramah lingkungan.",
 		"rating": 5.0,
-		"category": "Tas & Kantong",
+		"category_name": "Kain",
 		"image": "https://images.pexels.com/photos/2081332/pexels-photo-2081332.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -41,7 +41,7 @@
 		"price": 49000,
 		"description": "Set alat makan berbahan kompos, cocok untuk penggunaan sekali pakai tanpa merusak lingkungan.",
 		"rating": 4.5,
-		"category": "Peralatan Makan",
+		"category_name": "Kayu",
 		"image": "https://images.pexels.com/photos/4397820/pexels-photo-4397820.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -50,7 +50,7 @@
 		"price": 5000,
 		"description": "Kantong sampah ramah lingkungan, dapat digunakan berulang kali untuk mengurangi sampah plastik.",
 		"rating": 5.0,
-		"category": "Tas & Kantong",
+		"category_name": "Plastik",
 		"image": "https://images.pexels.com/photos/3962260/pexels-photo-3962260.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -59,7 +59,7 @@
 		"price": 29000,
 		"description": "Sikat gigi berbahan bambu alami, pengganti ideal sikat gigi plastik.",
 		"rating": 5.0,
-		"category": "Perawatan Diri",
+		"category_name": "Bambu",
 		"image": "https://images.pexels.com/photos/3737592/pexels-photo-3737592.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -68,7 +68,7 @@
 		"price": 49000,
 		"description": "Sedotan stainless steel yang tahan lama, dilengkapi dengan sikat pembersih.",
 		"rating": 5.0,
-		"category": "Peralatan Minum",
+		"category_name": "Stainless",
 		"image": "https://images.pexels.com/photos/6312717/pexels-photo-6312717.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -77,7 +77,7 @@
 		"price": 99000,
 		"description": "Lampu LED hemat energi, konsumsi daya rendah dan ramah lingkungan.",
 		"rating": 4.5,
-		"category": "Elektronik",
+		"category_name": "Kaca",
 		"image": "https://images.pexels.com/photos/14408370/pexels-photo-14408370.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -86,7 +86,7 @@
 		"price": 69000,
 		"description": "Set peralatan dapur berbahan kayu alami, tahan lama dan ramah lingkungan.",
 		"rating": 5.0,
-		"category": "Peralatan Dapur",
+		"category_name": "Kayu",
 		"image": "https://images.pexels.com/photos/9475254/pexels-photo-9475254.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -95,7 +95,7 @@
 		"price": 79000,
 		"description": "Keset berbahan sabut kelapa alami, tahan lama dan ramah lingkungan.",
 		"rating": 5.0,
-		"category": "Perlengkapan Rumah",
+		"category_name": "Lainnya",
 		"image": "https://images.pexels.com/photos/2950003/pexels-photo-2950003.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	},
 	{
@@ -104,7 +104,7 @@
 		"price": 29000,
 		"description": "Spons dapur berbahan serat alami, lembut di tangan dan tidak merusak lingkungan.",
 		"rating": 5.0,
-		"category": "Peralatan Dapur",
+		"category_name": "Lainnya",
 		"image": "https://images.pexels.com/photos/7814800/pexels-photo-7814800.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 	}
 ]
