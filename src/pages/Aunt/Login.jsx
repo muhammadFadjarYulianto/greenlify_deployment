@@ -17,7 +17,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
-    const [rememberMe, setRememberMe] = React.useState(false);
+    const [remember_me, setRememberMe] = React.useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -25,11 +25,7 @@ export default function Login() {
         setErrorMessage("");
         setLoading(true);
         try {
-            await authServices.login(email, password);
-
-            if (rememberMe) {
-                localStorage.setItem('email', email);
-            }
+            await authServices.login(email, password, remember_me);
             navigate("/dashboard");
         } catch (error) {
             setErrorMessage("Login gagal. Periksa email dan password Anda.");
@@ -44,12 +40,12 @@ export default function Login() {
     }, []);
 
     useEffect(() => {
-       const token = localStorage.getItem("access_token");
-       if (token) {
-           navigate("/dashboard");
-       }
-   }, []);
-
+        const token = localStorage.getItem("access_token");
+        if (token) {
+            navigate("/dashboard");
+        }
+    }, []);
+    console.log("Remember Me:", remember_me);
     return (
         <div className="w-full h-screen">
             <div className="flex items-stretch w-full h-full">
@@ -66,9 +62,10 @@ export default function Login() {
                     <Card className="w-full max-w-xl">
                         <CardContent className="space-y-8 p-8">
                             <div className="w-full flex gap-3 items-center mb-[66px]">
-                                <ArrowLeft className="h-4 w-4 text-emerald-700" />
+                                <ArrowLeft className="h-4 w-4 text-emerald-700"/>
                                 <Link to={'/'}>
-                                    <Typography variant="p" className="hover:underline text-emerald-700">Kembali</Typography>
+                                    <Typography variant="p"
+                                                className="hover:underline text-emerald-700">Kembali</Typography>
                                 </Link>
                             </div>
                             <div className="space-y-8">
@@ -144,8 +141,12 @@ export default function Login() {
                                 )}
 
                                 <div className="flex items-center space-x-4 my-4">
-                                    <Checkbox id="remember" className="bg-emerald-600" checked={rememberMe}
-                                              onCheckedChange={() => setRememberMe(!rememberMe)}/>
+                                    <Checkbox
+                                        id="remember"
+                                        className="bg-emerald-600"
+                                        checked={remember_me}
+                                        onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
+                                    />
                                     <Typography variant="small" className="text-gray-500">
                                         <label
                                             htmlFor="remember"

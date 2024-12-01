@@ -2,21 +2,21 @@ import axios from "axios";
 import {LOGIN, LOGOUT, REFRESH} from "@/constants/routesAPI";
 
 export default class AuthServices {
-    static async login(email, password) {
+    static async login(email, password, remember_me) {
         try {
-            this.validateLoginInputs(email, password);
-
-            const response = await axios.post(LOGIN, {email, password}, {
+            this.validateLoginInputs(email, password, remember_me);
+            const formattedRememberMe = !!remember_me;
+            const response = await axios.post(LOGIN, {email, password, remember_me: formattedRememberMe}, {
                 headers: {"Content-Type": "application/json"},
                 timeout: 3000,
             });
 
-            const {access_token, refresh_token} = response.data.data;
+            const {access_token, refresh_token, data: { id }} = response.data.data;
 
             localStorage.setItem("access_token", access_token);
             localStorage.setItem("refresh_token", refresh_token);
             localStorage.setItem("user_email", email);
-            localStorage.setItem("id", response.data.data.data.id);
+            localStorage.setItem("id", id);
 
             return response.data;
         } catch (error) {
@@ -59,8 +59,8 @@ export default class AuthServices {
         }
     }
 
-    static validateLoginInputs(email, password) {
-        if (!email || !password) {
+    static validateLoginInputs(email, password, remember_me) {
+        if (!email || !password || typeof remember_me !== "boolean") {
             throw new Error("Email dan password harus diisi.");
         }
         if (!this.isValidEmail(email)) {

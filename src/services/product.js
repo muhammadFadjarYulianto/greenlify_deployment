@@ -1,9 +1,12 @@
 import axios from "axios";
-import { PRODUCTS_ENDPOINT } from "@/constants/routesAPI";
+import { PAGINATION_PRODUCT_ENDPOINT, PRODUCT_FILTER_ENDPOINT } from "@/constants/routesAPI";
 
-export async function getProducts() {
+export async function productPagination(start = 1, limit = 8) {
     try {
-        const response = await axios.get(PRODUCTS_ENDPOINT, {
+        const response = await axios.get(`${PAGINATION_PRODUCT_ENDPOINT}?start=${start}&limit=${limit}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
 
         if (response.data && response.data.data) {
@@ -18,32 +21,50 @@ export async function getProducts() {
     }
 }
 
-// export async function getProductById(productId) {
-//   const response = await axios.get(`${API_BASE_URL}${PRODUCTS_ENDPOINT}/${productId}`);
-//   return response.data;
-// }
-//
-// export async function createProduct(product) {
-//     const response = await axios.post(`${API_BASE_URL}${PRODUCTS_ENDPOINT}`, product);
-//     return response.data;
-// }
-//
-// export async function updateProduct(productId, product) {
-//     const response = await axios.put(`${API_BASE_URL}${PRODUCTS_ENDPOINT}/${productId}`, product);
-//     return response.data;
-// }
-//
-// export async function deleteProduct(productId) {
-//     const response = await axios.delete(`${API_BASE_URL}${PRODUCTS_ENDPOINT}/${productId}`);
-//     return response.data;
-// }
-//
-// export async function getProductsByCategory(category) {
-//     const response = await axios.get(`${API_BASE_URL}${PRODUCTS_ENDPOINT}?category=${category}`);
-//     return response.data;
-// }
-//
-// export async function getProductsBySearch(search) {
-//     const response = await axios.get(`${API_BASE_URL}${PRODUCTS_ENDPOINT}?search=${search}`);
-//     return response.data;
-// }
+export async function getProductByPrice(min_price, max_price){
+    try {
+        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?min_price=${min_price}&max_price=${max_price}`, {});
+
+        if (response.data && response.data.data) {
+            return response.data.data;
+        } else {
+            console.error("Data tidak ditemukan di respons API.");
+            throw new Error("Data produk tidak ditemukan.");
+        }
+    } catch (error) {
+        console.error("Gagal mendapatkan data produk:", error.response || error.message);
+        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+    }
+}
+
+export async function getProductByCategory(category_name) {
+    try {
+        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?category_name=${category_name}`, {});
+
+        if (response.data && response.data.data) {
+            return response.data.data;
+        } else {
+            console.error("Data tidak ditemukan di respons API.");
+            throw new Error("Data produk tidak ditemukan.");
+        }
+    } catch (error) {
+        console.error("Gagal mendapatkan data produk:", error.response || error.message);
+        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+    }
+}
+
+export async function getProductBySearch(search){
+    try {
+        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?keyword=${search}`, {});
+
+        if (response.data && response.data.data) {
+            return response.data.data;
+        } else {
+            console.error("Data tidak ditemukan di respons API.");
+            throw new Error("Data produk tidak ditemukan.");
+        }
+    } catch (error) {
+        console.error("Gagal mendapatkan data produk:", error.response || error.message);
+        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+    }
+}
