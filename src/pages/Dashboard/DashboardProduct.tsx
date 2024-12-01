@@ -276,44 +276,6 @@ const handlePageChange = (page: number) => {
         );
     }
 
-    const renderPagination = () => {
-      const pageNumbers = [];
-      for (let i = 1; i <= totalPages; i++) {
-          pageNumbers.push(
-              <button
-                  key={i}
-                  onClick={() => handlePageChange(i)}
-                  className={`mx-1 px-3 py-1 rounded ${
-                      currentPage === i 
-                      ? 'bg-blue-500 text-white' 
-                      : 'bg-gray-200 text-black'
-                  }`}
-              >
-                  {i}
-              </button>
-          );
-      }
-
-      return (
-          <div className="flex justify-center items-center mt-4">
-              <button 
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="mx-2 px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-              >
-                  Previous
-              </button>
-              {pageNumbers}
-              <button 
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="mx-2 px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-              >
-                  Next
-              </button>
-          </div>
-      );
-  };
 
     return (
         <>
