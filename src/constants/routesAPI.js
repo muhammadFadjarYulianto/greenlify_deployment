@@ -5,4 +5,4 @@ export const REFRESH = `${END_POINT}/api/refresh`;
 export const PAGINATION_PRODUCT_ENDPOINT = `${END_POINT}/api/product/guest/page`;
 export const PRODUCT_FILTER_ENDPOINT = `${END_POINT}/api/product/guest/filter`;
 export const PRODUCT_MANAGEMENT_ENDPOINT = `${END_POINT}/api/product`;
-export const CATEGORIES_MANAGEMENT_ENDPOINT = `${END_POINT}/api/category`;
+export const PRODUCT_PAGINATION_ENDPOINT = `${END_POINT}/api/product/page`;

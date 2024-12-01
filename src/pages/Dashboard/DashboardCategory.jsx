@@ -247,7 +247,7 @@ export default function CategoryManagement() {
                                             <TableHead className="text-xl text-center">Nama Kategori</TableHead>
                                             <TableHead className="text-xl text-center">Jumlah Produk</TableHead>
                                             <TableHead className="text-xl text-center">Tanggal Dibuat</TableHead>
-                                            <TableHead className="text-xl text-center text-right">Aksi</TableHead>
+                                            <TableHead className="text-xl text-right">Aksi</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
