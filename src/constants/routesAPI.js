@@ -6,5 +6,3 @@ export const PAGINATION_PRODUCT_ENDPOINT = `${END_POINT}/api/product/guest/page`
 export const PRODUCT_FILTER_ENDPOINT = `${END_POINT}/api/product/guest/filter`;
 export const PRODUCT_MANAGEMENT_ENDPOINT = `${END_POINT}/api/product`;
 export const PRODUCT_PAGINATION_ENDPOINT = `${END_POINT}/api/product/page`;
-export const CATEGORIES_MANAGEMENT_ENDPOINT = `${END_POINT}/api/category`;
-export const CATEGORIES_PAGINATION_ENDPOINT = `${END_POINT}/api/category/page`;

@@ -1,26 +1,24 @@
 import axios from "axios";
-import { CATEGORIES_MANAGEMENT_ENDPOINT, CATEGORIES_PAGINATION_ENDPOINT } from "@/constants/routesAPI";
+import { CATEGORIES_MANAGEMENT_ENDPOINT } from "@/constants/routesAPI";
 
-
-export async function getCategoriesManagement(start = 1, limit = 5) {
+export async function getCategoriesManagement() {
     try {
         const token = localStorage.getItem("access_token");
+
         if (!token) {
             throw new Error("Token tidak tersedia. Silakan login kembali.");
         }
 
-        const response = await axios.get(
-            `${CATEGORIES_MANAGEMENT_ENDPOINT}?start=${start}&limit=${limit}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        
-        if (response.data && response.data.data && response.data.data.results) {
-            return response.data.data; // Mengembalikan objek paginasi
+        const response = await axios.get(CATEGORIES_MANAGEMENT_ENDPOINT, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (response.data && response.data.data) {
+            return response.data.data;
         } else {
+            console.error("Data kategori tidak ditemukan di respons API.");
             throw new Error("Data kategori tidak ditemukan.");
         }
     } catch (error) {
@@ -28,7 +26,6 @@ export async function getCategoriesManagement(start = 1, limit = 5) {
         throw new Error("Gagal mengambil data kategori. Silakan coba lagi.");
     }
 }
-
 
 export async function addCategory(categoryData) {
     try {

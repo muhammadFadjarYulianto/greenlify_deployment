@@ -44,14 +44,6 @@ import {
     updateCategory,
     deleteCategory
 } from "@/services/categoryManagement";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination";
 
 export default function CategoryManagement() {
     const [categories, setCategories] = useState([]);
@@ -59,28 +51,13 @@ export default function CategoryManagement() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [itemsPerPage] = useState(5);
-
     const {toast} = useToast();
 
-
-    const fetchCategories = async (page = 1) => {
+    const fetchCategories = async () => {
         try {
             setIsLoading(true);
-            const start = (page - 1) * itemsPerPage + 1;
-            
-            const response = await getCategoriesManagement(start, itemsPerPage);
-            
-            if (response.success) {
-                setCategories(response.results);
-                setTotalPages(response.total_page);
-                setCurrentPage(page);
-            } else {
-                throw new Error("Gagal mengambil data kategori");
-            }
+            const fetchedCategories = await getCategoriesManagement();
+            setCategories(fetchedCategories);
         } catch (error) {
             toast({
                 title: "Error",
@@ -89,16 +66,6 @@ export default function CategoryManagement() {
             });
         } finally {
             setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchCategories(currentPage);
-    }, [currentPage]);
-
-    const handlePageChange = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
         }
     };
 
@@ -169,6 +136,10 @@ export default function CategoryManagement() {
             });
         }
     };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
     const formatDate = (dateStr) => {
         const date = new Date(dateStr);
@@ -276,7 +247,7 @@ export default function CategoryManagement() {
                                             <TableHead className="text-xl text-center">Nama Kategori</TableHead>
                                             <TableHead className="text-xl text-center">Jumlah Produk</TableHead>
                                             <TableHead className="text-xl text-center">Tanggal Dibuat</TableHead>
-                                            <TableHead className="text-xl text-center text-right">Aksi</TableHead>
+                                            <TableHead className="text-xl text-right">Aksi</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -334,42 +305,6 @@ export default function CategoryManagement() {
                     </Card>
                 </div>
             </div>
-            <div className="mt-4">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={
-                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  onClick={() => handlePageChange(page)}
-                  isActive={currentPage === page}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={
-                  currentPage === totalPages
-                    ? "pointer-events-none opacity-50"
-                    : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
                 <DialogContent>
                     <DialogHeader>
