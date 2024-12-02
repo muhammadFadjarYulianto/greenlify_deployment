@@ -233,7 +233,7 @@ const About = () => {
                             <LazyLoadImage
                                 src={member.imageSrc}
                                 alt={member.name}
-                                className="w-40 h-40 object-cover rounded-lg shadow-md"
+                                className="w-80 h-80 object-cover rounded-lg shadow-md"
                                 effect="opacity"
                             />
                             <Typography variant="p-semibold" className="text-center">
