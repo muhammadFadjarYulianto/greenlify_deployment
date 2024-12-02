@@ -1,70 +1,65 @@
 import axios from "axios";
-import { PAGINATION_PRODUCT_ENDPOINT, PRODUCT_FILTER_ENDPOINT } from "@/constants/routesAPI";
+import {PRODUCT_ENDPOINT, PRODUCT_FILTER_ENDPOINT} from "@/constants/routesAPI";
 
-export async function productPagination(start = 1, limit = 8) {
+export const getProducts = async () => {
     try {
-        const response = await axios.get(`${PAGINATION_PRODUCT_ENDPOINT}?start=${start}&limit=${limit}`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        if (response.data && response.data.data) {
-            return response.data.data;
-        } else {
-            console.error("Data tidak ditemukan di respons API.");
-            throw new Error("Data produk tidak ditemukan.");
-        }
+        const response = await axios.get(PRODUCT_ENDPOINT);
+        return response.data.data;
     } catch (error) {
-        console.error("Gagal mendapatkan data produk:", error.response || error.message);
-        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+        console.error('Error fetching products:', error);
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Failed to fetch products');
+        } else if (error.request) {
+            throw new Error('No response received from server');
+        } else {
+            throw new Error('Error setting up the request');
+        }
     }
 }
 
-export async function getProductByPrice(min_price, max_price){
+export const getProductByMultipleFilter = async (filters) => {
     try {
-        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?min_price=${min_price}&max_price=${max_price}`, {});
-
-        if (response.data && response.data.data) {
-            return response.data.data;
-        } else {
-            console.error("Data tidak ditemukan di respons API.");
-            throw new Error("Data produk tidak ditemukan.");
+        const queryParams = new URLSearchParams();
+        if (filters.category_name) {
+            queryParams.append('category_name', filters.category_name);
         }
+        if (filters.min_price !== undefined && filters.min_price !== '') {
+            queryParams.append('min_price', filters.min_price);
+        }
+        if (filters.max_price !== undefined && filters.max_price !== '') {
+            queryParams.append('max_price', filters.max_price);
+        }
+        if (filters.keyword) {
+            queryParams.append('keyword', filters.keyword);
+        }
+        if (filters.page) {
+            queryParams.append('page', filters.page);
+        }
+        if (filters.limit) {
+            queryParams.append('limit', filters.limit);
+        }
+        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?${queryParams.toString()}`);
+        return response.data.data;
     } catch (error) {
-        console.error("Gagal mendapatkan data produk:", error.response || error.message);
-        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+        console.error('Error fetching filtered products:', error);
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Failed to fetch products');
+        } else if (error.request) {
+            throw new Error('No response received from server');
+        } else {
+            throw new Error('Error setting up the request');
+        }
     }
 }
 
-export async function getProductByCategory(category_name) {
-    try {
-        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?category_name=${category_name}`, {});
-
-        if (response.data && response.data.data) {
-            return response.data.data;
-        } else {
-            console.error("Data tidak ditemukan di respons API.");
-            throw new Error("Data produk tidak ditemukan.");
-        }
-    } catch (error) {
-        console.error("Gagal mendapatkan data produk:", error.response || error.message);
-        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
-    }
-}
-
-export async function getProductBySearch(search){
-    try {
-        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?keyword=${search}`, {});
-
-        if (response.data && response.data.data) {
-            return response.data.data;
-        } else {
-            console.error("Data tidak ditemukan di respons API.");
-            throw new Error("Data produk tidak ditemukan.");
-        }
-    } catch (error) {
-        console.error("Gagal mendapatkan data produk:", error.response || error.message);
-        throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
-    }
-}
+// export const getProductByCategory = async (categoryName) => {
+//     return getProductByMultipleFilter({ category_name: categoryName });
+// };
+//
+// export const getProductByPrice = async (minPrice, maxPrice) => {
+//     return getProductByMultipleFilter({ min_price: minPrice, max_price: maxPrice });
+// };
+//
+// export const getProductBySearch = async (keyword) => {
+//     return getProductByMultipleFilter({ keyword });
+// };

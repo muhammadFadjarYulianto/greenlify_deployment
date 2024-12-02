@@ -47,7 +47,7 @@ const Product = ({category_name, contact, img_file, price, title, description}) 
                     onClick={(e) => e.stopPropagation()}
                     className="w-full"
                 >
-                    <Button variant="outline" className="px-4 py-2 w-full">
+                    <Button variant="outline" className="px-4 py-2 w-full shadow-lg">
                         Hubungi
                     </Button>
                 </a>

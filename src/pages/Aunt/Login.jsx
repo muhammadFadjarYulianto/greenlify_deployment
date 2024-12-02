@@ -9,7 +9,7 @@ import Logo from "@/assets/logo/logo.svg";
 import LoginImg from "@/assets/images/img-login.svg";
 import {ArrowLeft, EyeIcon, EyeOffIcon} from "lucide-react";
 import authServices from "@/services/auth";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export default function Login() {
     const [email, setEmail] = React.useState("");
@@ -56,18 +56,16 @@ export default function Login() {
                         className="absolute inset-0 w-full h-full object-cover"
                         loading="lazy"
                     />
-                    {/*<div className="absolute inset-0 bg-black opacity-50" />*/}
                 </div>
                 <div className="flex items-center justify-center w-full lg:w-1/2 p-6">
                     <Card className="w-full max-w-xl">
+                        <div className="w-full flex gap-3 items-center mb-[66px]">
+                            <Button variant='icon' className="bg-emerald-500 hover:bg-emerald-600 shadow-lg"
+                                    onClick={() => navigate('/')}>
+                                <ArrowLeft className="h-4 w-4 text-background"/>
+                            </Button>
+                        </div>
                         <CardContent className="space-y-8 p-8">
-                            <div className="w-full flex gap-3 items-center mb-[66px]">
-                                <ArrowLeft className="h-4 w-4 text-emerald-700"/>
-                                <Link to={'/'}>
-                                    <Typography variant="p"
-                                                className="hover:underline text-emerald-700">Kembali</Typography>
-                                </Link>
-                            </div>
                             <div className="space-y-8">
                                 <img src={Logo} alt="GreenLify Logo" className="w-34 mx-auto"/>
                                 <Typography
@@ -76,7 +74,7 @@ export default function Login() {
                                 >
                                     Admin Login
                                 </Typography>
-                                <Typography variant="p" className="text-center text-gray-700">
+                                <Typography variant="p" className="text-center">
                                     pengelolaan sampah dengan deteksi menggunakan teknologi AI dan
                                     promosi produk ramah lingkungan
                                 </Typography>
@@ -100,7 +98,7 @@ export default function Login() {
                                     />
                                 </div>
 
-                                <div className="space-y-4">
+                                <div className="space-y-4 mt-4">
                                     <Label
                                         htmlFor="password"
                                         className="text-[18px] font-bold text-emerald-600"
@@ -143,7 +141,7 @@ export default function Login() {
                                 <div className="flex items-center space-x-4 my-4">
                                     <Checkbox
                                         id="remember"
-                                        className="bg-emerald-600"
+                                        className="bg-emerald-500"
                                         checked={remember_me}
                                         onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
                                     />
@@ -159,7 +157,7 @@ export default function Login() {
 
                                 <Button
                                     type="submit"
-                                    className="w-full bg-emerald-600 hover:bg-emerald-700"
+                                    className="w-full bg-emerald-500 hover:bg-emerald-600"
                                     disabled={loading || !email || !password}
                                 >
                                     {loading ? (
@@ -173,7 +171,7 @@ export default function Login() {
                                 </Button>
                             </form>
 
-                            <Typography variant="p" className="text-center text-slate-500">
+                            <Typography variant="p" className="text-center">
                                 Kesulitan, Perlu bantuan?{" "}
                                 <a
                                     href="/tentangkami"

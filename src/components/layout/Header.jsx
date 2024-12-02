@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Link} from "react-router-dom";
 import {Button} from "@/components/ui/button";
 import Logo from "@/assets/logo/logo.svg";
 import {X, Menu, User, LogOut} from "lucide-react";
+import {gsap} from "gsap";
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -24,6 +25,11 @@ export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState("");
 
+    const logoRef = useRef(null);
+    const navItemsRef = useRef([]);
+    const mobileMenuRef = useRef(null);
+    const authButtonRef = useRef(null);
+
     const menuItems = [
         {label: "Beranda", path: "beranda"},
         {label: "Statistik", path: "statistik"},
@@ -40,7 +46,41 @@ export default function Header() {
             setIsLoggedIn(true);
             setUserEmail(userEmail || "");
         }
+
+        gsap.fromTo(
+            logoRef.current,
+            {opacity: 0, x: -50},
+            {opacity: 1, x: 0, duration: 0.5, ease: "power2.out"}
+        );
+
+        gsap.fromTo(
+            navItemsRef.current,
+            {opacity: 0, y: 20},
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: "power2.out"
+            }
+        );
+
+        gsap.fromTo(
+            authButtonRef.current,
+            {opacity: 0, scale: 0.8},
+            {opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)"}
+        );
     }, []);
+
+    useEffect(() => {
+        if (isMobileMenuOpen && mobileMenuRef.current) {
+            gsap.fromTo(
+                mobileMenuRef.current,
+                {opacity: 0},
+                {opacity: 1, duration: 0.8, ease: "power2.out"}
+            );
+        }
+    }, [isMobileMenuOpen]);
 
     const handleLogout = () => {
         localStorage.removeItem("access_token");
@@ -58,19 +98,17 @@ export default function Header() {
         if (isLoggedIn) {
             return (
                 <>
-                    <Button size="md" className="w-full" onClick={() => window.location.href = "/dashboard"}>
-                        <User className="mr-2 h-4 w-4"/>
+                    <Button size="md" className="w-full text-base" onClick={() => window.location.href = "/dashboard"}>
                         Dashboard
                     </Button>
-                    <Button variant="destructive" size="md" className="w-full mt-4" onClick={handleLogout}>
-                        <LogOut className="mr-2 h-4 w-4"/>
+                    <Button variant="destructive" size="md" className="w-full mt-4 text-lg" onClick={handleLogout}>
                         Logout
                     </Button>
                 </>
             );
         }
         return (
-            <Button variant="outline" size="md" asChild className="w-full">
+            <Button variant="outline" size="md" asChild className="w-full shadow-md text-lg">
                 <Link to="/login">Login</Link>
             </Button>
         );
@@ -81,7 +119,7 @@ export default function Header() {
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Avatar className="cursor-pointer bg-emerald-500 text-white">
+                        <Avatar className="cursor-pointer bg-emerald-500 text-white shadow-md">
                             <AvatarImage src="" alt="User avatar"/>
                             <AvatarFallback>
                                 {userEmail ? userEmail.charAt(0).toUpperCase() : <User/>}
@@ -93,7 +131,8 @@ export default function Header() {
                             className="text-[16px] font-semibold leading-[28px]">{userEmail}</DropdownMenuLabel>
                         <DropdownMenuSeparator className="border"/>
                         <DropdownMenuLabel className="text-[16px] font-semibold leading-[28px]">Menu</DropdownMenuLabel>
-                        <DropdownMenuItem className="cursor-pointer" onClick={() => window.location.href = "/dashboard"}>
+                        <DropdownMenuItem className="cursor-pointer"
+                                          onClick={() => window.location.href = "/dashboard"}>
                             <User className="mr-2 h-6 w-6"/>
                             <Typography variant="p-semibold" className="text-white">Dashboard</Typography>
                         </DropdownMenuItem>
@@ -106,7 +145,7 @@ export default function Header() {
             );
         }
         return (
-            <Button variant="outline" size="md" asChild>
+            <Button variant="outline" size="md" asChild className="shadow-md">
                 <Link to="/login">Login</Link>
             </Button>
         );
@@ -115,15 +154,18 @@ export default function Header() {
     return (
         <div className="relative">
             <div
-                className="w-full h-[75px] px-4 md:px-[65px] border-b border-slate-300 flex justify-between items-center">
-                <Link to="/">
+                className="fixed top-0 z-50 w-full h-[75px] px-4 md:px-[65px] flex justify-between items-center bg-background">
+                <Link to="/" ref={logoRef}>
                     <img src={Logo} alt="Logo" className="h-11"/>
                 </Link>
 
                 <NavigationMenu className="hidden md:block">
                     <NavigationMenuList className="justify-between gap-10">
-                        {menuItems.map(({label, path}) => (
-                            <NavigationMenuItem key={label}>
+                        {menuItems.map(({label, path}, index) => (
+                            <NavigationMenuItem
+                                key={label}
+                                ref={el => navItemsRef.current[index] = el}
+                            >
                                 <NavigationMenuLink
                                     asChild
                                     className={navigationMenuTriggerStyle()}
@@ -137,20 +179,23 @@ export default function Header() {
 
                 <div className="flex items-center gap-4">
                     <div className="hidden md:flex gap-4 items-center">
-                        <Button size="md" asChild>
+                        <Button size="md" asChild className="shadow-md">
                             <Link to="/klasifikasi">Klasifikasi</Link>
                         </Button>
-                        {renderDesktopAuthButton()}
+                        <div ref={authButtonRef}>
+                            {renderDesktopAuthButton()}
+                        </div>
                     </div>
 
-                    <Button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden p-2 bg-emerald-500 text-white">
+                    <Button onClick={() => setIsMobileMenuOpen(true)}
+                            className="md:hidden p-2 bg-emerald-500 text-white">
                         <Menu/>
                     </Button>
                 </div>
             </div>
 
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-50 md:hidden bg-background p-4">
+                <div ref={mobileMenuRef} className="fixed inset-0 z-50 md:hidden bg-background p-4">
                     <div className="flex flex-col space-y-4">
                         <div className="flex justify-between items-center">
                             <Link to="/">
@@ -161,21 +206,22 @@ export default function Header() {
                             </Button>
                         </div>
 
-                        {menuItems.map(({label, path}) => (
-                            <Link
-                                key={label}
-                                to={`/${path}`}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="text-emerald-700 font-semibold text-xl py-2 rounded"
-                            >
-                                {label}
-                            </Link>
-                        ))}
+                        <div className="flex flex-col items-center">
+                            {menuItems.map(({label, path}) => (
+                                <Link
+                                    key={label}
+                                    to={`/${path}`}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="text-emerald-700 font-semibold text-lg py-2 rounded"
+                                >
+                                    {label}
+                                </Link>
+                            ))}
+                        </div>
 
-                        <Button size="md" asChild>
+                        <Button size="md" asChild className="shadow-md text-lg">
                             <Link to="/klasifikasi">Klasifikasi</Link>
                         </Button>
-
                         {renderMobileAuthOptions()}
                     </div>
                 </div>

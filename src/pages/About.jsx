@@ -1,8 +1,12 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {Typography} from "@/components/ui/Typography";
 import trashImage from "@/assets/images/img-about.svg";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const partners = [
     {id: 1, name: "KLHK", imageSrc: "/src/assets/partners/KLHK.svg"},
@@ -84,16 +88,58 @@ const teamMembers = [
     },
 ];
 const About = () => {
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const context = gsap.context(() => {
+            gsap.from(".fade-in", {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".fade-in",
+                    start: "top 80%",
+                    toggleActions: "play none none none",
+                },
+            });
+
+            gsap.from(".zoom-in", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 1.2,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".zoom-in",
+                    start: "top 80%",
+                },
+            });
+
+            gsap.from(".team-member", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                ease: "power2.out",
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: ".team-member",
+                    start: "top 90%",
+                },
+            });
+        }, containerRef);
+
+        return () => context.revert();
+    }, []);
     return (
-        <main>
-            <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
-                <div className="max-w-3x1 text-center lg:text-center">
+        <main ref={containerRef}>
+            <div className="w-full mt-[99px] h-auto flex flex-col items-center gap-[33px] fade-in">
+                <div className="max-w-sm md:max-w-xl text-center lg:text-center">
                     <Typography variant="title">
                         <strong className="text-emerald-700">Tentang</strong> Kami
                     </Typography>
                 </div>
-                <div className="text-center lg:max-w-4xl md:max-w-2xl">
-                    <Typography variant="p" className="p-4 md:p-0">
+                <div className="md:max-w-5xl lg:max-w-7xl p-4 lg:p-0 text-justify lg:text-center hero-description">
+                    <Typography variant="p">
                         GreenLify adalah solusi berbasis teknologi yang memanfaatkan
                         kecerdasan buatan (Al) dan visi komputer untuk mendeteksi dan
                         mengklasifikasikan jenis sampah melalui gambar. Hal ini membantu
@@ -104,13 +150,13 @@ const About = () => {
                 <LazyLoadImage
                     src={trashImage}
                     alt="trashImage"
-                    className="hidden md:block w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52"
+                    className="hidden md:block w-full mt-4 px-4 md:px-12 lg:px-24 xl:px-52 zoom-in"
                     effect="blur"
                 />
             </div>
 
             <div
-                className="w-full mt-[66px] flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0">
+                className="w-full mt-[66px] flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
                 <div className="max-w-2x1 text-center lg:text-left">
                     <Typography variant="h1">Visi</Typography>
                 </div>
@@ -127,7 +173,7 @@ const About = () => {
             </div>
 
             <div
-                className="w-full flex flex-col-reverse lg:flex-row justify-around items-center py-[33px] px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0">
+                className="w-full flex flex-col-reverse lg:flex-row justify-around items-center mt-[33px] px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
                 <div className="max-w-2xl text-justify lg:text-justify">
                     <Typography variant="p">
                         Meningkatkan kesadaran masyarakat tentang pentingnya pengelolaan
@@ -165,12 +211,12 @@ const About = () => {
             </div>
 
             <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
-                <div className="max-w-3x1 text-center lg:text-center">
+                <div className="max-w-3x1 text-center lg:text-center fade-in">
                     <Typography variant="title">
                         <strong className="text-emerald-700">Profile Tim</strong>
                     </Typography>
                 </div>
-                <div className="max-w-2xl text-center lg:text-center-full">
+                <div className="max-w-2xl px-4 md:px-0 text-center lg:text-center-full">
                     <Typography variant="p">
                         Kami adalah sekelompok individu yang berdedikasi untuk menciptakan
                         solusi inovatif dalam pengelolaan sampah dan pelestarian lingkungan.
@@ -180,7 +226,7 @@ const About = () => {
                     {teamMembers.map((member, index) => (
                         <div
                             key={member.id}
-                            className={`flex flex-col items-center justify-center space-y-4 ${
+                            className={`flex flex-col items-center team-member justify-center space-y-4 ${
                                 index === 8 ? "lg:col-start-2" : ""
                             } ${index === 9 ? "lg:col-start-3" : ""}`}
                         >
