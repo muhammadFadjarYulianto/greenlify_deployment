@@ -1,5 +1,5 @@
 import axios from "axios";
-import {PAGINATION_PRODUCT_ENDPOINT, PRODUCT_ENDPOINT, PRODUCT_FILTER_ENDPOINT} from "@/constants/routesAPI";
+import {PRODUCT_ENDPOINT, PRODUCT_FILTER_ENDPOINT} from "@/constants/routesAPI";
 
 export const getProducts = async () => {
     try {

@@ -98,12 +98,10 @@ export default function Header() {
         if (isLoggedIn) {
             return (
                 <>
-                    <Button size="md" className="w-full" onClick={() => window.location.href = "/dashboard"}>
-                        <User className="mr-2 h-4 w-4"/>
+                    <Button size="md" className="w-full text-base" onClick={() => window.location.href = "/dashboard"}>
                         Dashboard
                     </Button>
                     <Button variant="destructive" size="md" className="w-full mt-4 text-lg" onClick={handleLogout}>
-                        <LogOut className="mr-2 h-4 w-4"/>
                         Logout
                     </Button>
                 </>
@@ -121,7 +119,7 @@ export default function Header() {
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Avatar className="cursor-pointer bg-emerald-500 text-white">
+                        <Avatar className="cursor-pointer bg-emerald-500 text-white shadow-md">
                             <AvatarImage src="" alt="User avatar"/>
                             <AvatarFallback>
                                 {userEmail ? userEmail.charAt(0).toUpperCase() : <User/>}

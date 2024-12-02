@@ -28,7 +28,7 @@ const Footer = () => {
 						className="h-16 lg:h-24 object-cover"
 					/>
 					<Typography variant="blockquote" className="text-background">
-						Transformasikan sampah menjadi manfaat
+						Transformasikan sampah menjadi manfaat yang berkelanjutan untuk lingkungan dan masyarakat Indonesia.
 					</Typography>
 				</div>
 				<div className="flex flex-col md:flex-row w-full lg:w-1/2 justify-between gap-8 md:gap-[80px] lg:gap-[160px]">
