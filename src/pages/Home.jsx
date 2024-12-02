@@ -8,8 +8,8 @@ import {Upload, ScanLine, MessageSquareMore} from "lucide-react";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import {Link} from "react-router-dom";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {gsap} from "gsap";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
 
 const steps = [
     {
@@ -47,7 +47,7 @@ const benefits = [
         title: "Mendukung pengelolaan sampah yang berkelanjutan",
         description:
             "Dengan klasifikasi sampah yang tepat, kita dapat mengurangi dampak negatif sampah terhadap lingkungan, mengoptimalkan daur ulang, dan memastikan sampah dikelola dengan cara yang lebih ramah lingkungan",
-        badge: "Advantages #1",
+        badge: "Keuntungan #1",
         image:
             "https://img.freepik.com/free-photo/couple-collects-garbage-garbage-bags-park_1157-27406.jpg?t=st=1732365623~exp=1732369223~hmac=005a0557a7abec95f2b7bbafe44652636470a3c476437dfb70dce845acb22d12&w=1380",
     },
@@ -56,10 +56,19 @@ const benefits = [
         title: "Inovasi dalam pengelolaan sampah modern",
         description:
             "Kami berkomitmen untuk menciptakan solusi inovatif yang ramah lingkungan, efisien, dan didukung teknologi terkini, untuk memastikan pengelolaan sampah yang lebih baik dan berkelanjutan demi masa depan yang lebih hijau.",
-        badge: "Advantages #2",
+        badge: "Keuntungan #2",
         image:
             "https://img.freepik.com/free-photo/group-asian-diverse-people-volunteer-teamwork-environment-conservationvolunteer-help-picking-plastic-foam-garbage-park-areavolunteering-world-environment-day_640221-307.jpg?t=st=1732365722~exp=1732369322~hmac=5efd3b061905cda330f4f872b39af44fe2784c9d6d87ca82819068f00ce9f92b&w=1380",
     },
+    {
+        id: 3,
+        title: "Pengelolaan sampah yang lebih efektif",
+        description:
+            "Dengan sistem klasifikasi sampah yang otomatis, kita dapat mengelola sampah dengan lebih efektif, meminimalkan risiko kesalahan, dan memastikan setiap jenis sampah dikelola dengan cara yang tepat.",
+        badge: "Keuntungan #3",
+        image:
+            "https://images.pexels.com/photos/6193131/pexels-photo-6193131.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    }
 ];
 
 gsap.registerPlugin(ScrollTrigger);
@@ -242,7 +251,7 @@ const Home = () => {
                 </div>
             </div>
             <div className="w-full mt-[66px] h-auto flex flex-col items-center">
-                <div className="text-center max-w-4xl px-4">
+                <div className="text-center max-w-5xl px-4">
                     <Typography variant="h1" className="">
                         Deteksi Sampah <br/> Dengan Teknologi AI
                     </Typography>
@@ -251,34 +260,35 @@ const Home = () => {
                         jenis sampah secara otomatis. Ini memudahkan pengguna dalam
                         mengelola sampah mereka dengan lebih efisien dan efektif.
                     </Typography>
-                    <div className="mt-[33px] flex flex-col md:flex-row justify-center items-center gap-8 px-4 md:px-8">
-                        {benefits.map((benefit) => (
-                            <Card
-                                key={benefit.id}
-                                ref={el => benefitsRef.current[benefit.id] = el}
-                                className="w-full sm:w-[535px] h-[420px] bg-cover bg-center rounded-xl shadow-md relative shadow-lg"
-                                style={{backgroundImage: `url(${benefit.image})`}}
-                            >
-                                <div className="absolute inset-0 bg-black bg-opacity-50 rounded-xl"/>
-                                <CardContent className="relative z-10 p-6 flex flex-col gap-10">
-                                    <Typography
-                                        className="bg-emerald-500 text-white rounded-[52px] px-4 py-2 text-sm font-semibold inline-block">
-                                        {benefit.badge}
-                                    </Typography>
-                                    <Typography variant="h2" className="text-white text-left">
-                                        {benefit.title}
-                                    </Typography>
-                                    <Typography
-                                        variant="p"
-                                        type="description"
-                                        className="text-white text-justify"
-                                    >
-                                        {benefit.description}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+                </div>
+                <div
+                    className="mt-[33px] flex flex-col md:flex-row justify-center items-center gap-10 max-w-7xl px-4 md:px-8">
+                    {benefits.map((benefit) => (
+                        <Card
+                            key={benefit.id}
+                            ref={el => benefitsRef.current[benefit.id] = el}
+                            className="w-full sm:w-[535px] h-[420px] bg-cover bg-center rounded-xl shadow-md relative"
+                            style={{backgroundImage: `url(${benefit.image})`}}
+                        >
+                            <div className="absolute inset-0 bg-black bg-opacity-60 rounded-xl"/>
+                            <CardContent className="relative z-10 p-6 flex flex-col gap-10">
+                                <Typography
+                                    className="bg-emerald-500 text-white text-center rounded-[52px] px-4 py-2 text-sm font-semibold inline-block">
+                                    {benefit.badge}
+                                </Typography>
+                                <Typography variant="h2" className="text-white text-left">
+                                    {benefit.title}
+                                </Typography>
+                                <Typography
+                                    variant="p"
+                                    type="description"
+                                    className="text-white text-justify"
+                                >
+                                    {benefit.description}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    ))}
                 </div>
             </div>
             <div ref={ctaSectionRef}

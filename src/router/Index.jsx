@@ -10,6 +10,8 @@ const Prediction = lazy(() => import("@/pages/Prediction"));
 const Products = lazy(() => import("@/pages/Produk/Products"));
 const ProductDetails = lazy(() => import("@/pages/Produk/ProductDetails"));
 const About = lazy(() => import("@/pages/About"));
+const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("@/pages/TermConditions"));
 const Errors = lazy(() => import("@/pages/Errors"));
 const Login = lazy(() => import("@/pages/Aunt/Login"));
 const DashboardHome = lazy(() => import("@/pages/Dashboard/DashboardHome"));
@@ -27,6 +29,8 @@ export default function Index() {
                 <Route path="/produk" element={lazyWrap(Products)()}/>
                 <Route path="/produk/:id" element={lazyWrap(ProductDetails)()}/>
                 <Route path="/tentangkami" element={lazyWrap(About)()}/>
+                <Route path="/privacy+policy" element={lazyWrap(PrivacyPolicy)()}/>
+                <Route path="/terms+conditions" element={lazyWrap(TermsConditions)()}/>
             </Route>
             <Route path="/dashboard" element={<LayoutSidebarDashboard/>}>
                 <Route path="/dashboard" element={lazyWrap(DashboardHome)()}/>

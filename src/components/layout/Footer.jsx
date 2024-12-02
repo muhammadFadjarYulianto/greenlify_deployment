@@ -88,23 +88,23 @@ const Footer = () => {
 					variant="p-semibold"
 					className="text-background text-sm lg:text-base font-medium text-center md:text-left"
 				>
-					©2024 ErsTalent. All rights reserved
+					©2024 ErsTalent - Hak cipta dilindungi undang-undang
 				</Typography>
 				<div className="flex gap-4">
-					<Link to="/privacy-policy">
+					<Link to="/privacy+policy">
 						<Typography
 							variant="p-semibold"
 							className="text-background text-sm lg:text-base hover:text-slate-50 transition-colors"
 						>
-							Privacy & Policy
+							Privasi & Kebijakan
 						</Typography>
 					</Link>
-					<Link to="/terms-condition">
+					<Link to="/terms+conditions">
 						<Typography
 							variant="p-semibold"
 							className="text-background text-sm lg:text-base hover:text-slate-50 transition-colors"
 						>
-							Terms & Condition
+							Syarat & Ketentuan
 						</Typography>
 					</Link>
 				</div>
