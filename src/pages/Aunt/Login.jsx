@@ -45,7 +45,6 @@ export default function Login() {
             navigate("/dashboard");
         }
     }, []);
-    console.log("Remember Me:", remember_me);
     return (
         <div className="w-full h-screen">
             <div className="flex items-stretch w-full h-full">
