@@ -48,14 +48,14 @@ import {
 import {getCategoriesManagement} from "@/services/categoryManagement.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Textarea} from "@/components/ui/textarea";
-import { 
+import {
     Pagination,
     PaginationContent,
     PaginationItem,
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-  } from "@/components/ui/pagination";
+} from "@/components/ui/pagination";
 
 interface Product {
     id: number;
@@ -76,72 +76,71 @@ interface Category {
 }
 
 interface PaginationResponse {
-  success: boolean;
-  results: Product[];
-  total_page: number;
-  start_page: number;
-  per_page: number;
-  total_data: number;
-  next: string;
-  previous: string;
+    success: boolean;
+    results: Product[];
+    total_page: number;
+    start_page: number;
+    per_page: number;
+    total_data: number;
+    next: string;
+    previous: string;
 }
 
 export default function DashboardProduct() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    null
-  );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage] = useState(5);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+        null
+    );
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [itemsPerPage] = useState(5);
 
-  const { toast } = useToast();
+    const {toast} = useToast();
 
-  const fetchProducts = async (page: number = 1) => {
-    try {
-      setLoading(true);
-      // Hitung start berdasarkan halaman
-      const start = (page - 1) * itemsPerPage + 1;
-      
-      const response = await getProductsManagement(start, itemsPerPage) as PaginationResponse;
-      console.log('Fetched products:', response);
+    const fetchProducts = async (page: number = 1) => {
+        try {
+            setLoading(true);
+            const start = (page - 1) * itemsPerPage + 1;
 
-      if (response.success) {
-        setProducts(response.results);
-        setTotalPages(response.total_page);
-        setCurrentPage(page);
-      } else {
-        throw new Error("Failed to fetch products");
-      }
-    } catch (err) {
-      console.error("Gagal mengambil produk:", err);
-      const errorMessage = err instanceof Error ? err.message : "Gagal mengambil produk";
-      setError(errorMessage);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: errorMessage,
-      });
-    } finally {
-      setLoading(false);
-    }
-};
+            const response = await getProductsManagement(start, itemsPerPage) as PaginationResponse;
+            console.log('Fetched products:', response);
 
-useEffect(() => {
-    fetchProducts(currentPage);
-}, [currentPage]);
+            if (response.success) {
+                setProducts(response.results);
+                setTotalPages(response.total_page);
+                setCurrentPage(page);
+            } else {
+                throw new Error("Failed to fetch products");
+            }
+        } catch (err) {
+            console.error("Gagal mengambil produk:", err);
+            const errorMessage = err instanceof Error ? err.message : "Gagal mengambil produk";
+            setError(errorMessage);
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: errorMessage,
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
-const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-    }
-};
+    useEffect(() => {
+        fetchProducts(currentPage);
+    }, [currentPage]);
+
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -312,7 +311,7 @@ const handlePageChange = (page: number) => {
                     </Breadcrumb>
                 </div>
             </header>
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            <div className="flex flex-1 flex-col gap-4 p-4 pt-0 pb-0">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 mr-0 md:mr-6">
                     <div>
                         <Typography variant="h1" className="text-4xl lg:text-5xl">
@@ -420,37 +419,35 @@ const handlePageChange = (page: number) => {
                         </CardContent>
                     </Card>
                 </div>
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem className="cursor-pointer">
+                            <PaginationPrevious
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                className={currentPage === 1 ? 'pointer-events-none opacity-50 ' : ''}
+                            />
+                        </PaginationItem>
+
+                        {Array.from({length: totalPages}, (_, i) => i + 1).map((page) => (
+                            <PaginationItem key={page}>
+                                <PaginationLink className="cursor-pointer"
+                                    onClick={() => handlePageChange(page)}
+                                    isActive={currentPage === page}
+                                >
+                                    {page}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
+
+                        <PaginationItem className="cursor-pointer">
+                            <PaginationNext
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
-            <div className="mt-4">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious 
-                onClick={() => handlePageChange(currentPage - 1)}
-                className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
-              />
-            </PaginationItem>
-            
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  onClick={() => handlePageChange(page)}
-                  isActive={currentPage === page}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handlePageChange(currentPage + 1)}
-                className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
             <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
                 <DialogContent>
                     <DialogHeader>
