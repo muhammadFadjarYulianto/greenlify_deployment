@@ -169,11 +169,6 @@ export default function DashboardProduct() {
             formData.delete('category_name');
         }
 
-        const createdBy = localStorage.getItem('id');
-        if (createdBy) {
-            formData.append('created_by', createdBy);
-        }
-
         try {
             await createProductManagement(formData);
             fetchProducts();
@@ -199,11 +194,6 @@ export default function DashboardProduct() {
         if (selectedCategoryId) {
             formData.append('category_id', selectedCategoryId.toString());
             formData.delete('category_name');
-        }
-
-        const createdBy = localStorage.getItem('id');
-        if (createdBy) {
-            formData.append('created_by', createdBy);
         }
 
         try {
@@ -431,8 +421,8 @@ export default function DashboardProduct() {
                         {Array.from({length: totalPages}, (_, i) => i + 1).map((page) => (
                             <PaginationItem key={page}>
                                 <PaginationLink className="cursor-pointer"
-                                    onClick={() => handlePageChange(page)}
-                                    isActive={currentPage === page}
+                                                onClick={() => handlePageChange(page)}
+                                                isActive={currentPage === page}
                                 >
                                     {page}
                                 </PaginationLink>

@@ -11,12 +11,10 @@ export default class AuthServices {
                 timeout: 8000,
             });
 
-            const {access_token, refresh_token, data: { id }} = response.data.data;
+            const {access_token, refresh_token} = response.data.data;
 
             localStorage.setItem("access_token", access_token);
             localStorage.setItem("refresh_token", refresh_token);
-            localStorage.setItem("user_email", email);
-            localStorage.setItem("id", id);
 
             return response.data;
         } catch (error) {

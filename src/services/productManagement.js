@@ -1,5 +1,7 @@
 import axios from "axios";
 import {PRODUCT_MANAGEMENT_ENDPOINT, PRODUCT_PAGINATION_ENDPOINT} from "@/constants/routesAPI";
+import {getAdmin} from "@/services/admin.js";
+import {data} from "autoprefixer";
 
 
 export async function getProductsManagement(start = 1, limit = 5) {
@@ -24,11 +26,12 @@ export async function getProductsManagement(start = 1, limit = 5) {
 
 export async function createProductManagement(product) {
     try {
-        const token = localStorage.getItem("access_token");
-
+        const admin = await getAdmin();
+        product.append('created_by', admin.id.toString());
         const response = await axios.post(PRODUCT_MANAGEMENT_ENDPOINT, product, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
             },
         });
         return response.data.data;
@@ -40,11 +43,11 @@ export async function createProductManagement(product) {
 
 export async function updateProductManagement(productId, product) {
     try {
-        const token = localStorage.getItem("access_token");
-
+        const admin = await getAdmin();
+        product.append('created_by', admin.id.toString());
         const response = await axios.put(`${PRODUCT_MANAGEMENT_ENDPOINT}/${productId}`, product, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
         });
         return response.data.data;
