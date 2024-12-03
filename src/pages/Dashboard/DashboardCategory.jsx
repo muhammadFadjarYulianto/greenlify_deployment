@@ -207,7 +207,7 @@ export default function CategoryManagement() {
                         <DialogTrigger asChild>
                             <Button
                                 variant="primary"
-                                className="text-white shadow-lg"
+                                className="text-white shadow-lg"Tambah Kategori
                             >
                                 <Plus className="w-6 h-6 mr-2"/>
                                 Tambah Kategori

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import {Typography} from "@/components/ui/Typography";
 import {Card, CardContent} from "@/components/ui/card";
+// @ts-ignore
+import Logo from "@/assets/logo/logo.svg";
 import {
     Table,
     TableBody,
@@ -314,7 +316,7 @@ export default function DashboardProduct() {
                     </div>
                     <Button
                         variant="primary"
-                        className="text-white"
+                        className="text-white shadow-lg"
                         onClick={() => setIsAddModalOpen(true)}
                     >
                         <Plus className="w-6 h-6 mr-2"/>
@@ -364,8 +366,8 @@ export default function DashboardProduct() {
                                                                     <Eye className="w-4 h-4"/>
                                                                 </Button>
                                                             </TooltipTrigger>
-                                                            <TooltipContent>
-                                                                <p>Lihat Detail</p>
+                                                            <TooltipContent className="bg-emerald-600">
+                                                                <p className="text-background">Lihat Detail</p>
                                                             </TooltipContent>
                                                         </Tooltip>
 
@@ -379,8 +381,8 @@ export default function DashboardProduct() {
                                                                     <Pencil className="w-4 h-4"/>
                                                                 </Button>
                                                             </TooltipTrigger>
-                                                            <TooltipContent>
-                                                                <p>Edit Produk</p>
+                                                            <TooltipContent className="bg-emerald-600">
+                                                                <p className="text-background">Edit Produk</p>
                                                             </TooltipContent>
                                                         </Tooltip>
 
@@ -395,8 +397,8 @@ export default function DashboardProduct() {
                                                                     <Trash2 className="w-4 h-4"/>
                                                                 </Button>
                                                             </TooltipTrigger>
-                                                            <TooltipContent>
-                                                                <p>Hapus Produk</p>
+                                                            <TooltipContent className="bg-emerald-600">
+                                                                <p className="text-background">Hapus Produk</p>
                                                             </TooltipContent>
                                                         </Tooltip>
                                                     </div>
@@ -439,114 +441,127 @@ export default function DashboardProduct() {
                 </Pagination>
             </div>
             <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Tambah Produk
-                            Baru</DialogTitle>
-                        <Typography variant="p-regular" className="text-center text-slate-700">
-                            Tambahkan produk baru ke dalam daftar produk yang tersedia
-                        </Typography>
-                    </DialogHeader>
-                    <form onSubmit={handleAddProduct}>
-                        <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="product_name" className="text-[16px] font-normal leading-[28px]">
-                                    Nama Produk
-                                </Label>
-                                <Input
-                                    id="product_name"
-                                    name="product_name"
-                                    className="col-span-3 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
-                                    placeholder="Masukkan nama produk"
-                                    required
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="price" className="text-[16px] font-normal leading-[28px]">
-                                    Harga
-                                </Label>
-                                <Input
-                                    id="price"
-                                    name="price"
-                                    type="number"
-                                    className="col-span-3 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                    placeholder="Rp. 0"
-                                    required
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="img_file" className="text-[16px] font-normal leading-[28px]">
-                                    Gambar
-                                </Label>
-                                <Input
-                                    id="img_file"
-                                    name="img_file"
-                                    type="text"
-                                    className="col-span-3 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
-                                    placeholder="Url"
-                                    required
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="category" className="text-[16px] font-normal leading-[28px] ">
-                                    Kategori
-                                </Label>
-                                <Select
-                                    onValueChange={(value) => setSelectedCategoryId(Number(value))}
-                                    required
-                                >
-                                    <SelectTrigger
-                                        className="col-span-3 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600">
-                                        <SelectValue placeholder="Pilih Kategori"/>
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-emerald-600 text-white">
-                                        {categories.map((category) => (
-                                            <SelectItem
-                                                key={category.id}
-                                                value={category.id.toString()}
-                                            >
-                                                {category.category_name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="contact" className="text-[16px] font-normal leading-[28px]">
-                                    Hubungi
-                                </Label>
-                                <Input
-                                    id="contact"
-                                    name="contact"
-                                    type="text"
-                                    className="col-span-3 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
-                                    placeholder="Masukkan url"
-                                    required
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="description" className="text-[16px] font-normal leading-[28px]">
-                                    Deskripsi Produk
-                                </Label>
-                                <Textarea
-                                    id="description"
-                                    name="description"
-                                    className="col-span-3 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
-                                    placeholder="Masukkan deskripsi produk"
-                                    rows={4}
-                                    required
-                                />
-                            </div>
+                <DialogContent className="max-w-4xl">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div className="hidden lg:col-span-6 lg:flex items-center justify-center rounded-lg p-4">
+                            <img
+                                src="https://images.pexels.com/photos/7814569/pexels-photo-7814569.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                alt="Preview"
+                                className="w-full h-auto object-cover rounded-lg"
+                            />
                         </div>
-                        <DialogFooter>
-                            <DialogClose asChild>
-                                <Button type="button" variant="secondary">
-                                    Batal
-                                </Button>
-                            </DialogClose>
-                            <Button type="submit">Simpan</Button>
-                        </DialogFooter>
-                    </form>
+                        <div className="lg:col-span-6 space-y-4">
+                            <DialogHeader>
+                                <DialogTitle className="text-center text-[30px] font-bold leading-[36px]">Tambah Produk
+                                    Baru</DialogTitle>
+                                <Typography variant="p-regular" className="text-left max-w-lg text-slate-500">
+                                    Tambahkan produk baru ke dalam daftar produk yang tersedia.
+                                    Produk akan langsung tampil di halaman produk.
+                                </Typography>
+                            </DialogHeader>
+                            <form onSubmit={handleAddProduct}>
+                                <div className="grid gap-4">
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="product_name"
+                                               className="text-[16px] font-bold text-emerald-600">
+                                            Nama Produk
+                                        </Label>
+                                        <Input
+                                            id="product_name"
+                                            name="product_name"
+                                            className="col-span-3 h-10 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                            placeholder="Masukkan nama produk"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="price" className="text-[16px] font-bold text-emerald-600">
+                                            Harga
+                                        </Label>
+                                        <Input
+                                            id="price"
+                                            name="price"
+                                            type="number"
+                                            className="col-span-3 h-10 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            placeholder="Rp. 0"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="img_file" className="text-[16px] font-bold text-emerald-600">
+                                            Gambar
+                                        </Label>
+                                        <Input
+                                            id="img_file"
+                                            name="img_file"
+                                            type="text"
+                                            className="col-span-3 h-10 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                            placeholder="Url"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="category" className="text-[16px] font-bold text-emerald-600">
+                                            Kategori
+                                        </Label>
+                                        <Select
+                                            onValueChange={(value) => setSelectedCategoryId(Number(value))}
+                                            required
+                                        >
+                                            <SelectTrigger
+                                                className="col-span-3 h-10 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600">
+                                                <SelectValue placeholder="Pilih Kategori"/>
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-emerald-600 text-white">
+                                                {categories.map((category) => (
+                                                    <SelectItem
+                                                        key={category.id}
+                                                        value={category.id.toString()}
+                                                    >
+                                                        {category.category_name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="contact" className="text-[16px] font-bold text-emerald-600">
+                                            Hubungi
+                                        </Label>
+                                        <Input
+                                            id="contact"
+                                            name="contact"
+                                            type="text"
+                                            className="col-span-3 h-10 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                            placeholder="Masukkan url"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="description" className="text-[16px] font-bold text-emerald-600">
+                                            Deskripsi Produk
+                                        </Label>
+                                        <Textarea
+                                            id="description"
+                                            name="description"
+                                            className="col-span-3 min-h-[90px] text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                            placeholder="Masukkan deskripsi produk"
+                                            rows={4}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <DialogFooter className="mt-4">
+                                    <DialogClose asChild>
+                                        <Button type="button" variant="destructive">
+                                            Batal
+                                        </Button>
+                                    </DialogClose>
+                                    <Button type="submit" className="mb-3 md:mb-0">Simpan</Button>
+                                </DialogFooter>
+                            </form>
+                        </div>
+                    </div>
                 </DialogContent>
             </Dialog>
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
