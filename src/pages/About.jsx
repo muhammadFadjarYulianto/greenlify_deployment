@@ -1,10 +1,10 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Typography} from "@/components/ui/Typography";
 import trashImage from "@/assets/images/img-about.svg";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {gsap} from "gsap";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,7 +23,7 @@ const partners = [
 const teamMembers = [
     {
         id: 1,
-        name: "I NGURAH KOMANG AGUS SURYADIYATMIKA. S",
+        name: "I NGURAH KOMANG AGUS S.S",
         role: "Product Manager",
         imageSrc:
             "https://ik.imagekit.io/cv0glgi4n/member/I%20Ngurah%20Komang%20Agus%20Suryadiyatmika.%20S.jpg?updatedAt=1732961558534",
@@ -89,9 +89,29 @@ const teamMembers = [
 ];
 const About = () => {
     const containerRef = useRef(null);
+    const [currentGroup, setCurrentGroup] = useState(0);
+    const groupSize = 4;
+    const totalGroups = Math.ceil(teamMembers.length / groupSize);
+    const membersContainerRef = useRef(null);
 
     useEffect(() => {
         const context = gsap.context(() => {
+            const desktopAnimation = gsap.matchMedia();
+
+            desktopAnimation.add("(min-width: 1024px)", () => {
+                gsap.from(".team-member", {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    stagger: 0.2,
+                    scrollTrigger: {
+                        trigger: ".team-members-section",
+                        start: "top 90%",
+                    },
+                });
+            });
+
             gsap.from(".fade-in", {
                 opacity: 0,
                 y: 50,
@@ -114,22 +134,44 @@ const About = () => {
                     start: "top 80%",
                 },
             });
-
-            gsap.from(".team-member", {
-                opacity: 0,
-                y: 50,
-                duration: 0.8,
-                ease: "power2.out",
-                stagger: 0.2,
-                scrollTrigger: {
-                    trigger: ".team-member",
-                    start: "top 90%",
-                },
-            });
         }, containerRef);
 
         return () => context.revert();
     }, []);
+
+    const switchGroup = () => {
+        const nextGroup = (currentGroup + 1) % totalGroups;
+        const members = membersContainerRef.current.children;
+
+        if (window.innerWidth >= 1024) {
+            gsap.to(members, {
+                x: -50,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.1,
+                onComplete: () => {
+                    setCurrentGroup(nextGroup);
+                    gsap.fromTo(
+                        members,
+                        {x: 50, opacity: 0},
+                        {x: 0, opacity: 1, duration: 0.5, stagger: 0.1}
+                    );
+                },
+            });
+        } else {
+            setCurrentGroup(nextGroup);
+        }
+    };
+
+    useEffect(() => {
+        const interval = setInterval(switchGroup, 8000);
+        return () => clearInterval(interval);
+    }, [currentGroup]);
+
+    const visibleMembers = teamMembers.slice(
+        currentGroup * groupSize,
+        currentGroup * groupSize + groupSize
+    );
     return (
         <main ref={containerRef}>
             <div className="w-full mt-[99px] h-auto flex flex-col items-center gap-[33px] fade-in">
@@ -154,9 +196,7 @@ const About = () => {
                     effect="blur"
                 />
             </div>
-
-            <div
-                className="w-full mt-[66px] flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
+            <div className="w-full mt-[66px] flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
                 <div className="max-w-2x1 text-center lg:text-left">
                     <Typography variant="h1">Visi</Typography>
                 </div>
@@ -171,9 +211,7 @@ const About = () => {
                     </Typography>
                 </div>
             </div>
-
-            <div
-                className="w-full flex flex-col-reverse lg:flex-row justify-around items-center mt-[33px] px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
+            <div className="w-full flex flex-col-reverse lg:flex-row justify-around items-center mt-[33px] px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
                 <div className="max-w-2xl text-justify lg:text-justify">
                     <Typography variant="p">
                         Meningkatkan kesadaran masyarakat tentang pentingnya pengelolaan
@@ -189,7 +227,6 @@ const About = () => {
                     </Typography>
                 </div>
             </div>
-
             <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px] px-4">
                 <div className="max-w-3xl text-center">
                     <Typography variant="h1">
@@ -209,7 +246,6 @@ const About = () => {
                     ))}
                 </div>
             </div>
-
             <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
                 <div className="max-w-3x1 text-center lg:text-center fade-in">
                     <Typography variant="title">
@@ -222,29 +258,47 @@ const About = () => {
                         solusi inovatif dalam pengelolaan sampah dan pelestarian lingkungan.
                     </Typography>
                 </div>
-                <div className="w-full mt-[33px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-5">
-                    {teamMembers.map((member, index) => (
-                        <div
-                            key={member.id}
-                            className={`flex flex-col items-center team-member justify-center space-y-4 ${
-                                index === 8 ? "lg:col-start-2" : ""
-                            } ${index === 9 ? "lg:col-start-3" : ""}`}
-                        >
-                            <LazyLoadImage
-                                src={member.imageSrc}
-                                alt={member.name}
-                                className="w-80 h-80 object-cover rounded-lg shadow-md"
-                                effect="opacity"
-                            />
-                            <Typography variant="p-semibold" className="text-center">
-                                {member.name}
-                            </Typography>
-                            <Typography variant="p">{member.role}</Typography>
-                        </div>
-                    ))}
+                <div className="w-full mt-[33px] flex justify-center team-members-section">
+                    <div ref={membersContainerRef}
+                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[33px] max-w-7xl">
+                        {window.innerWidth < 1024
+                            ? teamMembers.map((member) => (
+                                <div
+                                    key={member.id}
+                                    className="flex flex-col items-center team-member justify-center space-y-4"
+                                >
+                                    <LazyLoadImage
+                                        src={member.imageSrc}
+                                        alt={member.name}
+                                        className="w-80 h-80 object-cover rounded-lg shadow-lg"
+                                        effect="opacity"
+                                    />
+                                    <Typography variant="p-semibold" className="text-center">
+                                        {member.name}
+                                    </Typography>
+                                    <Typography variant="p">{member.role}</Typography>
+                                </div>
+                            )) : visibleMembers.map((member) => (
+                                <div
+                                    key={member.id}
+                                    className="flex flex-col items-center team-member justify-center space-y-4"
+                                >
+                                    <LazyLoadImage
+                                        src={member.imageSrc}
+                                        alt={member.name}
+                                        className="w-80 h-80 object-cover rounded-lg shadow-lg"
+                                        effect="opacity"
+                                    />
+                                    <Typography variant="p-semibold" className="text-center">
+                                        {member.name}
+                                    </Typography>
+                                    <Typography variant="p">{member.role}</Typography>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
-
         </main>
     );
 };
