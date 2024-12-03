@@ -8,7 +8,7 @@ export default class AuthServices {
             const formattedRememberMe = !!remember_me;
             const response = await axios.post(LOGIN, {email, password, remember_me: formattedRememberMe}, {
                 headers: {"Content-Type": "application/json"},
-                timeout: 3000,
+                timeout: 8000,
             });
 
             const {access_token, refresh_token, data: { id }} = response.data.data;

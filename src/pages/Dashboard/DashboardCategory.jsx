@@ -50,6 +50,7 @@ export default function CategoryManagement() {
     const [isLoading, setIsLoading] = useState(true);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
     const {toast} = useToast();
 
@@ -88,8 +89,8 @@ export default function CategoryManagement() {
             event.target.reset();
         } catch (error) {
             toast({
-                title: "Error",
-                description: error.message,
+                title: "Produk Gagal Ditambahkan",
+                description: "Produk yang anda tambahkan sudah ada.",
                 variant: "destructive",
             });
         }
@@ -107,13 +108,13 @@ export default function CategoryManagement() {
             await updateCategory(currentCategory.id, updatedCategory);
             toast({
                 title: "Berhasil",
-                description: "Kategori telah diperbarui",
+                description: "Kategori telah diperbarui.",
             });
             setIsEditModalOpen(false);
             await fetchCategories();
         } catch (error) {
             toast({
-                title: "Error",
+                title: "Terjadi Kesalahan",
                 description: error.message,
                 variant: "destructive",
             });
@@ -123,6 +124,7 @@ export default function CategoryManagement() {
     const handleDeleteCategory = async (categoryId) => {
         try {
             await deleteCategory(categoryId);
+            setIsDeleteModalOpen(false);
             toast({
                 title: "Berhasil",
                 description: "Kategori telah dihapus",
@@ -130,7 +132,7 @@ export default function CategoryManagement() {
             await fetchCategories();
         } catch (error) {
             toast({
-                title: "Error",
+                title: "Terjadi Kesaahan",
                 description: error.message,
                 variant: "destructive",
             });
@@ -154,8 +156,6 @@ export default function CategoryManagement() {
 
         return `${day}, ${dateNum} ${month} ${year}`;
     };
-
-    const limitedCategories = categories.slice(0, 20);
 
     return (
         <>
@@ -207,27 +207,31 @@ export default function CategoryManagement() {
                         <DialogTrigger asChild>
                             <Button
                                 variant="primary"
-                                className="text-white"
+                                className="text-white shadow-lg"
                             >
                                 <Plus className="w-6 h-6 mr-2"/>
                                 Tambah Kategori
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Tambah
+                            <DialogHeader className="space-y-4">
+                                <DialogTitle className="text-center text-[30px] font-bold leading-[36px]">Tambah
                                     Kategori Baru</DialogTitle>
+                                <Typography variant="p" className="text-left max-w-lg text-slate-500">
+                                    Tambahkan kategori baru untuk memudahkan pengorganisasian produk. Kategori baru akan
+                                    muncul di halaman produk.
+                                </Typography>
                             </DialogHeader>
                             <form onSubmit={handleAddCategory} className="space-y-4">
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor="categoryName" className="text-[16px] font-normal leading-[28px]">Nama
+                                    <Label htmlFor="categoryName" className="text-[18px] font-bold text-emerald-600">Nama
                                         Kategori</Label>
                                     <Input
                                         id="categoryName"
                                         name="categoryName"
                                         required
                                         placeholder="Masukkan nama kategori"
-                                        className="text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                        className="h-12 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
                                     />
                                 </div>
                                 <Button type="submit" className="w-full">Simpan</Button>
@@ -256,7 +260,8 @@ export default function CategoryManagement() {
                                                 <TableCell className="text-center">{category.category_name}</TableCell>
                                                 <TableCell
                                                     className="text-center">{category.product_count} Produk</TableCell>
-                                                <TableCell className="text-center">{formatDate(category.created_at)}</TableCell>
+                                                <TableCell
+                                                    className="text-center">{formatDate(category.created_at)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <TooltipProvider>
                                                         <div className="flex justify-end gap-2">
@@ -273,8 +278,9 @@ export default function CategoryManagement() {
                                                                         <Pencil className="w-4 h-4"/>
                                                                     </Button>
                                                                 </TooltipTrigger>
-                                                                <TooltipContent>
-                                                                    <p>Edit Kategori</p>
+                                                                <TooltipContent className="bg-emerald-600">
+                                                                    <Typography variant="p" className="text-background">Edit
+                                                                        Kategori</Typography>
                                                                 </TooltipContent>
                                                             </Tooltip>
 
@@ -284,13 +290,17 @@ export default function CategoryManagement() {
                                                                         variant="outline"
                                                                         size="icon"
                                                                         className="text-red-500 hover:text-red-600"
-                                                                        onClick={() => handleDeleteCategory(category.id)}
+                                                                        onClick={() => {
+                                                                            setCurrentCategory(category);
+                                                                            setIsDeleteModalOpen(true);
+                                                                        }}
                                                                     >
                                                                         <Trash2 className="w-4 h-4"/>
                                                                     </Button>
                                                                 </TooltipTrigger>
-                                                                <TooltipContent>
-                                                                    <p>Hapus Kategori</p>
+                                                                <TooltipContent className="bg-emerald-600">
+                                                                    <Typography variant="p" className="text-background">Hapus
+                                                                        Kategori</Typography>
                                                                 </TooltipContent>
                                                             </Tooltip>
                                                         </div>
@@ -307,13 +317,17 @@ export default function CategoryManagement() {
             </div>
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
                 <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-center text-[20px] font-bold leading-[28px]">Edit
+                    <DialogHeader className="space-y-4">
+                        <DialogTitle className="text-center text-[30px] font-bold leading-[36px]">Edit
                             Kategori</DialogTitle>
+                        <Typography variant="p" className="text-left max-w-lg text-slate-500">
+                            Ubah nama kategori untuk memperbarui informasi kategori produk. Perubahan akan muncul di
+                            halaman produk.
+                        </Typography>
                     </DialogHeader>
                     <form onSubmit={handleEditCategory} className="space-y-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="categoryName" className="text-[16px] font-normal leading-[28px]">Nama
+                            <Label htmlFor="categoryName" className="text-[18px] font-bold text-emerald-600">Nama
                                 Kategori</Label>
                             <Input
                                 id="categoryName"
@@ -321,11 +335,37 @@ export default function CategoryManagement() {
                                 required
                                 defaultValue={currentCategory?.category_name || ''}
                                 placeholder="Masukkan nama kategori"
-                                className="text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                className="h-12 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
                             />
                         </div>
                         <Button type="submit" className="w-full">Simpan Perubahan</Button>
                     </form>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+                <DialogContent>
+                    <DialogHeader className="space-y-4">
+                        <DialogTitle className="text-left text-[30px] font-bold leading-[36px]">Hapus
+                            Kategori</DialogTitle>
+                        <Typography variant="p" className="text-left max-w-lg text-slate-500">
+                            Apakah Anda yakin ingin menghapus kategori ini? Kategori yang dihapus tidak dapat
+                            dikembalikan.
+                        </Typography>
+                    </DialogHeader>
+                    <div className="flex justify-end gap-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsDeleteModalOpen(false)}
+                        >
+                            Batal
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {handleDeleteCategory(currentCategory.id);}}
+                        >
+                            Hapus
+                        </Button>
+                    </div>
                 </DialogContent>
             </Dialog>
         </>
