@@ -1,6 +1,2 @@
 .env
 __pycache__/
-app/__pycache__/
-app/controller/__pycache__/
-app/model/__pycache__/
-migrations/__pycache__/

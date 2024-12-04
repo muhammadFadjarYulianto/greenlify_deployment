@@ -73,9 +73,10 @@ def filterProducts():
         category_name = request.args.get('category_name', type=str)
         min_price = request.args.get('min_price', type=float)
         max_price = request.args.get('max_price', type=float)
+        keyword = request.args.get('keyword', type=str)
 
-        if not category_name and min_price is None and max_price is None:
-            return response.badRequest([], "Silakan masukkan salah satu filter: category_name atau min_price & max_price.")
+        if not category_name and min_price is None and max_price is None and not keyword:
+            return response.badRequest([], "Silakan masukkan salah satu filter: category_name atau min_price & max_price, atau keyword.")
 
         query = Products.query
 
@@ -100,6 +101,13 @@ def filterProducts():
                 return response.badRequest([], "Harga maksimum tidak boleh bernilai negatif.")
             query = query.filter(Products.price < max_price)
 
+        if keyword:
+            keyword = f"%{keyword}%"
+            query = query.filter(
+                Products.product_name.ilike(keyword) | 
+                Products.description.ilike(keyword)
+            )
+
         products = query.all()
 
         if not products:
@@ -111,31 +119,57 @@ def filterProducts():
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal memfilter produk.")
-
-def searchProducts():
+    
+def filterProductsManage():
     try:
+        category_name = request.args.get('category_name', type=str)
+        min_price = request.args.get('min_price', type=float)
+        max_price = request.args.get('max_price', type=float)
         keyword = request.args.get('keyword', type=str)
 
-        if not keyword:
-            return response.badRequest([], "Silakan masukkan kata kunci untuk pencarian.")
+        if not category_name and min_price is None and max_price is None and not keyword:
+            return response.badRequest([], "Silakan masukkan salah satu filter: category_name atau min_price & max_price, atau keyword.")
 
-        keyword = f"%{keyword}%"
+        query = Products.query
 
-        products = Products.query.filter(
-            Products.product_name.ilike(keyword) | 
-            Products.description.ilike(keyword)
-        ).all()
+        if category_name:
+            category = Categories.query.filter_by(category_name=category_name).first()
+            if not category:
+                return response.notFound([], "Kategori tidak ditemukan.")
+            query = query.filter_by(category_id=category.id)
+
+        if min_price is not None and max_price is not None:
+            if min_price < 0 or max_price < 0:
+                return response.badRequest([], "Harga tidak boleh bernilai negatif.")
+            if min_price > max_price:
+                return response.badRequest([], "Harga minimum tidak boleh lebih besar dari harga maksimum.")
+            query = query.filter(Products.price.between(min_price, max_price))
+        elif min_price is not None:
+            if min_price < 0:
+                return response.badRequest([], "Harga minimum tidak boleh bernilai negatif.")
+            query = query.filter(Products.price > min_price)
+        elif max_price is not None:
+            if max_price < 0:
+                return response.badRequest([], "Harga maksimum tidak boleh bernilai negatif.")
+            query = query.filter(Products.price < max_price)
+
+        if keyword:
+            keyword = f"%{keyword}%"
+            query = query.filter(
+                Products.product_name.ilike(keyword)
+            )
+
+        products = query.all()
 
         if not products:
-            return response.notFound([], "Tidak ada produk yang ditemukan sesuai kata kunci.")
+            return response.notFound([], "Tidak ada produk yang ditemukan dengan kriteria yang diberikan.")
 
         data = format_array(products)
         return response.success(data)
 
     except Exception as e:
         print(e)
-        return response.serverError([], "Gagal mencari produk.")
-
+        return response.serverError([], "Gagal memfilter produk.")
 
 def tambahProduct():
     try:
@@ -297,7 +331,6 @@ def get_pagination(clss, url, start, limit):
 
     obj['results'] = data[(start - 1): (start - 1 + limit)]
     return obj  # Kembalikan dictionary mentah untuk diproses di luar
-
 
 def paginate():
     start = request.args.get('start')

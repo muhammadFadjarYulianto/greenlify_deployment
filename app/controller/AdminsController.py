@@ -5,7 +5,6 @@ from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
 from datetime import datetime, timedelta
-import redis
 
 def indexAdmin():
     try:
@@ -163,6 +162,9 @@ def loginAdmin():
         password = request.form.get('password') or request.json.get('password')
         remember_me = request.form.get('remember_me') or request.json.get('remember_me')
 
+        if not isinstance(remember_me, bool):
+            return response.badRequest([], 'Nilai remember_me harus berupa boolean')
+
         admin = Admins.query.filter_by(email=email).first()
 
         if not email or not password:
@@ -176,11 +178,12 @@ def loginAdmin():
         
         data = single_object(admin)
 
-        expires = timedelta(days=3) if remember_me == 'true' else timedelta(hours=12)
-        expires_refresh = timedelta(days=7)
+        expires = timedelta(hours=12)
+        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        additional_claims = {'remember_me': remember_me}
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
-        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
+        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh, additional_claims=additional_claims)
 
         return response.success({
             "data" : data,
@@ -194,43 +197,42 @@ def loginAdmin():
 def refreshToken():
     try:
         current_user = get_jwt_identity()
+        jwt_claims = get_jwt()
+        remember_me = jwt_claims.get('remember_me', False)
 
-        expires = timedelta(hours=12)
-        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires)
+        expires_access = timedelta(hours=12)
+        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        additional_claims = {'remember_me': remember_me}
 
-        return response.success({
-            "access_token": new_access_token
-        })
+        access_token_expiry_time = datetime.utcnow() + expires_access
+        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+
+        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
+        new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
+
+        data = {
+            "access_token": new_access_token,
+            "refresh_token": new_refresh_token,
+            "access_token_expiry_time": access_token_expiry_time.isoformat(),
+            "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+        }
+        return response.success(data)
     except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal memperbarui token")
+        return response.serverError([],"Gagal memperbarui token")
 
+def get_me():
+        try:
+            current_user_email = get_jwt_identity()
 
-# # Setup Redis 
-# redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+            admin = Admins.query.filter_by(email=current_user_email).first()
 
-# def logoutAdmin():
-#     try:
-#         # Mengambil identitas pengguna dari token JWT yang sedang digunakan
-#         identity = get_jwt_identity()
+            if not admin:
+                return response.notFound([],"Admin tidak ditemukan")
 
-#         # Mendapatkan JWT ID (jti) yang unik untuk token yang sedang digunakan
-#         jti = get_jwt()['jti']
+            data = single_object(admin)
 
-#         # Menambahkan jti ke dalam Redis untuk menandakan bahwa token ini tidak valid
-#         # Mengatur waktu kedaluwarsa (misalnya 12 jam)
-#         redis_client.setex(jti, timedelta(hours=12), "revoked")  # Token ini tidak dapat digunakan lagi setelah logout
-
-#         # Mengirim respons sukses
-#         return response.success("Sukses logout, token telah dinonaktifkan.")
-#     except Exception as e:
-#         print(e)
-#         return response.serverError([], "Gagal melakukan logout.")
-
-def logoutAdmin():
-    try:
-        identity = get_jwt_identity()
-        return response.success([],"Sukses logout. Token dihapus dari frontend.")
-    except Exception as e:
-        print(e)
-        return response.serverError([],"Gagal melakukan logout.")
+            return response.success(data)
+        
+        except Exception as e:
+            print(e)
+            return response.serverError([],"Gagal mengambil data admin")
