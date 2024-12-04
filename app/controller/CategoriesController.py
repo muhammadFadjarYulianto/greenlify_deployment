@@ -110,6 +110,8 @@ def ubahCategory(id):
         category_name = request.form.get('category_name') or request.json.get('category_name')
         if not category_name:
             return response.badRequest([], "Nama kategori wajib diisi.")
+        if len(category_name) < 3:
+            return response.badRequest([], "Nama kategori harus terdiri dari minimal 3 karakter.")
 
         category = Categories.query.filter_by(id=id).first()
         if not category:
