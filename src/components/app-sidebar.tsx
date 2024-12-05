@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
 	Bot,
-	LifeBuoy,
 	Settings2,
 	LayoutDashboardIcon,
 	StoreIcon,
@@ -10,8 +9,6 @@ import {
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
 	Sidebar,
@@ -22,7 +19,6 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Send } from "lucide-react";
 // @ts-ignore
 import Logo from "@/assets/logo/logo.svg";
 import { Link } from "react-router-dom";
@@ -60,55 +56,26 @@ const data = {
 			url: "#",
 			icon: TableOfContents,
 		},
-		{
-			title: "Settings",
-			url: "#",
-			icon: Settings2,
-			items: [
-				{
-					title: "Profil Admin",
-					url: "#",
-				},
-				{
-					title: "Keamanan",
-					url: "#",
-				},
-				{
-					title: "Backup Data",
-					url: "#",
-				},
-			],
-		},
+		// {
+		// 	title: "Settings",
+		// 	url: "#",
+		// 	icon: Settings2,
+		// 	items: [
+		// 		{
+		// 			title: "Profil Admin",
+		// 			url: "#",
+		// 		},
+		// 		{
+		// 			title: "Keamanan",
+		// 			url: "#",
+		// 		},
+		// 		{
+		// 			title: "Backup Data",
+		// 			url: "#",
+		// 		},
+		// 	],
+		// },
 	],
-	navSecondary: [
-		{
-			title: "Support",
-			url: "#",
-			icon: LifeBuoy,
-		},
-		{
-			title: "Feedback",
-			url: "#",
-			icon: Send,
-		},
-	],
-	// projects: [
-	//     {
-	//         name: "Design Engineering",
-	//         url: "#",
-	//         icon: Frame,
-	//     },
-	//     {
-	//         name: "Sales & Marketing",
-	//         url: "#",
-	//         icon: PieChart,
-	//     },
-	//     {
-	//         name: "Travel",
-	//         url: "#",
-	//         icon: Map,
-	//     },
-	// ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -129,8 +96,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain items={data.navMain} />
-				{/*<NavProjects projects={data.projects} />*/}
-				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={data.user} />

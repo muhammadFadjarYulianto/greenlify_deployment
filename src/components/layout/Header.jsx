@@ -19,11 +19,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Typography} from "@/components/ui/Typography";
+import {getAdmin} from "@/services/admin.js";
 
 export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState("");
+    const [name, setName] = useState("");
 
     const logoRef = useRef(null);
     const navItemsRef = useRef([]);
@@ -40,11 +42,19 @@ export default function Header() {
 
     useEffect(() => {
         const accessToken = localStorage.getItem("access_token");
-        const userEmail = localStorage.getItem("user_email");
+        const fetchAdmin = async () => {
+            try {
+                const admin = await getAdmin();
+                setUserEmail(admin.email);
+                setName(admin.name);
+            } catch (error) {
+                console.error("Gagal mendapatkan data admin:", error.response || error.message);
+            }
+        }
 
         if (accessToken) {
             setIsLoggedIn(true);
-            setUserEmail(userEmail || "");
+            fetchAdmin();
         }
 
         gsap.fromTo(
@@ -85,11 +95,10 @@ export default function Header() {
     const handleLogout = () => {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        localStorage.removeItem("user_email");
-        localStorage.removeItem("id");
 
         setIsLoggedIn(false);
         setUserEmail("");
+        setName("");
 
         window.location.href = "/login";
     };
@@ -98,7 +107,7 @@ export default function Header() {
         if (isLoggedIn) {
             return (
                 <>
-                    <Button size="md" className="w-full text-base" onClick={() => window.location.href = "/dashboard"}>
+                    <Button size="md" className="w-full text-lg" onClick={() => window.location.href = "/dashboard"}>
                         Dashboard
                     </Button>
                     <Button variant="destructive" size="md" className="w-full mt-4 text-lg" onClick={handleLogout}>
@@ -128,7 +137,9 @@ export default function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="bg-emerald-500 text-white">
                         <DropdownMenuLabel
-                            className="text-[16px] font-semibold leading-[28px]">{userEmail}</DropdownMenuLabel>
+                            className="py-0 text-center text-[16px] font-semibold leading-[28px]">{name}</DropdownMenuLabel>
+                        <DropdownMenuLabel
+                            className="py-0 text-[16px] font-semibold leading-[28px]">{userEmail}</DropdownMenuLabel>
                         <DropdownMenuSeparator className="border"/>
                         <DropdownMenuLabel className="text-[16px] font-semibold leading-[28px]">Menu</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer"

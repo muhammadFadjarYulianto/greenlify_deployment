@@ -1,5 +1,5 @@
 import axios from "axios";
-import {LOGIN, LOGOUT, REFRESH} from "@/constants/routesAPI";
+import {LOGIN, REFRESH} from "@/constants/routesAPI";
 
 export default class AuthServices {
     static async login(email, password, remember_me) {
@@ -23,15 +23,10 @@ export default class AuthServices {
         }
     }
 
-    static async logout() {
-        try {
-            await axios.post(LOGOUT, {}, {withCredentials: true});
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-        } catch (error) {
-            console.error("Logout gagal:", error.response || error.message);
-            throw new Error("Logout gagal. Silakan coba lagi.");
-        }
+    static logout() {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("admin_data");
     }
 
     static async refreshAccessToken() {
@@ -42,25 +37,35 @@ export default class AuthServices {
         }
 
         try {
-            const response = await axios.post(REFRESH, {refresh_token: refreshToken}, {
-                headers: {"Content-Type": "application/json"},
+            const response = await axios.post(REFRESH, {}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${refreshToken}`
+                }
             });
 
-            const {access_token} = response.data;
+            const {access_token, refresh_token} = response.data.data;
 
             localStorage.setItem("access_token", access_token);
+            localStorage.setItem("refresh_token", refresh_token);
 
             return access_token;
         } catch (error) {
-            console.error("Gagal refresh token:", error.response || error.message);
+             this.logout();
+            window.location.href = "/login";
             throw new Error("Sesi Anda telah berakhir. Silakan login kembali.");
         }
     }
 
     static validateLoginInputs(email, password, remember_me) {
-        if (!email || !password || typeof remember_me !== "boolean") {
+        if (!email || !password) {
             throw new Error("Email dan password harus diisi.");
         }
+
+        if (typeof remember_me !== "boolean") {
+            throw new Error("Remember me harus berupa boolean.");
+        }
+
         if (!this.isValidEmail(email)) {
             throw new Error("Format email tidak valid.");
         }
@@ -80,8 +85,8 @@ export default class AuthServices {
         if (!token) return false;
         try {
             const payload = JSON.parse(atob(token.split(".")[1]));
-            const expiration = payload.exp;
-            return Date.now() / 1000 < expiration;
+            const expiration = payload.exp * 1000;
+            return Date.now() / 1000 + 10 < expiration;
         } catch (e) {
             return false;
         }
@@ -104,7 +109,7 @@ axios.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== REFRESH) {
             originalRequest._retry = true;
 
             try {
@@ -112,9 +117,9 @@ axios.interceptors.response.use(
                 originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
                 return axios(originalRequest);
             } catch (refreshError) {
-                console.error("Refresh token gagal, logout pengguna.");
-                await AuthServices.logout();
+                AuthServices.logout();
                 window.location.href = "/login";
+                return Promise.reject(refreshError);
             }
         }
         return Promise.reject(error);
