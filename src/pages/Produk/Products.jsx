@@ -25,6 +25,8 @@ import {Link} from "react-router-dom";
 import debounce from 'lodash/debounce';
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import {gsap} from 'gsap';
+import ProductSkeleton from "@/components/product/ProductSkeleton";
+import ProductSkeletonList from "@/components/product/ProductSkeletonList.jsx";
 
 export default function Products() {
     const productContainerRef = useRef(null);
@@ -237,21 +239,9 @@ export default function Products() {
         }
 
         if (error) {
-            return (
-                <div className="col-span-full flex flex-col items-center justify-center w-full p-8" ref={noProductsRef}>
-                    <Typography
-                        variant="h2"
-                        className="text-emerald-600 text-center mb-4"
-                    >
-                        Produk Tidak Ditemukan
-                    </Typography>
-                    <Typography
-                        variant="large"
-                        className="text-slate-500 text-center mb-6"
-                    >
-                        {error || "Mohon coba beberapa saat lagi."}
-                    </Typography>
-                </div>
+            return (<>
+                    <ProductSkeletonList count={4}/>
+                </>
             );
         }
         if (!isLoading && paginatedProducts.length === 0) {
