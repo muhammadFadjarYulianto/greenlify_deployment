@@ -91,7 +91,7 @@ export default function Login() {
                                         id="email"
                                         type="email"
                                         placeholder="admin@gmail.com"
-                                        className="h-12 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                        className="h-12 text-slate-900 border border-slate-50 focus:border-slate-100"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
@@ -109,7 +109,7 @@ export default function Login() {
                                             id="password"
                                             type={showPassword ? "text" : "password"}
                                             placeholder="Enter your password"
-                                            className="h-12 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                            className="h-12 text-slate-900 border border-slate-50 focus:border-slate-100"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
@@ -120,9 +120,9 @@ export default function Login() {
                                             className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
                                         >
                                             {showPassword ? (
-                                                <EyeOffIcon className="text-emerald-600"/>
+                                                <EyeOffIcon className="text-emerald-500"/>
                                             ) : (
-                                                <EyeIcon className="text-emerald-600"/>
+                                                <EyeIcon className="text-emerald-500"/>
                                             )}
                                         </button>
                                     </div>

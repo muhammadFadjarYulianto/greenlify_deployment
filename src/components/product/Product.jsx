@@ -34,8 +34,8 @@ const Product = ({category_name, contact, img_file, price, title, description}) 
             </CardHeader>
             <CardContent>
                 <CardDescription>
-                    <Typography variant="p" type="description">
-                        {description}
+                    <Typography variant="p" type="description" className="text-justify">
+                        {description.split('.').slice(0, 1).join('.')+'.'}
                     </Typography>
                 </CardDescription>
             </CardContent>

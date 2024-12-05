@@ -203,41 +203,14 @@ export default function CategoryManagement() {
                             pencarian produk di toko Anda.
                         </Typography>
                     </div>
-                    <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-                        <DialogTrigger asChild>
-                            <Button
-                                variant="primary"
-                                className="text-white shadow-lg"Tambah Kategori
-                            >
-                                <Plus className="w-6 h-6 mr-2"/>
-                                Tambah Kategori
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader className="space-y-4">
-                                <DialogTitle className="text-center text-[30px] font-bold leading-[36px]">Tambah
-                                    Kategori Baru</DialogTitle>
-                                <Typography variant="p" className="text-left max-w-lg text-slate-500">
-                                    Tambahkan kategori baru untuk memudahkan pengorganisasian produk. Kategori baru akan
-                                    muncul di halaman produk.
-                                </Typography>
-                            </DialogHeader>
-                            <form onSubmit={handleAddCategory} className="space-y-4">
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="categoryName" className="text-[18px] font-bold text-emerald-600">Nama
-                                        Kategori</Label>
-                                    <Input
-                                        id="categoryName"
-                                        name="categoryName"
-                                        required
-                                        placeholder="Masukkan nama kategori"
-                                        className="h-12 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
-                                    />
-                                </div>
-                                <Button type="submit" className="w-full">Simpan</Button>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
+                    <Button
+                        variant="primary"
+                        className="text-white shadow-lg"
+                        onClick={() => setIsAddModalOpen(true)}
+                    >
+                        <Plus className="w-6 h-6 mr-2"/>
+                        Tambah Kategori
+                    </Button>
                 </div>
                 <div className="grid gap-4 grid-cols-1">
                     <Card>
@@ -315,6 +288,32 @@ export default function CategoryManagement() {
                     </Card>
                 </div>
             </div>
+            <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+                <DialogContent>
+                    <DialogHeader className="space-y-4">
+                        <DialogTitle className="text-center text-[30px] font-bold leading-[36px]">Tambah
+                            Kategori Baru</DialogTitle>
+                        <Typography variant="p" className="text-left max-w-lg text-slate-500">
+                            Tambahkan kategori baru untuk memudahkan pengorganisasian produk. Kategori baru akan
+                            muncul di halaman produk.
+                        </Typography>
+                    </DialogHeader>
+                    <form onSubmit={handleAddCategory} className="space-y-4">
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="categoryName" className="text-[18px] font-bold text-emerald-600">Nama
+                                Kategori</Label>
+                            <Input
+                                id="categoryName"
+                                name="categoryName"
+                                required
+                                placeholder="Masukkan nama kategori"
+                                className="h-12 text-slate-900 border border-slate-50 focus:border-slate-100"
+                            />
+                        </div>
+                        <Button type="submit" className="w-full">Simpan</Button>
+                    </form>
+                </DialogContent>
+            </Dialog>
             <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
                 <DialogContent>
                     <DialogHeader className="space-y-4">
@@ -335,7 +334,7 @@ export default function CategoryManagement() {
                                 required
                                 defaultValue={currentCategory?.category_name || ''}
                                 placeholder="Masukkan nama kategori"
-                                className="h-12 text-slate-900 border-2 border-emerald-500 focus:border-emerald-600"
+                                className="h-12 text-slate-900 border border-slate-50 focus:border-slate-100"
                             />
                         </div>
                         <Button type="submit" className="w-full">Simpan Perubahan</Button>
@@ -354,14 +353,16 @@ export default function CategoryManagement() {
                     </DialogHeader>
                     <div className="flex justify-end gap-4">
                         <Button
-                            variant="outline"
+                            variant="secondary"
                             onClick={() => setIsDeleteModalOpen(false)}
                         >
                             Batal
                         </Button>
                         <Button
                             variant="destructive"
-                            onClick={() => {handleDeleteCategory(currentCategory.id);}}
+                            onClick={() => {
+                                handleDeleteCategory(currentCategory.id);
+                            }}
                         >
                             Hapus
                         </Button>

@@ -15,7 +15,6 @@ export async function getProductsManagement(start = 1, limit = 5) {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("API Response Produk:", response.data);
       return response.data.data;
     } catch (error) {
       console.error("Gagal mendapatkan data produk:", error.response || error.message);
