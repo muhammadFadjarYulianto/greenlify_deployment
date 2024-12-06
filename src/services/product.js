@@ -1,10 +1,46 @@
 import axios from "axios";
-import {PRODUCT_ENDPOINT, PRODUCT_FILTER_ENDPOINT} from "@/constants/routesAPI";
+import {PRODUCT_ENDPOINT} from "@/constants/routesAPI";
 
-export const getProducts = async () => {
+export const getProducts = async (filters) => {
     try {
-        const response = await axios.get(PRODUCT_ENDPOINT);
-        return response.data.data;
+        let url = PRODUCT_ENDPOINT;
+        if (Object.keys(filters).length > 0) {
+            const queryParams = new URLSearchParams();
+            if (filters.category_name) {
+                queryParams.append('category_name', filters.category_name);
+            }
+            if (filters.min_price !== undefined && filters.min_price !== '') {
+                queryParams.append('min_price', filters.min_price);
+            }
+            if (filters.max_price !== undefined && filters.max_price !== '') {
+                queryParams.append('max_price', filters.max_price);
+            }
+            if (filters.keyword) {
+                queryParams.append('keyword', filters.keyword);
+            }
+            if (filters.page) {
+                const start = (filters.page - 1) * (filters.limit || 4);
+                queryParams.append('start', start + 1);
+            }
+            if (filters.limit) {
+                queryParams.append('limit', filters.limit);
+            }
+            url += `?${queryParams.toString()}`;
+        }
+
+        const response = await axios.get(url);
+        const data = response.data.data;
+        return {
+            categories: data.categories,
+            products: data.pagination.results,
+            pagination: {
+                next: data.pagination.next,
+                previous: data.pagination.previous,
+                per_page: data.pagination.per_page,
+                start_index: data.pagination.start_index,
+                total_data: data.pagination.total_data
+            }
+        };
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch products');
@@ -16,33 +52,14 @@ export const getProducts = async () => {
     }
 }
 
-export const getProductByMultipleFilter = async (filters) => {
+export const getProductById = async (id) => {
     try {
-        const queryParams = new URLSearchParams();
-        if (filters.category_name) {
-            queryParams.append('category_name', filters.category_name);
-        }
-        if (filters.min_price !== undefined && filters.min_price !== '') {
-            queryParams.append('min_price', filters.min_price);
-        }
-        if (filters.max_price !== undefined && filters.max_price !== '') {
-            queryParams.append('max_price', filters.max_price);
-        }
-        if (filters.keyword) {
-            queryParams.append('keyword', filters.keyword);
-        }
-        if (filters.page) {
-            queryParams.append('page', filters.page);
-        }
-        if (filters.limit) {
-            queryParams.append('limit', filters.limit);
-        }
-        const response = await axios.get(`${PRODUCT_FILTER_ENDPOINT}?${queryParams.toString()}`);
+        const response = await axios.get(`${PRODUCT_ENDPOINT}/${id}`);
+        console.log(response.data);
         return response.data.data;
     } catch (error) {
-        console.error('Error fetching filtered products:', error);
         if (error.response) {
-            throw new Error(error.response.data.message || 'Failed to fetch products');
+            throw new Error(error.response.data.message || 'Failed to fetch product');
         } else if (error.request) {
             throw new Error('No response received from server');
         } else {
@@ -50,15 +67,3 @@ export const getProductByMultipleFilter = async (filters) => {
         }
     }
 }
-
-// export const getProductByCategory = async (categoryName) => {
-//     return getProductByMultipleFilter({ category_name: categoryName });
-// };
-//
-// export const getProductByPrice = async (minPrice, maxPrice) => {
-//     return getProductByMultipleFilter({ min_price: minPrice, max_price: maxPrice });
-// };
-//
-// export const getProductBySearch = async (keyword) => {
-//     return getProductByMultipleFilter({ keyword });
-// };
