@@ -6,7 +6,6 @@ export const getProducts = async () => {
         const response = await axios.get(PRODUCT_ENDPOINT);
         return response.data.data;
     } catch (error) {
-        console.error('Error fetching products:', error);
         if (error.response) {
             throw new Error(error.response.data.message || 'Failed to fetch products');
         } else if (error.request) {
