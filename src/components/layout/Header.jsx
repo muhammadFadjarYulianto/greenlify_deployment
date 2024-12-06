@@ -34,10 +34,10 @@ export default function Header() {
 
     const menuItems = [
         {label: "Beranda", path: "beranda"},
-        {label: "Blog", path: "blog"},
         {label: "Statistik", path: "statistik"},
         {label: "Prediksi", path: "prediksi"},
         {label: "Produk", path: "produk"},
+        {label: "Blog", path: "blog"},
         {label: "Tentang Kami", path: "tentangkami"},
     ];
 
