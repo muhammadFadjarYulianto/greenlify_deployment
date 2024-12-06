@@ -6,6 +6,8 @@ import lazyWrap from "@/router/lazyWrap";
 
 const Home = lazy(() => import("@/pages/Home"));
 const Statistic = lazy(() => import("@/pages/Statistic"));
+const Blog = lazy(() => import("@/pages/Blog/Blog"));
+const BlogDetail = lazy(() => import("@/pages/Blog/BlogDetail"));
 const Prediction = lazy(() => import("@/pages/Prediction"));
 const Products = lazy(() => import("@/pages/Produk/Products"));
 const ProductDetails = lazy(() => import("@/pages/Produk/ProductDetails"));
@@ -24,6 +26,8 @@ export default function Index() {
             <Route path="/" element={<Layout/>}>
                 <Route path="/" element={lazyWrap(Home)()}/>
                 <Route path="/beranda" element={<Navigate to="/"/>}/>
+                <Route path="/blog" element={lazyWrap(Blog)()}/>
+                <Route path="/blog/:id" element={lazyWrap(BlogDetail)()}/>
                 <Route path="/statistik" element={lazyWrap(Statistic)()}/>
                 <Route path="/prediksi" element={lazyWrap(Prediction)()}/>
                 <Route path="/produk" element={lazyWrap(Products)()}/>
