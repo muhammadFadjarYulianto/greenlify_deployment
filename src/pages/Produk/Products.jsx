@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState, useRef} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getProducts, getProductByMultipleFilter} from "@/services/product";
+import {getProducts} from "@/services/product";
 import {Typography} from "@/components/ui/Typography";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
@@ -25,82 +25,61 @@ import {Link} from "react-router-dom";
 import debounce from 'lodash/debounce';
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import {gsap} from 'gsap';
+import ProductSkeletonList from "@/components/product/ProductSkeletonList";
 
 export default function Products() {
     const productContainerRef = useRef(null);
     const noProductsRef = useRef(null);
-
     const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [allCategories, setAllCategories] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState(searchParams.get("keyword") || "");
     const [searchPending, setSearchPending] = useState(searchParams.get("keyword") || "");
-    const [selectedPriceRange, setSelectedPriceRange] = useState(
-        searchParams.get("min_price") ? [searchParams.get("min_price"), searchParams.get("max_price")] : null
-    );
+    const [selectedPriceRange, setSelectedPriceRange] = useState(searchParams.get("min_price") ? [searchParams.get("min_price"), searchParams.get("max_price")] : null);
     const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category_name") || "");
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get("page")) || 1);
+    const [pagination, setPagination] = useState({
+        next: null,
+        previous: null,
+        per_page: 8,
+        total_data: 0
+    });
     const [isLoading, setIsLoading] = useState(true);
-    const [itemsPerPage] = useState(4);
 
     useEffect(() => {
         async function fetchProducts() {
             try {
                 setIsLoading(true);
                 setError(null);
-                const allData = await getProducts();
-                const allCategoriesData = [
-                    ...new Set(allData.map((product) => product.category_name)),
-                ];
-                setAllCategories(allCategoriesData);
+                setProducts([]);
                 const filters = {
                     keyword: searchQuery || null,
                     category_name: selectedCategory || null,
                     min_price: selectedPriceRange ? selectedPriceRange[0] : null,
                     max_price: selectedPriceRange ? selectedPriceRange[1] : null,
+                    page: currentPage,
+                    limit: pagination.per_page
                 };
-
-                let filteredData = allData;
-                if (Object.values(filters).some((value) => value !== null)) {
-                    filteredData = await getProductByMultipleFilter(filters);
-                }
-
-                if (filteredData.length === 0) {
-                    setError("Produk Tidak Ditemukan");
-                    setFilteredProducts([]);
-                } else {
-                    const productsData = filteredData.map((product) => ({
-                        id: product.id,
-                        product_name: product.product_name,
-                        description: product.description,
-                        price: product.price,
-                        img_file: product.img_file,
-                        contact: product.contact,
-                        category_name: product.category_name,
-                    }));
-                    setProducts(productsData);
-                    setFilteredProducts(productsData);
-                }
-
-                setCategories(allCategoriesData);
-                setTotalPages(filteredData.total_page || 1);
+                const response = await getProducts(filters);
+                setCategories(response.categories);
+                setProducts(response.products);
+                setPagination(response.pagination);
             } catch (err) {
-                const errorMsg = err.response ? err.response.data.message : err.message;
-                setError(errorMsg);
+                if (err.message.includes('No response received from server')) {
+                    setError('ERR_CONNECTION_REFUSED');
+                } else {
+                    setError(err.message);
+                }
             } finally {
                 setIsLoading(false);
             }
         }
 
         fetchProducts();
-    }, [searchQuery, selectedCategory, selectedPriceRange, currentPage]);
+    }, [searchQuery, selectedCategory, selectedPriceRange, currentPage, pagination.per_page]);
 
     useEffect(() => {
         if (productContainerRef.current) {
@@ -129,7 +108,7 @@ export default function Products() {
             });
         }
 
-    }, [filteredProducts, error]);
+    }, [products, error]);
 
     const updateURLParams = (params) => {
         const updatedParams = new URLSearchParams(location.search);
@@ -144,17 +123,19 @@ export default function Products() {
         debounce((query) => {
             const params = query ? {
                 keyword: query,
-                category_name: selectedCategory ? selectedCategory : null,
+                category_name: selectedCategory || null,
                 min_price: selectedPriceRange ? selectedPriceRange[0] : null,
-                max_price: selectedPriceRange ? selectedPriceRange[1] : null
+                max_price: selectedPriceRange ? selectedPriceRange[1] : null,
+                page: 1
             } : {
                 keyword: null,
                 category_name: null,
                 min_price: null,
-                max_price: null
+                max_price: null,
+                page: 1
             };
-
             setSearchQuery(query || "");
+            setCurrentPage(1);
             updateURLParams(params);
         }, 500),
         [selectedCategory, selectedPriceRange]
@@ -169,32 +150,34 @@ export default function Products() {
     const handleCategoryChange = (category) => {
         const params = {
             category_name: category,
-            keyword: searchQuery ? searchQuery : null,
+            keyword: searchQuery || null,
             min_price: selectedPriceRange ? selectedPriceRange[0] : null,
-            max_price: selectedPriceRange ? selectedPriceRange[1] : null
+            max_price: selectedPriceRange ? selectedPriceRange[1] : null,
+            page: 1
         };
-
         setSelectedCategory(category);
+        setCurrentPage(1);
         updateURLParams(params);
     };
 
     const handlePriceRangeChange = (range) => {
         const parsedRange = range.split(",").map(Number);
-
         const params = {
             min_price: parsedRange[0],
             max_price: parsedRange[1],
-            category_name: selectedCategory ? selectedCategory : null,
-            keyword: searchQuery ? searchQuery : null
+            category_name: selectedCategory || null,
+            keyword: searchQuery || null,
+            page: 1
         };
-
         setSelectedPriceRange(parsedRange);
+        setCurrentPage(1);
         updateURLParams(params);
     };
 
     const handlePageChange = (page) => {
-        if (page > 0 && page <= totalPages) {
+        if (page >= 1 && page <= Math.ceil(pagination.total_data / pagination.per_page)) {
             setCurrentPage(page);
+            updateURLParams({...searchParams, page: page.toString()});
         }
     };
 
@@ -203,24 +186,16 @@ export default function Products() {
             category_name: null,
             keyword: null,
             min_price: null,
-            max_price: null
+            max_price: null,
+            page: 1
         };
-
         setSelectedCategory("");
         setSearchQuery("");
         setSearchPending("");
         setSelectedPriceRange(null);
+        setCurrentPage(1);
         updateURLParams(params);
     }
-
-    const paginatedProducts = filteredProducts.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-    useEffect(() => {
-        setTotalPages(Math.ceil(filteredProducts.length / itemsPerPage));
-    }, [filteredProducts, itemsPerPage]);
 
     const renderProductContent = () => {
         if (isLoading) {
@@ -237,45 +212,32 @@ export default function Products() {
         }
 
         if (error) {
-            return (
-                <div className="col-span-full flex flex-col items-center justify-center w-full p-8" ref={noProductsRef}>
-                    <Typography
-                        variant="h2"
-                        className="text-emerald-600 text-center mb-4"
-                    >
-                        Produk Tidak Ditemukan
-                    </Typography>
-                    <Typography
-                        variant="large"
-                        className="text-slate-500 text-center mb-6"
-                    >
-                        {error || "Mohon coba beberapa saat lagi."}
-                    </Typography>
-                </div>
-            );
+            if (error === 'ERR_CONNECTION_REFUSED') {
+                return <ProductSkeletonList count={4}/>;
+            } else {
+                return (
+                    <div className="col-span-full flex flex-col items-center justify-center w-full p-8"
+                         ref={noProductsRef}>
+                        <Typography
+                            variant="h2"
+                            className="text-emerald-600 text-center mb-4"
+                        >
+                            Produk Tidak Ditemukan
+                        </Typography>
+                        <Typography
+                            variant="large"
+                            className="text-slate-500 text-center mb-6"
+                        >
+                            Tidak ada produk yang sesuai dengan filter atau pencarian Anda.
+                        </Typography>
+                        <Button onClick={deleteFilter} variant="primary">
+                            Hapus Filter
+                        </Button>
+                    </div>
+                );
+            }
         }
-        if (!isLoading && paginatedProducts.length === 0) {
-            return (
-                <div className="col-span-full flex flex-col items-center justify-center w-full p-8" ref={noProductsRef}>
-                    <Typography
-                        variant="h2"
-                        className="text-emerald-600 text-center mb-4"
-                    >
-                        Produk Tidak Ditemukan
-                    </Typography>
-                    <Typography
-                        variant="large"
-                        className="text-slate-500 text-center mb-6"
-                    >
-                        Tidak ada produk yang sesuai dengan filter atau pencarian Anda.
-                    </Typography>
-                    <Button onClick={deleteFilter} variant="primary">
-                        Hapus Filter
-                    </Button>
-                </div>
-            );
-        }
-        return paginatedProducts.map((product) => (
+        return products.map((product) => (
             <div ref={productContainerRef} key={product.id}>
                 <Link to={`/produk/${product.id}`}>
                     <Product
@@ -290,6 +252,8 @@ export default function Products() {
             </div>
         ));
     };
+
+    const totalPages = Math.ceil(pagination.total_data / pagination.per_page);
 
     return (
         <div>
@@ -396,16 +360,17 @@ export default function Products() {
                     {renderProductContent()}
                 </div>
 
-                {filteredProducts.length > 0 && (
+                {products.length > 0 && (
                     <div className="w-10/12 mt-8 sm:mt-[33px]">
-                        <Pagination className="gap-5 flex flex-wrap justify-center ">
+                        <Pagination className="gap-5 flex flex-wrap justify-center">
                             <PaginationPrevious
                                 className="order-1 sm:order-none cursor-pointer"
                                 onClick={() => handlePageChange(currentPage - 1)}
-                                aria-disabled={currentPage === 1}
+                                aria-disabled={!pagination.previous}
                             >
                                 <PaginationLink>Previous</PaginationLink>
                             </PaginationPrevious>
+
                             <PaginationContent className="order-3 sm:order-none hidden sm:flex cursor-pointer">
                                 {[...Array(totalPages)].map((_, index) => (
                                     <PaginationItem key={index} className="sm:mx-1">
@@ -418,10 +383,11 @@ export default function Products() {
                                     </PaginationItem>
                                 ))}
                             </PaginationContent>
+
                             <PaginationNext
                                 className="order-2 sm:order-none cursor-pointer"
                                 onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
+                                disabled={!pagination.next}
                             >
                                 <PaginationLink>Next</PaginationLink>
                             </PaginationNext>

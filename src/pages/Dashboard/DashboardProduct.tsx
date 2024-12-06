@@ -40,12 +40,12 @@ import {
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {useToast} from "@/hooks/use-toast";
-
 import {
     getProductsManagement,
     createProductManagement,
     updateProductManagement,
-    deleteProductManagement
+    deleteProductManagement,
+    getDetailsProductManagement
 } from "@/services/productManagement.js";
 import {getCategoriesManagement} from "@/services/categoryManagement.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -215,6 +215,19 @@ export default function DashboardProduct() {
         }
     };
 
+    const handleProductDetails = async (productId: number) => {
+        try {
+            const response = await getDetailsProductManagement(productId);
+            window.location.href = `/produk/${response}`;
+        } catch (error) {
+            toast({
+                title: "Gagal Mengambil Detail Produk",
+                description: "Terjadi kesalahan saat mengambil detail produk.",
+                variant: "destructive",
+            });
+        }
+    }
+
     const handleDeleteProduct = async (productId: number) => {
         try {
             await deleteProductManagement(productId);
@@ -363,7 +376,9 @@ export default function DashboardProduct() {
                                                     <div className="flex justify-end gap-2">
                                                         <Tooltip>
                                                             <TooltipTrigger asChild>
-                                                                <Button variant="outline" size="icon">
+                                                                <Button variant="outline" size="icon" onClick={
+                                                                    () => handleProductDetails(product.id)
+                                                                }>
                                                                     <Eye className="w-4 h-4"/>
                                                                 </Button>
                                                             </TooltipTrigger>
