@@ -2,10 +2,7 @@ from flask import request, jsonify, abort
 from app.model.products import Products
 from app.model.admins import Admins
 from app.model.categories import Categories
-from app import response, db, uploadconfig, app
-import uuid
-import os
-from werkzeug.utils import secure_filename
+from app import response, db, app
 import math
 import re
 
@@ -46,28 +43,6 @@ def detail_product(id):
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail produk.")
-
-def indexGuest():
-    try:    
-        products = Products.query.all()        
-        
-        data = [
-            {
-                'id': product.id,
-                'category_name': product.category.category_name,
-                'product_name': product.product_name,
-                'description': product.description,
-                'price': str(product.price),
-                'contact': product.contact,
-                'img_file': product.img_file
-            }
-            for product in products
-        ]
-        
-        return response.success(data)
-    except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal mengambil data produk untuk guest.")
 
 def filterProducts():
     try:
@@ -181,21 +156,6 @@ def tambahProduct():
         price = request.form.get('price') or request.json.get('price')
         contact = request.form.get('contact') or request.json.get('contact')
         img_file = request.form.get('img_file') or request.json.get('img_file')
-
-        # if 'img_file' not in request.files:
-        #     return response.badRequest([], 'File tidak tersedia')
-
-        # file = request.files['img_file']
-
-        # if file.filename == '':
-        #     return response.badRequest([], 'File tidak tersedia')
-        
-        # if file and uploadconfig.allowed_file(file.filename):
-        #     uid = uuid.uuid4()
-        #     filename = secure_filename(file.filename)
-        #     renamefile = "GreenLify-Product-"+str(uid)+filename
-
-        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -392,6 +352,100 @@ def paginate():
                 limit=int(limit)
             )
         return response.success(pagination_data)  # Bungkus dalam response.success
+    except Exception as e:
+        print(e)
+        return response.serverError([], "Gagal mengambil data produk.")
+
+def paginate_and_filter():
+    try:
+        start = request.args.get('start', default=1, type=int)
+        limit = request.args.get('limit', default=4, type=int)
+
+        category_name = request.args.get('category_name', type=str)
+        min_price = request.args.get('min_price', type=float)
+        max_price = request.args.get('max_price', type=float)
+        keyword = request.args.get('keyword', type=str)
+
+        query = Products.query
+
+        if category_name:
+            category = Categories.query.filter_by(category_name=category_name).first()
+            if not category:
+                return response.notFound([], "Kategori tidak ditemukan.")
+            query = query.filter_by(category_id=category.id)
+
+        if min_price is not None and max_price is not None:
+            if min_price > max_price:
+                return response.badRequest([], "Harga minimum tidak boleh lebih besar dari harga maksimum.")
+            query = query.filter(Products.price.between(min_price, max_price))
+        elif min_price is not None:
+            query = query.filter(Products.price >= min_price)
+        elif max_price is not None:
+            query = query.filter(Products.price <= max_price)
+
+        if keyword:
+            keyword = f"%{keyword}%"
+            query = query.filter(
+                Products.product_name.ilike(keyword) | 
+                Products.description.ilike(keyword)
+            )
+
+        total_data = query.count()
+
+        if start < 1 or limit < 1:
+            return response.badRequest([], "Parameter start dan limit harus lebih besar dari 0.")
+
+        products = query.offset(start - 1).limit(limit).all()
+
+        if not products:
+            return response.notFound([], "Tidak ada produk yang ditemukan.")
+
+        categories = Categories.query.all()
+        category_names = [category.category_name for category in categories]
+
+        pagination_data = {
+            'success': True,
+            'start_index': start,
+            'per_page': limit,
+            'total_data': total_data,
+            'results': format_array(products),
+        }
+
+        base_url = "http://127.0.0.1:5000/api/product/guest"
+
+        filter_params = []
+        if category_name:
+            filter_params.append(f"category_name={category_name}")
+        if min_price is not None:
+            filter_params.append(f"min_price={int(min_price) if min_price.is_integer() else min_price}")
+        if max_price is not None:
+            filter_params.append(f"max_price={int(max_price) if max_price.is_integer() else max_price}")
+        if keyword:
+            filter_params.append(f"keyword={keyword}")
+
+        filter_query = "&".join(filter_params)
+
+        if start > 1:
+            previous_start = max(1, start - limit)
+            previous_query = f"start={previous_start}&limit={limit}"
+            pagination_data['previous'] = f"{base_url}?{previous_query}&{filter_query}" if filter_query else f"{base_url}?{previous_query}"
+        else:
+            pagination_data['previous'] = None
+
+        if start + limit <= total_data:
+            next_start = start + limit
+            next_query = f"start={next_start}&limit={limit}"
+            pagination_data['next'] = f"{base_url}?{next_query}&{filter_query}" if filter_query else f"{base_url}?{next_query}"
+        else:
+            pagination_data['next'] = None
+
+        final_response = {
+            'categories': category_names,
+            'pagination': pagination_data
+        }
+
+        return response.success(final_response)
+
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data produk.")

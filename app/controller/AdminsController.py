@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
 from datetime import datetime, timedelta
 import re
+import os
 
 def indexAdmin():
     try:
@@ -267,3 +268,32 @@ def get_me():
         except Exception as e:
             print(e)
             return response.serverError([],"Gagal mengambil data admin")
+
+def defaultAdmin():
+    try:
+        default_admin = Admins.query.filter_by(email='admin1@gmail.com').first()
+
+        if os.getenv('FLASK_ENV') == 'production':
+            return response.forbidden([], "Tidak dapat membuat admin default di lingkungan produksi.")
+
+        if default_admin:
+            return response.success([], "Admin default sudah ada. Tidak perlu ditambah lagi.")
+
+        admin = Admins(
+            name="Admin",
+            email="admin1@gmail.com",
+            phone_number="1234567890",
+            gender="Laki-Laki"
+        )
+
+        # Set password dan simpan ke database
+        admin.setPassword('14141414')
+        db.session.add(admin)
+        db.session.commit()
+
+        return response.created([], "Akun admin default berhasil dibuat.")
+
+    except Exception as e:
+        print(e)  # Untuk debugging di konsol
+        return response.serverError([], "Terjadi kesalahan saat membuat admin default.")
+

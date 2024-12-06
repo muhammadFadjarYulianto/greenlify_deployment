@@ -23,13 +23,17 @@ def getMe():
     return AdminsController.get_me()
 
 @app.route('/api/admin', methods=['GET', 'POST'])
-# @jwt_required()
+@jwt_required()
 def admins():
     if request.method == 'GET':
         return AdminsController.indexAdmin()
     else:
         return AdminsController.tambahAdmin()
-    
+
+@app.route('/api/admin/default', methods=['POST'])
+def default():
+    return AdminsController.defaultAdmin()
+
 @app.route('/api/admin/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
 def adminDetail(id):
@@ -47,11 +51,6 @@ def categories():
         return CategoriesController.indexCategory()
     else:
         return CategoriesController.tambahCategory()
-    
-# @app.route('/api/category/filter', methods=['GET'])
-# @jwt_required()
-# def filterCategory():
-#     return CategoriesController.filterCategory()
 
 @app.route('/api/category/<id>', methods=["PUT", "DELETE"])
 @jwt_required()
@@ -65,18 +64,24 @@ def categoryDetail(id):
 @jwt_required()
 def products():
     if request.method == 'GET':
-        return ProductsController.indexProduct()
+        return ProductsController.paginate_and_filter()
     else:
         return ProductsController.tambahProduct()
     
+@app.route('/api/product/page', methods=['GET'])
+@jwt_required()
+def paginateProductManage():
+    return ProductsController.paginate()
+
 @app.route('/api/product/filter', methods=['GET'])
 @jwt_required()
 def filterProductManage():
     return ProductsController.filterProductsManage()
-        
+
+
 @app.route('/api/product/guest', methods=['GET'])
 def guestProduct():
-    return ProductsController.indexGuest()
+    return ProductsController.paginate_and_filter()
 
 @app.route('/api/product/guest/filter', methods=['GET'])
 def filterProduct():

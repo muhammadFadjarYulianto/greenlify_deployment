@@ -7,7 +7,6 @@ import re
 def indexCategory():
     try:
         categories = Categories.query.all()
-
         data = [
             {
                 'id': category.id,
@@ -23,7 +22,6 @@ def indexCategory():
         print(e)
         return response.serverError([], "Gagal mengambil data kategori.")
 
-
 def format_array(datas):
     return [single_object(data) for data in datas]
 
@@ -33,63 +31,6 @@ def single_object(data):
         'category_name': data.category_name,
         'created_at': data.created_at
     }
-
-# def detail_category(id):
-#     try:
-#         category = Categories.query.filter_by(id=id).first()
-
-#         if not category:
-#             return response.notFound([], 'Kategori tidak ditemukan.')
-#         products = Products.query.filter_by(category_id=id).all()
-
-#         data = single_detail_category(category, products)
-
-#         return response.success(data)
-    
-#     except Exception as e:
-#         print(e)
-#         return response.serverError([], "Gagal mengambil detail kategori.")
-    
-# def filterCategory():
-#     try:
-#         category_name = request.args.get('category_name', type=str)
-
-#         category = Categories.query.filter_by(category_name=category_name).first()
-
-#         if not category:
-#             return response.notFound([], 'Kategori tidak ditemukan.')
-#         products = Products.query.filter_by(category_id=category.id).all()
-
-#         if not products:
-#                 return response.notFound([], "Tidak ada produk yang ditemukan dalam kategori ini.")
-
-#         data = single_detail_category(category, products)
-
-#         return response.success(data)
-#     except Exception as e:
-#         print(e)
-#         return response.serverError([], "Gagal memfilter produk berdasarkan kategori.")
-
-# def single_detail_category(category, products):
-#     return {
-#         'id': category.id,
-#         'category_name': category.category_name,
-#         'products': [single_product(product) for product in products]
-#     }
-
-# def single_product(product):
-#     return {
-#         'id': product.id,
-#         'created_by': product.admin.name,
-#         'category_name': product.category.category_name,
-#         'product_name': product.product_name,
-#         'description': product.description,
-#         'price': str(product.price),
-#         'contact': product.contact,
-#         'img_file': product.img_file,
-#         'created_at': product.created_at,
-#         'updated_at': product.updated_at
-#     }
 
 def tambahCategory():
     try:
