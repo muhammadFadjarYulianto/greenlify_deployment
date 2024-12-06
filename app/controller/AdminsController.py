@@ -5,6 +5,7 @@ from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
 from datetime import datetime, timedelta
+import re
 
 def indexAdmin():
     try:
@@ -91,6 +92,18 @@ def tambahAdmin():
 
         if Admins.query.filter_by(phone_number=phone_number).first():
             return response.badRequest([], "Nomor telepon sudah terdaftar.")
+        
+        if not re.match("^[a-zA-Z\s]+$", name) or len(name) < 3 or len(name) > 50:
+            return response.badRequest([], "Nama hanya boleh huruf, panjang 3-50 karakter.")
+
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        if not re.match("^\d{10,15}$", phone_number):
+            return response.badRequest([], "Nomor telepon hanya boleh angka, panjang 10-15 digit.")
+
+        if not re.match(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password):
+            return response.badRequest([], "Password harus memiliki minimal 8 karakter, 1 huruf besar, 1 angka, dan 1 simbol.")
 
 
         admin = Admins(
@@ -126,6 +139,18 @@ def ubahAdmin(id):
 
         if gender not in ["Laki-Laki", "Perempuan"]:
             return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")
+        
+        if name and (not re.match("^[a-zA-Z\s]+$", name) or len(name) < 3 or len(name) > 50):
+            return response.badRequest([], "Nama hanya boleh huruf, panjang 3-50 karakter.")
+
+        if email and not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        if phone_number and not re.match("^\d{10,15}$", phone_number):
+            return response.badRequest([], "Nomor telepon hanya boleh angka, panjang 10-15 digit.")
+
+        if password and not re.match(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password):
+            return response.badRequest([], "Password harus memiliki minimal 8 karakter, 1 huruf besar, 1 angka, dan 1 simbol.")
 
         admin.name = name
         admin.email = email
@@ -175,6 +200,12 @@ def loginAdmin():
         
         if not admin.checkPassword(password):
             return response.unauthorized([], 'Kombinasi password salah')
+  
+        if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        if password and len(password) > 50:  
+            return response.badRequest([], "Password terlalu panjang, maksimal 50 karakter.")
         
         data = single_object(admin)
 

@@ -7,6 +7,7 @@ import uuid
 import os
 from werkzeug.utils import secure_filename
 import math
+import re
 
 def indexProduct():
     try:
@@ -198,6 +199,25 @@ def tambahProduct():
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+        
+        if not re.match(r'^[a-zA-Z0-9 ]*$', product_name):
+            return response.badRequest([], "Nama produk tidak boleh mengandung karakter khusus.")
+
+        if len(product_name) < 3 or len(product_name) > 100:
+            return response.badRequest([], "Nama produk harus antara 3 hingga 100 karakter.")
+        
+        if description and (len(description) < 10 or len(description) > 500):
+            return response.badRequest([], "Deskripsi harus antara 10 hingga 500 karakter.")
+
+        if contact and not re.match(r'^\d+$', contact):
+            return response.badRequest([], "Kontak harus berupa angka.")
+
+        try:
+            price = float(price)
+            if price <= 0:
+                return response.badRequest([], "Harga harus lebih besar dari 0.")
+        except ValueError:
+            return response.badRequest([], "Harga harus berupa angka.")
 
         admin = Admins.query.filter_by(id=created_by).first()
         if not admin:
@@ -259,6 +279,25 @@ def ubahProduct(id):
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+        
+        if not re.match(r'^[a-zA-Z0-9 ]*$', product_name):
+            return response.badRequest([], "Nama produk tidak boleh mengandung karakter khusus.")
+
+        if len(product_name) < 3 or len(product_name) > 100:
+            return response.badRequest([], "Nama produk harus antara 3 hingga 100 karakter.")
+        
+        if description and (len(description) < 10 or len(description) > 500):
+            return response.badRequest([], "Deskripsi harus antara 10 hingga 500 karakter.")
+
+        if contact and not re.match(r'^\d+$', contact):
+            return response.badRequest([], "Kontak harus berupa angka.")
+
+        try:
+            price = float(price)
+            if price <= 0:
+                return response.badRequest([], "Harga harus lebih besar dari 0.")
+        except ValueError:
+            return response.badRequest([], "Harga harus berupa angka.")
 
         product.created_by = created_by
         product.category_id = category_id
