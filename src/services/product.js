@@ -55,7 +55,6 @@ export const getProducts = async (filters) => {
 export const getProductById = async (id) => {
     try {
         const response = await axios.get(`${PRODUCT_ENDPOINT}/${id}`);
-        console.log(response.data);
         return response.data.data;
     } catch (error) {
         if (error.response) {
