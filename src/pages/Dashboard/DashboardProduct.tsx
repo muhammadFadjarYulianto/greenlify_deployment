@@ -144,7 +144,7 @@ export default function DashboardProduct() {
       setProducts(products);
       setTotalData(pagination.total_data);
       setTotalPages(Math.ceil(pagination.total_data / filters.limit));
-      setCurrentPage(filters.page); // Update current page from filters
+      setCurrentPage(filters.page); 
       setError(null);
     } catch (err) {
       const errorMessage =
@@ -157,14 +157,12 @@ export default function DashboardProduct() {
 
   const handleFilterChange = (key: string, value: any) => {
     setFilters((prev) => {
-      // If the value is empty or null, remove it from filters
       const newFilters = {
         ...prev,
         [key]: value || "",
-        page: 1, // Reset page when filter changes
+        page: 1,
       };
 
-      // Remove empty filters
       Object.keys(newFilters).forEach((k) => {
         if (newFilters[k] === "" || newFilters[k] === null) {
           delete newFilters[k];
@@ -275,7 +273,18 @@ export default function DashboardProduct() {
     try {
       await deleteProductManagement(productId);
       setIsDeleteModalOpen(false);
+      const newTotalData = totalData - 1;
+      const newTotalPages = Math.ceil(newTotalData / filters.limit);
+      
+      if (filters.page > newTotalPages && newTotalPages > 0) {
+        setFilters(prev => ({
+          ...prev,
+          page: newTotalPages
+        }));
+      }
+  
       await fetchProducts();
+      
       toast({
         title: "Produk Berhasil Dihapus",
         description: "Produk telah berhasil dihapus.",
@@ -500,7 +509,7 @@ export default function DashboardProduct() {
               <Select
                 value={selectedPriceValue}
                 onValueChange={(value) => {
-                  setSelectedPriceValue(value); // Track the selected value
+                  setSelectedPriceValue(value);
                   const priceRanges = {
                     low: { min: "0", max: "10000", label: "Di bawah 10,000" },
                     medium: {
