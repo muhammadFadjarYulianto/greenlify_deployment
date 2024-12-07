@@ -1,212 +1,117 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Typography } from "@/components/ui/Typography";
-import { Badge } from "@/components/ui/badge";
-import { Slash } from "lucide-react";
-import { Star, StarHalf } from "lucide-react";
-import Product from "@/components/product/Product.jsx";
-import products from "@/data/product.json";
-
+import {Button} from "@/components/ui/button";
+import {Typography} from "@/components/ui/Typography";
+import {Badge} from "@/components/ui/badge";
+import {ArrowLeft, Slash} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Link } from "react-router-dom";
 
-function calculateDiscountPercentage(originalPrice, discountedPrice) {
-	return Math.round(((originalPrice - discountedPrice) / originalPrice) * 100);
-}
+function ProductDetail({product}) {
+    const navigate = useNavigate();
 
-function ProductDetail({ product }) {
-	const fullStars = Math.floor(product.rating);
-	const hasHalfStar = product.rating % 1 !== 0;
+    if (!product) {
+        return null;
+    }
 
-	return (
-		<>
-			<div className="flex flex-col md:flex-row items-center w-10/12 mx-auto mt-[66px]">
-				<div className="w-full md:w-1/2 flex justify-center items-center mb-6 md:mb-0">
-					<img
-						src={product.image}
-						alt={product.name}
-						className="max-w-full h-auto rounded-[6px]"
-					/>
-				</div>
-				<div className="w-full md:w-1/2 md:pl-8">
-					<Breadcrumb className="my-2 font-normal text-slate-600 overflow-x-auto">
-						<BreadcrumbList className="flex flex-wrap">
-							<BreadcrumbItem>
-								<BreadcrumbLink href="/">Beranda</BreadcrumbLink>
-							</BreadcrumbItem>
-							<BreadcrumbSeparator>
-								<Slash />
-							</BreadcrumbSeparator>
-							<BreadcrumbItem>
-								<BreadcrumbLink href="/produk">Produk</BreadcrumbLink>
-							</BreadcrumbItem>
-							<BreadcrumbSeparator>
-								<Slash />
-							</BreadcrumbSeparator>
-							<BreadcrumbItem>
-								<BreadcrumbPage>{product.category}</BreadcrumbPage>
-							</BreadcrumbItem>
-						</BreadcrumbList>
-					</Breadcrumb>
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
 
-					<Typography
-						variant="h1"
-						className="mb-2 text-emerald-600 text-4xl md:text-6xl"
-					>
-						{product.name}
-					</Typography>
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-					<div className="mb-4 flex flex-wrap items-center gap-5">
-						<Typography variant="h4" className="line-through text-gray-500">
-							Rp {product.price.original.toLocaleString()}
-						</Typography>
-						<Typography variant="h2" className="text-slate-900">
-							Rp {product.price.discounted.toLocaleString()}
-						</Typography>
-						<Badge className="bg-emerald-600 text-white">
-							Diskon{" "}
-							{calculateDiscountPercentage(
-								product.price.original,
-								product.price.discounted,
-							)}
-							%
-						</Badge>
-					</div>
+        const day = days[date.getDay()];
+        const dateNum = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
 
-					<div className="flex items-center mb-4">
-						{[...Array(fullStars)].map((_, index) => (
-							<Star
-								key={index.toString()}
-								size={24}
-								className="mr-1"
-								color="#40916C"
-								fill="#40916C"
-							/>
-						))}
-						{hasHalfStar && (
-							<StarHalf
-								size={24}
-								className="mr-1"
-								color="#40916C"
-								fill="#40916C"
-							/>
-						)}
-						<Typography variant="large" className="mr-5 text-emerald-600">
-							( {product.rating} )
-						</Typography>
-					</div>
+        return `${day}, ${dateNum} ${month} ${year}`;
+    };
 
-					<div className="mb-4">
-						<Typography variant="h3" className="mb-2">
-							Stok: {product.availability.stock}
-						</Typography>
-						<div className="flex flex-wrap gap-2">
-							{product.availability.colors.map((color) => (
-								<div
-									key={color}
-									style={{
-										backgroundColor: color,
-										width: "20px",
-										height: "20px",
-										borderRadius: "50%",
-									}}
-									className="inline-block"
-								/>
-							))}
-						</div>
-					</div>
-
-					<Typography variant="p" className="mb-4 text-justify">
-						{product.description}
-					</Typography>
-
-					<Button variant="primary" className="w-full md:w-auto">
-						{product.cta}
-					</Button>
-				</div>
-			</div>
-			{/*<div className="flex items-center w-10/12 mx-auto mt-[66px]">*/}
-			{/*    <div className="grid grid-cols-2 gap-4 p-4">*/}
-			{/*        <div className="relative col-span-1 row-span-2 overflow-hidden rounded-lg">*/}
-			{/*            <img*/}
-			{/*                src="https://images.pexels.com/photos/6193131/pexels-photo-6193131.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"*/}
-			{/*                alt="Produk Terbaru"*/}
-			{/*                className="w-full h-full object-cover"*/}
-			{/*            />*/}
-			{/*            <div*/}
-			{/*                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 opacity-0 hover:opacity-100">*/}
-			{/*                <Typography*/}
-			{/*                    variant="h1"*/}
-			{/*                    className="text-white text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl"*/}
-			{/*                >*/}
-			{/*                    Produk terbaru*/}
-			{/*                </Typography>*/}
-			{/*            </div>*/}
-			{/*        </div>*/}
-			{/*        <div className="relative col-span-1 overflow-hidden rounded-lg">*/}
-			{/*            <img*/}
-			{/*                src="https://images.pexels.com/photos/3737576/pexels-photo-3737576.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"*/}
-			{/*                alt="Keranjang Anyaman"*/}
-			{/*                className="w-full h-full object-cover"*/}
-			{/*            />*/}
-			{/*            <div*/}
-			{/*                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 opacity-0 hover:opacity-100">*/}
-			{/*                <Typography*/}
-			{/*                    variant="h1"*/}
-			{/*                    className="text-white text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl"*/}
-			{/*                >*/}
-			{/*                    Keranjang Anyaman*/}
-			{/*                </Typography>*/}
-			{/*            </div>*/}
-			{/*        </div>*/}
-			{/*        <div className="relative col-span-1 overflow-hidden rounded-lg">*/}
-			{/*            <img*/}
-			{/*                src="https://images.pexels.com/photos/3737672/pexels-photo-3737672.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"*/}
-			{/*                alt="Cangkir Kertas"*/}
-			{/*                className="w-full h-full object-cover"*/}
-			{/*            />*/}
-			{/*            <div*/}
-			{/*                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300 opacity-0 hover:opacity-100">*/}
-			{/*                <Typography*/}
-			{/*                    variant="h1"*/}
-			{/*                    className="text-white text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl"*/}
-			{/*                >*/}
-			{/*                    Cangkir Kertas*/}
-			{/*                </Typography>*/}
-			{/*            </div>*/}
-			{/*        </div>*/}
-			{/*    </div>*/}
-			{/*</div>*/}
-			{/*<div className="w-full mt-[66px] h-auto flex flex-col items-center">*/}
-			{/*    <div className="text-center max-w-4xl px-4">*/}
-			{/*        <Typography variant="h1" className="">*/}
-			{/*            <strong className="text-emerald-600">Produk</strong> Lainnya*/}
-			{/*        </Typography>*/}
-			{/*    </div>*/}
-			{/*    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 w-10/12 mt-[33px]">*/}
-			{/*        {products.map((product) => (*/}
-			{/*            <Link to={`/produk/${product.id}`}>*/}
-			{/*                <product*/}
-			{/*                    key={product.id}*/}
-			{/*                    image={product.image}*/}
-			{/*                    price={product.price}*/}
-			{/*                    title={product.title}*/}
-			{/*                    rating={product.rating}*/}
-			{/*                    description={product.description}*/}
-			{/*                />*/}
-			{/*            </Link>*/}
-			{/*        ))}*/}
-			{/*    </div>*/}
-			{/*</div>*/}
-		</>
-	);
+    return (
+        <>
+            <div className="flex flex-col md:flex-row items-center w-10/12 mx-auto mt-[99px]">
+                <div className="w-full md:w-1/2 flex justify-center items-center mb-6 md:mb-0">
+                    <img
+                        src={product.img_file}
+                        alt={product.product_name}
+                        className="max-w-full h-auto rounded-3xl shadow-lg"
+                    />
+                </div>
+                <div className="w-full md:w-1/2 md:pl-8 flex flex-col">
+                    <div className="w-full flex justify-end mb-[33px]">
+                        <Button variant='icon' className="bg-emerald-500 hover:bg-emerald-600 shadow-lg"
+                                onClick={() => navigate(-1)}>
+                            <ArrowLeft className="h-4 w-4 text-background"/>
+                        </Button>
+                    </div>
+                    <Breadcrumb className="my-4 font-normal text-slate-600 overflow-x-auto">
+                        <BreadcrumbList className="flex flex-wrap">
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/">Beranda</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>
+                                <Slash/>
+                            </BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/produk">Produk</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>
+                                <Slash/>
+                            </BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>{product.category_name}</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <div className="mb-4 flex flex-wrap items-center gap-2">
+                        <Badge className="h-8 bg-emerald-600 text-white">
+                            {product.category_name}
+                        </Badge>
+                        <Badge variant="outline"
+                               className="h-8 bg-background text-emerald-500 border-2 border-emerald-500">
+                            {formatDate(product.created_at)}
+                        </Badge>
+                    </div>
+                    <div className="mb-4">
+                        <Typography
+                            variant="h1"
+                            className="mb-2 text-emerald-600 text-4xl md:text-6xl"
+                        >
+                            {product.product_name}
+                        </Typography>
+                    </div>
+                    <div className="mb-4">
+                        <Typography variant="h2" className="mb-2 text-2xl md:text-3xl text-emerald-600">
+                            Rp. {product.price}
+                        </Typography>
+                    </div>
+                    <div className="mb-4">
+                        <Typography variant="h4" className="mb-2 text-slate-700">
+                            Deskripsi:
+                        </Typography>
+                        <Typography variant="p" className="mb-4 text-justify text-slate-700">
+                            {product.description}
+                        </Typography>
+                    </div>
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        className="w-full md:w-1/2 shadow-lg"
+                        onClick={() => window.open(`https://wa.me/${product.contact}`, '_blank')}
+                    >
+                        Hubungi
+                    </Button>
+                </div>
+            </div>
+        </>
+    );
 }
 
 export default ProductDetail;

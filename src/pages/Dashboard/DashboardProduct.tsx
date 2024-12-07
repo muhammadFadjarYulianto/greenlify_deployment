@@ -221,7 +221,6 @@ export default function DashboardProduct() {
   const handleAddProduct = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
     if (selectedCategoryId) {
       formData.append("category_id", selectedCategoryId.toString());
       formData.delete("category_name");
