@@ -1,5 +1,5 @@
 from app import app, response
-from app.controller import AdminsController, CategoriesController, ProductsController
+from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.controller.ProductsController import Products, format_array
@@ -64,32 +64,9 @@ def categoryDetail(id):
 @jwt_required()
 def products():
     if request.method == 'GET':
-        return ProductsController.paginate_and_filter()
+        return ProductsController.paginate_and_filter_manage()
     else:
         return ProductsController.tambahProduct()
-    
-@app.route('/api/product/page', methods=['GET'])
-@jwt_required()
-def paginateProductManage():
-    return ProductsController.paginate()
-
-@app.route('/api/product/filter', methods=['GET'])
-@jwt_required()
-def filterProductManage():
-    return ProductsController.filterProductsManage()
-
-
-@app.route('/api/product/guest', methods=['GET'])
-def guestProduct():
-    return ProductsController.paginate_and_filter()
-
-@app.route('/api/product/guest/filter', methods=['GET'])
-def filterProduct():
-    return ProductsController.filterProducts()
-
-@app.route('/api/product/guest/page', methods=['GET'])
-def pagination():
-    return ProductsController.paginate()
 
 @app.route('/api/product/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
@@ -100,4 +77,58 @@ def productDetail(id):
         return ProductsController.ubahProduct(id)
     elif request.method == "DELETE":
         return ProductsController.hapusProduct(id)
+
+@app.route('/api/product/guest', methods=['GET'])
+def guestProduct():
+    return ProductsController.paginate_and_filter()
+
+@app.route('/api/product/guest/<id>', methods=["GET"])
+def productGuestDetail(id):
+    return ProductsController.detail_product(id)
+
+@app.route('/api/article', methods=['GET', 'POST'])
+@jwt_required()
+def articles():
+    if request.method == 'GET':
+        return ArticlesController.paginateAndFilterArticlesManage()
+    else:
+        return ArticlesController.tambahArticle()
+
+@app.route('/api/article/<id>', methods=["GET", "PUT", "DELETE"])
+@jwt_required()
+def detailArticle(id):
+    if request.method == 'GET':
+        return ArticlesController.detailArticleManage(id)
+    elif request.method == "PUT":
+        return ArticlesController.ubahArticle(id)
+    elif request.method == "DELETE":
+        return ArticlesController.hapusArticle(id)
+
+@app.route('/api/article/guest', methods=['GET'])
+def guestArticles():
+    return ArticlesController.paginateAndFilterArticles()
+
+@app.route('/api/article/guest/<id>', methods=['GET', 'POST'])
+def guestDetailArticle(id):
+    if request.method == 'GET':
+        return ArticlesController.detailArticle(id)
+    elif request.method == 'POST':
+        return ArticlesController.tambahCommentForArticle(id)
+
+@app.route('/api/comment', methods=['GET'])
+@jwt_required()
+def comments():
+    return CommentsController.paginateAndFilterCommentsManage()
+
+@app.route('/api/comment/<id>', methods=["GET", "PUT", "DELETE"])
+@jwt_required()
+def commentDetail(id):
+    if request.method == 'GET':
+        return CommentsController.detailComment(id)
+    elif request.method == "PUT":
+        return CommentsController.ubahComment(id)
+    elif request.method == "DELETE":
+        return CommentsController.hapusComment(id)
+
+
 

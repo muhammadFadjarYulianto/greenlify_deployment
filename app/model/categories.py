@@ -8,4 +8,4 @@ class Categories(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
-        return '<Categories {}>'.format(self.name)
+        return '<Categories {}>'.format(self.category_name)
