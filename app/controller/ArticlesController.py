@@ -131,12 +131,31 @@ def tambahArticle():
         author = request.form.get('author') or request.json.get('author')
         img_file = request.form.get('img_file') or request.json.get('img_file')
 
-        if not title or not created_by:
-            return response.badRequest([], "Kolom title dan created_by wajib diisi.")
+        # Validasi 'title'
+        if not title:
+            return response.badRequest([], "Kolom title wajib diisi.")
+        if not re.match(r'^[a-zA-Z0-9 ]*$', title):
+            return response.badRequest([], "Title tidak boleh mengandung karakter khusus.")
+        if len(title) < 3 or len(title) > 255:
+            return response.badRequest([], "Title harus memiliki panjang antara 3 hingga 255 karakter.")
 
+        # Validasi 'content'
+        if content and (len(content) < 10 or len(content) > 10000):
+            return response.badRequest([], "Content harus memiliki panjang antara 10 hingga 10000 karakter.")
+
+        # Validasi 'created_by'
+        if not created_by:
+            return response.badRequest([], "Kolom created_by wajib diisi.")
         admin = Admins.query.filter_by(id=created_by).first()
         if not admin:
             return response.notFound([], "Admin ID tidak valid.")
+
+        # Validasi 'author'
+        if author:
+            if not re.match(r'^[a-zA-Z ]*$', author):
+                return response.badRequest([], "Author hanya boleh mengandung huruf dan spasi.")
+            if len(author) < 3 or len(author) > 100:
+                return response.badRequest([], "Author harus memiliki panjang antara 3 hingga 100 karakter.")
 
         article = Articles(
             title=title,
@@ -160,8 +179,21 @@ def tambahCommentForArticle(id):
         email = request.form.get('email') or request.json.get('email')
         comment = request.form.get('comment') or request.json.get('comment')
 
-        if not all([username, comment]):
-            return response.badRequest([], "Kolom username dan comment wajib diisi.")
+        # Validasi 'username'
+        if not username:
+            return response.badRequest([], "Kolom username wajib diisi.")
+        if len(username) < 3 or len(username) > 100:
+            return response.badRequest([], "Username harus memiliki panjang antara 3 hingga 100 karakter.")
+
+        # Validasi 'email'
+        if email and not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        # Validasi 'comment'
+        if not comment:
+            return response.badRequest([], "Kolom comment wajib diisi.")
+        if len(comment) < 3:
+            return response.badRequest([], "Comment harus memiliki panjang minimal 3 karakter.")
 
         article = Articles.query.filter_by(id=id).first()
         if not article:
@@ -197,20 +229,25 @@ def ubahArticle(id):
         author = request.form.get('author') or request.json.get('author')
         img_file = request.form.get('img_file') or request.json.get('img_file')
 
-        if not all([created_by, title, author]):
+        # Validasi input
+        if not created_by or not title or not author:
             return response.badRequest([], "Kolom created_by, title, dan author wajib diisi.")
         
+        # Validasi 'title'
         if not re.match(r'^[a-zA-Z0-9 ]*$', title):
-            return response.badRequest([], "Judul tidak boleh mengandung karakter khusus.")
-        
+            return response.badRequest([], "Title tidak boleh mengandung karakter khusus.")
         if len(title) < 3 or len(title) > 255:
-            return response.badRequest([], "Judul harus antara 3 hingga 255 karakter.")
+            return response.badRequest([], "Title harus memiliki panjang antara 3 hingga 255 karakter.")
         
-        if content and (len(content) < 10 or len(content) > 2000):
-            return response.badRequest([], "Konten harus antara 10 hingga 2000 karakter.")
+        # Validasi 'content'
+        if content and (len(content) < 10 or len(content) > 10000):
+            return response.badRequest([], "Content harus memiliki panjang antara 10 hingga 10000 karakter.")
 
+        # Validasi 'author'
+        if not re.match(r'^[a-zA-Z ]*$', author):
+            return response.badRequest([], "Author hanya boleh mengandung huruf dan spasi.")
         if len(author) < 3 or len(author) > 100:
-            return response.badRequest([], "Nama penulis harus antara 3 hingga 100 karakter.")
+            return response.badRequest([], "Author harus memiliki panjang antara 3 hingga 100 karakter.")
 
         article.created_by = created_by
         article.title = title

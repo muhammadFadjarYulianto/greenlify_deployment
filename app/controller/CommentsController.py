@@ -30,6 +30,9 @@ def indexComments():
 
 def detailComment(id):
     try:
+        if not id.isdigit():
+            return response.badRequest([], "ID harus berupa angka.")
+
         comment = Comments.query.filter_by(id=id).first()
         if not comment:
             return response.notFound([], "Komentar tidak ditemukan.")
@@ -40,11 +43,17 @@ def detailComment(id):
 
 def ubahComment(id):
     try:
+        if not str(id).isdigit():
+            return response.badRequest([], "ID harus berupa angka.")
+        
         comment = Comments.query.filter_by(id=id).first()
         if not comment:
             return response.notFound([], "Komentar tidak ditemukan.")
 
         is_approved = request.form.get('is_approved') or request.json.get('is_approved')
+
+        if is_approved not in [True, False, None]:
+            return response.badRequest([], "Nilai 'is_approved' tidak valid.")
 
         if is_approved is True:
             comment.status = StatusEnum.APPROVED
@@ -65,6 +74,9 @@ def ubahComment(id):
 
 def hapusComment(id):
     try:
+        if not id.isdigit():
+            return response.badRequest([], "ID harus berupa angka.")
+
         comment = Comments.query.filter_by(id=id).first()
         if not comment:
             return response.notFound([], "Komentar tidak ditemukan.")
@@ -83,6 +95,12 @@ def paginateAndFilterCommentsManage():
         start = request.args.get('start', default=1, type=int)
         limit = request.args.get('limit', default=10, type=int)
         keyword = request.args.get('keyword', type=str)
+
+        if start < 1 or limit < 1:
+            return response.badRequest([], "Parameter 'start' dan 'limit' harus lebih besar dari 0.")
+
+        if keyword and len(keyword) > 50:
+            return response.badRequest([], "Keyword tidak boleh lebih dari 50 karakter.")
 
         query = Comments.query
 
