@@ -708,7 +708,7 @@ export default function DashboardProduct() {
                 <DialogContent>
                     <DialogHeader className="space-y-4">
                         <DialogTitle className="text-left text-[30px] font-bold leading-[36px]">Hapus
-                            Kategori</DialogTitle>
+                            Produk</DialogTitle>
                         <Typography variant="p-regular" className="text-left max-w-lg text-slate-500">
                             Apakah Anda yakin ingin menghapus kategori ini? Kategori yang dihapus tidak dapat
                             dikembalikan.
