@@ -4,23 +4,80 @@ import {getAdmin} from "@/services/admin.js";
 import {data} from "autoprefixer";
 
 
-export async function getProductsManagement(start = 1, limit = 5) {
+// export async function getProductsManagement(start = 1, limit = 5) {
+//     try {
+//       const token = localStorage.getItem("access_token");
+//       if (!token) {
+//         throw new Error("Token tidak tersedia. Silakan login kembali.");
+//     }
+//       const response = await axios.get(`${PRODUCT_PAGINATION_ENDPOINT}?start=${start}&limit=${limit}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+//       return response.data.data;
+//     } catch (error) {
+//       console.error("Gagal mendapatkan data produk:", error.response || error.message);
+//       throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+//     }
+//   }
+
+
+  export const getProductsManagement = async (filters) => {
     try {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        throw new Error("Token tidak tersedia. Silakan login kembali.");
-    }
-      const response = await axios.get(`${PRODUCT_PAGINATION_ENDPOINT}?start=${start}&limit=${limit}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data.data;
+        let url = PRODUCT_MANAGEMENT_ENDPOINT;
+        if (Object.keys(filters).length > 0) {
+            const queryParams = new URLSearchParams();
+            if (filters.category_name) {
+                queryParams.append('category_name', filters.category_name);
+            }
+            if (filters.min_price !== undefined && filters.min_price !== '') {
+                queryParams.append('min_price', filters.min_price);
+            }
+            if (filters.max_price !== undefined && filters.max_price !== '') {
+                queryParams.append('max_price', filters.max_price);
+            }
+            if (filters.keyword) {
+                queryParams.append('keyword', filters.keyword);
+            }
+            if (filters.page) {
+                const start = (filters.page - 1) * (filters.limit || 4);
+                queryParams.append('start', start + 1);
+            }
+            if (filters.limit) {
+                queryParams.append('limit', filters.limit);
+            }
+            url += `?${queryParams.toString()}`;
+        }
+
+        const response = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+        });
+        const data = response.data.data;
+        console.log(data);
+        return {
+            categories: data.categories,
+            products: data.pagination.results,
+            pagination: {
+                next: data.pagination.next,
+                previous: data.pagination.previous,
+                per_page: data.pagination.per_page,
+                start_index: data.pagination.start_index,
+                total_data: data.pagination.total_data
+            }
+        };
     } catch (error) {
-      console.error("Gagal mendapatkan data produk:", error.response || error.message);
-      throw new Error("Gagal mengambil data produk. Silakan coba lagi.");
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Failed to fetch products');
+        } else if (error.request) {
+            throw new Error('No response received from server');
+        } else {
+            throw new Error('Error setting up the request');
+        }
     }
-  }
+}
 
 
 export async function createProductManagement(product) {
