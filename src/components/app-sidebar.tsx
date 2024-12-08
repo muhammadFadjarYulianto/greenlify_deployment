@@ -53,28 +53,19 @@ const data = {
 		},
 		{
 			title: "Manajemen Konten",
-			url: "#",
+			url: "/dashboard",
 			icon: TableOfContents,
+			items: [
+				{
+					title: "Manajemen Blog",
+					url: "/dashboard/blog",
+				},
+				{
+					title: "Manajemen Komentar",
+					url: "#",
+				},
+			],
 		},
-		// {
-		// 	title: "Settings",
-		// 	url: "#",
-		// 	icon: Settings2,
-		// 	items: [
-		// 		{
-		// 			title: "Profil Admin",
-		// 			url: "#",
-		// 		},
-		// 		{
-		// 			title: "Keamanan",
-		// 			url: "#",
-		// 		},
-		// 		{
-		// 			title: "Backup Data",
-		// 			url: "#",
-		// 		},
-		// 	],
-		// },
 	],
 };
 
