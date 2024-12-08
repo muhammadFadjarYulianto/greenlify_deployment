@@ -55,26 +55,17 @@ const data = {
 			title: "Manajemen Konten",
 			url: "#",
 			icon: TableOfContents,
+			items: [
+				{
+					title: "Manajemen Artikel",
+					url: "#",
+				},
+				{
+					title: "Manajemen Komentar",
+					url: "#",
+				},
+			],
 		},
-		// {
-		// 	title: "Settings",
-		// 	url: "#",
-		// 	icon: Settings2,
-		// 	items: [
-		// 		{
-		// 			title: "Profil Admin",
-		// 			url: "#",
-		// 		},
-		// 		{
-		// 			title: "Keamanan",
-		// 			url: "#",
-		// 		},
-		// 		{
-		// 			title: "Backup Data",
-		// 			url: "#",
-		// 		},
-		// 	],
-		// },
 	],
 };
 
