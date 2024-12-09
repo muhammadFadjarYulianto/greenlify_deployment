@@ -37,7 +37,7 @@ export const getBlogs = async (filters) => {
         } else if (error.request) {
             throw new Error('Kegagalan dalam mengambil data dari server');
         } else {
-            throw new Error('Kesanalahan dalam mengatur request');
+            throw new Error('Kesalahan dalam mengatur request');
         }
     }
 };

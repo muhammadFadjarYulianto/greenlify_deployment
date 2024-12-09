@@ -52,7 +52,7 @@ const Blog = () => {
                 setTotalPages(calculatedTotalPages || 1);
                 setIsLoading(false);
             } catch (err) {
-                if (err.message.includes('No response received from server')) {
+                if (err.message.includes('Kegagalan dalam mengambil data dari server')) {
                     setError('ERR_CONNECTION_REFUSED');
                 } else {
                     setError(err.message);
