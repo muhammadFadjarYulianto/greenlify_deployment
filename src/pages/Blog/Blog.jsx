@@ -307,7 +307,7 @@ const Blog = () => {
                         {renderArticleContent()}
                     </div>
                 </section>
-                {articles.length > 6 && (
+                {pagination.total_data > pagination.per_page && (
                     <div className="w-10/12 mt-8 sm:mt-[33px]">
                         <Pagination className="gap-5 flex flex-wrap justify-center">
                             <PaginationPrevious

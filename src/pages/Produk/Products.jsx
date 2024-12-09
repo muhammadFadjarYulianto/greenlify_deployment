@@ -363,7 +363,7 @@ export default function Products() {
                     {renderProductContent()}
                 </div>
 
-                {products.length > 0 && (
+                {pagination.total_data > pagination.per_page && (
                     <div className="w-10/12 mt-8 sm:mt-[33px]">
                         <Pagination className="gap-5 flex flex-wrap justify-center">
                             <PaginationPrevious
