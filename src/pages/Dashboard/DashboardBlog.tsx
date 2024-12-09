@@ -296,8 +296,8 @@ export default function DashboardBlog() {
     if (blogs.length === 0) {
       return (
         <TableRow>
-          <TableCell colSpan={7} className="text-center py-4 text-gray-500">
-            <Typography variant="p-regular">Tidak ada blog</Typography>
+          <TableCell colSpan={7} className="text-center py-4 text-slate-700">
+            <Typography variant="p-semibold">Tidak ada blog</Typography>
           </TableCell>
         </TableRow>
       );
@@ -315,12 +315,12 @@ export default function DashboardBlog() {
               />
             </TableCell>
             <TableCell>{blog.author}</TableCell>
-            <TableCell>{blog.title}</TableCell>
-            <TableCell>{blog.views.toLocaleString("id-ID")}</TableCell>
-            <TableCell>
+            <TableCell className="max-w-20">{blog.title}</TableCell>
+            <TableCell className="text-center">{blog.views.toLocaleString("id-ID")}</TableCell>
+            <TableCell className="text-center">
               {blog.approved_comments_count.toLocaleString("id-ID")}
             </TableCell>{" "}
-            <TableCell>{formatDate(blog.created_at)}</TableCell>
+            <TableCell className="text-center">{formatDate(blog.created_at)}</TableCell>
             <TableCell>
               <TooltipProvider>
                 <div className="flex justify-end gap-2">
@@ -394,12 +394,6 @@ export default function DashboardBlog() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-[16px] font-normal leading-[28px]">
-                  Produk
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-[16px] font-normal leading-[28px]">
                   Blog
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -449,9 +443,9 @@ export default function DashboardBlog() {
                     <TableHead className="text-xl">Gambar</TableHead>
                     <TableHead className="text-xl">Author</TableHead>
                     <TableHead className="text-xl">Nama Blog</TableHead>
-                    <TableHead className="text-xl">Di Baca</TableHead>
-                    <TableHead className="text-xl">Jumlah Komentar</TableHead>
-                    <TableHead className="text-xl ">Tanggal Dibuat</TableHead>
+                    <TableHead className="text-xl text-center">Di Baca</TableHead>
+                    <TableHead className="text-xl text-center">Komentar</TableHead>
+                    <TableHead className="text-xl text-center">Tanggal Dibuat</TableHead>
                     <TableHead className="text-xl text-right">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -471,8 +465,8 @@ export default function DashboardBlog() {
           </Card>
         </div>
 
-        {totalPages > 1 && (
-          <div className="mt-4">
+        {totalData > totalPages && (
+          <div className="mb-8">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -512,12 +506,6 @@ export default function DashboardBlog() {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-
-            <div className="text-center mt-2 text-sm text-gray-600">
-              Showing {(filters.page - 1) * filters.limit + 1} to{" "}
-              {Math.min(filters.page * filters.limit, totalData)} of {totalData}{" "}
-              entries
-            </div>
           </div>
         )}
       </div>
@@ -722,7 +710,6 @@ export default function DashboardBlog() {
           </form>
         </DialogContent>
       </Dialog>
-
       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <DialogContent>
           <DialogHeader className="space-y-4">

@@ -32,8 +32,6 @@ export const getBlogManagement = async (filters) => {
         });
         
         const data = response.data.data;
-        console.log('API Response:', data);
-        
         return {
             blogs: data.pagination.results,
             pagination: {
