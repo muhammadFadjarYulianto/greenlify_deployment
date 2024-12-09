@@ -57,7 +57,6 @@ def detailArticle(id):
         total_approved = query_approved.count()
 
         query = Comments.query.filter_by(id_article=id, status=StatusEnum.APPROVED)
-
         total_data = query.count()
 
         if start < 1 or limit < 1:
@@ -74,24 +73,23 @@ def detailArticle(id):
             'results': [{
                 'id': comment.id,
                 'username': comment.username,
-                'email' : comment.email,
+                'email': comment.email,
                 'comment': comment.comment,
                 'created_at': comment.created_at
             } for comment in comments]
         }
 
-        base_url = f"http://127.0.0.1:5000/api/article/{id}/guest"
-        filter_query = f"start={start}&limit={limit}"
+        base_url = f"http://127.0.0.1:5000/api/article/guest/{id}"
 
         if start > 1:
             previous_start = max(1, start - limit)
-            pagination_comment['previous'] = f"{base_url}?{filter_query}&start={previous_start}"
+            pagination_comment['previous'] = f"{base_url}?start={previous_start}&limit={limit}"
         else:
             pagination_comment['previous'] = None
 
         if start + limit <= total_data:
             next_start = start + limit
-            pagination_comment['next'] = f"{base_url}?{filter_query}&start={next_start}"
+            pagination_comment['next'] = f"{base_url}?start={next_start}&limit={limit}"
         else:
             pagination_comment['next'] = None
 
@@ -102,7 +100,7 @@ def detailArticle(id):
                 'content': article.content,
                 'views': article.views,
                 'author': article.author,
-                'img_file' : article.img_file,
+                'img_file': article.img_file,
                 'created_by': article.admin.name,
                 'created_at': article.created_at,
                 'updated_at': article.updated_at
