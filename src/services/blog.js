@@ -18,10 +18,8 @@ export const getBlogs = async (filters) => {
             }
             url += `?${queryParams.toString()}`;
         }
-
         const response = await axios.get(url);
         const data = response.data.data;
-
         return {
             latest_article: data.latest_article,
             articles: data.pagination.results,
@@ -35,11 +33,58 @@ export const getBlogs = async (filters) => {
         };
     } catch (error) {
         if (error.response) {
-            throw new Error(error.response.data.message || 'Failed to fetch articles');
+            throw new Error(error.response.data.message || 'Gagal mengambil data artikel');
         } else if (error.request) {
-            throw new Error('No response received from server');
+            throw new Error('Kegagalan dalam mengambil data dari server');
         } else {
-            throw new Error('Error setting up the request');
+            throw new Error('Kesanalahan dalam mengatur request');
+        }
+    }
+};
+
+export const getBlogById = async (id, filters = {}) => {
+    try {
+        let url = `${BLOG_ENDPOINT}/${id}`;
+
+        if (Object.keys(filters).length > 0) {
+            const queryParams = new URLSearchParams();
+            if (filters.page) {
+                const start = (filters.page - 1) * (filters.limit || 4) + 1;
+                queryParams.append('start', start);
+            }
+            if (filters.limit) {
+                queryParams.append('limit', filters.limit);
+            }
+            url += `?${queryParams.toString()}`;
+        }
+        const response = await axios.get(url);
+        return response.data.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Galat dalam mengambil data artikel');
+        } else if (error.request) {
+            throw new Error('Tidak ada respon dari server');
+        } else {
+            throw new Error('Kesanalah dalam mengatur request');
+        }
+    }
+}
+
+export const addComment = async (articleId, comment) => {
+    try {
+        const response = await axios.post(`${BLOG_ENDPOINT}/${articleId}`, comment);
+        if (response.data.status === 'success') {
+            return response.data;
+        } else {
+            throw new Error(response.data.message || 'Gagal menambahkan komentar');
+        }
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Gagal menambahkan komentar');
+        } else if (error.request) {
+            throw new Error('Tidak ada respon dari server');
+        } else {
+            throw new Error('Kesanalah dalam mengatur request');
         }
     }
 };

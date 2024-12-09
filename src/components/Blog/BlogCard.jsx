@@ -2,7 +2,6 @@ import {Card, CardContent, CardDescription, CardFooter, CardHeader} from "@/comp
 import React, {useEffect, useState} from "react";
 import {Badge} from "@/components/ui/badge";
 import {Typography} from "@/components/ui/Typography";
-import {Button} from "@/components/ui/button";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {User} from "lucide-react";
@@ -39,7 +38,7 @@ const BlogCard = ({author, content, created_at, img_file, title, views}) => {
                     variant="outline"
                     className="bg-background text-emerald-600 border-2 border-emerald-600 max-w-max px-2 py-1 rounded-full"
                 >
-                    {views} Dibaca
+                    {views} pemirsa
                 </Badge>
                 <Typography variant="h2" className="text-emerald-600 font-bold">
                     {title}

@@ -1,14 +1,12 @@
 const blog = [
     {
-      id: 1,
-      title: "Dampak Lingkungan karena Sampah Plastik",
-      description:
-        "Sampah plastik menjadi salah satu ancaman terbesar bagi ekosistem laut dan darat, Apa dampaknya? ",
-      image: "https://images.pexels.com/photos/2547565/pexels-photo-2547565.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      author: "Damar Permadany",
-      date: "11 Dec 2024",
-      readTime: "4 min read",
-      content: `
+        id: 1,
+        author: "Damar Permadany",
+        title: "Dampak Lingkungan karena Sampah Plastik",
+        image: "https://images.pexels.com/photos/2547565/pexels-photo-2547565.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        created_at: "Sabtu, 11 Desember 2024",
+        views: "4 min read",
+        content: `
             Sampah plastik merupakan salah satu tantangan lingkungan yang paling mendesak di era modern ini, Setiap tahun, milyaran ton plastik diproduksi, dan sebagian besar berakhir di tempat pembuangan akhir, sungai, dan lautan. Dampak dari limbah plastik tidak hanya terasa di darat tetapi juga merambat ke dalam ekosistem laut.
         
             Salah satu dampak paling tragis dari sampah plastik adalah pengaruhnya terhadap kehidupan laut. Berbagai spesies, mulai dari ikan hingga burung laut, sering kali tersangkut dalam limbah plastik, yang dapat menyebabkan cedera serius atau bahkan kematian. Selain itu, ketika hewan-hewan ini mengira plastik sebagai makanan, mereka bisa mengalami masalah pencernaan yang fatal.
@@ -21,15 +19,15 @@ const blog = [
           `,
     },
     {
-      id: 2,
-      title: "5 Cara Efektif Mendaur Ulang Sampah di Rumah",
-      description:
-        "Mendaur ulang adalah langkah penting untuk menjaga lingkungan dan mengurangi sampah.",
-      image: "https://via.placeholder.com/600x400",
-      author: "Agus Setiawan",
-      date: "11 Dec 2024",
-      readTime: "5 min read",
-      content: `
+        id: 2,
+        title: "5 Cara Efektif Mendaur Ulang Sampah di Rumah",
+        description:
+            "Mendaur ulang adalah langkah penting untuk menjaga lingkungan dan mengurangi sampah.",
+        image: "https://via.placeholder.com/600x400",
+        author: "Agus Setiawan",
+        date: "11 Dec 2024",
+        readTime: "5 min read",
+        content: `
             Pengelolaan sampah di rumah dapat dilakukan dengan cara yang sederhana namun berdampak besar, Mendaur ulang adalah salah satu cara paling efektif untuk mengurangi jumlah sampah yang dihasilkan sehari-hari. Berikut adalah lima cara yang dapat Anda terapkan untuk mendaur ulang di rumah.
         
             Pertama, pisahkan sampah Anda dengan baik. Siapkan tempat sampah terpisah untuk kategori berbeda, seperti plastik, kertas, logam, dan sampah organik. Dengan memilah sampah sejak awal, Anda dapat mempermudah proses daur ulang dan memastikan bahwa bahan yang dapat didaur ulang tidak akan terbuang.
@@ -46,15 +44,15 @@ const blog = [
           `,
     },
     {
-      id: 3,
-      title: "Peran Komunitas dalam Pengelolaan Sampah",
-      description:
-        "Komunitas memiliki peran penting dalam pengelolaan sampah yang efektif.",
-      image: "https://via.placeholder.com/600x400",
-      author: "Dika Pratama",
-      date: "11 Dec 2024",
-      readTime: "6 min read",
-      content: `
+        id: 3,
+        title: "Peran Komunitas dalam Pengelolaan Sampah",
+        description:
+            "Komunitas memiliki peran penting dalam pengelolaan sampah yang efektif.",
+        image: "https://via.placeholder.com/600x400",
+        author: "Dika Pratama",
+        date: "11 Dec 2024",
+        readTime: "6 min read",
+        content: `
             Pengelolaan sampah tidak hanya menjadi tanggung jawab pemerintah, tetapi juga membutuhkan keterlibatan aktif dari masyarakat, Komunitas yang berdaya dapat membuat perbedaan besar dalam mengatasi masalah sampah dan dampak lingkungannya.
         
             Salah satu cara komunitas dapat berkontribusi adalah dengan menyelenggarakan kegiatan bersih-bersih. Kegiatan ini tidak hanya membantu membersihkan area publik, tetapi juga meningkatkan kesadaran masyarakat tentang pentingnya menjaga lingkungan. Ketika warga bergerak bersama untuk membersihkan lingkungan, ini akan menciptakan rasa memiliki dan tanggung jawab bersama terhadap kebersihan.
@@ -67,15 +65,15 @@ const blog = [
           `,
     },
     {
-      id: 4,
-      title: "Sampah Organik: Potensi yang Tak Terpakai",
-      description:
-        "Sampah organik dapat diolah menjadi kompos yang bermanfaat bagi tanah.",
-      image: "https://via.placeholder.com/600x400",
-      author: "Rida Nurul",
-      date: "11 Dec 2024",
-      readTime: "5 min read",
-      content: `
+        id: 4,
+        title: "Sampah Organik: Potensi yang Tak Terpakai",
+        description:
+            "Sampah organik dapat diolah menjadi kompos yang bermanfaat bagi tanah.",
+        image: "https://via.placeholder.com/600x400",
+        author: "Rida Nurul",
+        date: "11 Dec 2024",
+        readTime: "5 min read",
+        content: `
             Sampah organik sering kali dianggap sebagai limbah tanpa nilai, Namun, jika dikelola dengan baik, sampah ini memiliki potensi yang sangat berharga. Dengan pengolahan yang tepat, sampah organik dapat diubah menjadi kompos, yang tidak hanya mengurangi jumlah limbah, tetapi juga memberikan manfaat besar bagi pertanian dan kebun.
         
             Sampah organik meliputi sisa-sisa makanan, daun, dan limbah kebun lainnya. Ketika kita mengolahnya menjadi kompos, kita membantu mengurangi volume sampah yang masuk ke tempat pembuangan akhir. Selain itu, kompos yang dihasilkan kaya akan unsur hara yang sangat diperlukan untuk pertumbuhan tanaman.
@@ -88,15 +86,15 @@ const blog = [
           `,
     },
     {
-      id: 5,
-      title: "Mengenal Zero Waste Lifestyle",
-      description:
-        "Gaya hidup tanpa sampah mengajak kita untuk hidup lebih berkelanjutan.",
-      image: "https://via.placeholder.com/600x400",
-      author: "Ahmad Fauzi",
-      date: "11 Dec 2024",
-      readTime: "5 min read",
-      content: `
+        id: 5,
+        title: "Mengenal Zero Waste Lifestyle",
+        description:
+            "Gaya hidup tanpa sampah mengajak kita untuk hidup lebih berkelanjutan.",
+        image: "https://via.placeholder.com/600x400",
+        author: "Ahmad Fauzi",
+        date: "11 Dec 2024",
+        readTime: "5 min read",
+        content: `
             Gaya hidup zero waste semakin populer di kalangan masyarakat yang peduli terhadap lingkungan, Konsep ini berfokus pada pengurangan limbah hingga mendekati nol, dengan tujuan utama untuk menciptakan keberlanjutan dan mengurangi dampak negatif terhadap lingkungan.
         
             Prinsip dasar dari gaya hidup ini meliputi menolak produk yang menghasilkan sampah, mengurangi konsumsi barang-barang yang tidak perlu, menggunakan kembali barang yang sudah ada, mendaur ulang ketika barang tidak dapat digunakan lagi, dan mengolah sampah organik menjadi kompos.
@@ -109,15 +107,15 @@ const blog = [
           `,
     },
     {
-      id: 6,
-      title: "Mengenal Zero Waste Lifestyle",
-      description:
-        "Gaya hidup tanpa sampah mengajak kita untuk hidup lebih berkelanjutan.",
-      image: "https://via.placeholder.com/600x400",
-      author: "Ahmad Fauzi",
-      date: "11 Dec 2024",
-      readTime: "5 min read",
-      content: `
+        id: 6,
+        title: "Mengenal Zero Waste Lifestyle",
+        description:
+            "Gaya hidup tanpa sampah mengajak kita untuk hidup lebih berkelanjutan.",
+        image: "https://via.placeholder.com/600x400",
+        author: "Ahmad Fauzi",
+        date: "11 Dec 2024",
+        readTime: "5 min read",
+        content: `
             Gaya hidup zero waste semakin populer di kalangan masyarakat yang peduli terhadap lingkungan, Konsep ini berfokus pada pengurangan limbah hingga mendekati nol, dengan tujuan utama untuk menciptakan keberlanjutan dan mengurangi dampak negatif terhadap lingkungan.
         
             Prinsip dasar dari gaya hidup ini meliputi menolak produk yang menghasilkan sampah, mengurangi konsumsi barang-barang yang tidak perlu, menggunakan kembali barang yang sudah ada, mendaur ulang ketika barang tidak dapat digunakan lagi, dan mengolah sampah organik menjadi kompos.
@@ -129,7 +127,7 @@ const blog = [
             Dengan menerapkan prinsip-prinsip gaya hidup tanpa sampah, kita tidak hanya berkontribusi pada lingkungan, tetapi juga menyadari pentingnya keberlanjutan. Mari mulai menerapkan gaya hidup ini dan menciptakan masa depan yang lebih baik untuk diri kita sendiri dan lingkungan sekitar.
           `,
     },
-  ];
-  
-  export default blog;
+];
+
+export default blog;
   

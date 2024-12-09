@@ -164,9 +164,10 @@ const Blog = () => {
                 <LatestBlogSkeleton/>
             );
         }
+
         return (
             <div className="hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
-                <Link to={`/article/${latestArticle.id}`} className="block">
+                <Link to={`/blog/${latestArticle.id}`} className="block">
                     <div className="relative">
                         <img
                             src={latestArticle.img_file}
@@ -242,6 +243,7 @@ const Blog = () => {
                 );
             }
         }
+
         return articles.map((article) => (
             <div ref={articlesContainerRef} key={article.id}>
                 <Link to={`/blog/${article.id}`}>
@@ -294,7 +296,7 @@ const Blog = () => {
                         className="w-auto px-4 py-2 text-sm"
                         onClick={handleSearch}
                     >
-                        Cari Sekarang
+                        Cari
                     </Button>
                 </div>
                 <section className="w-10/12 mx-auto px-4 pt-12">
@@ -305,7 +307,7 @@ const Blog = () => {
                         {renderArticleContent()}
                     </div>
                 </section>
-                {articles.length > 0 && (
+                {articles.length > 6 && (
                     <div className="w-10/12 mt-8 sm:mt-[33px]">
                         <Pagination className="gap-5 flex flex-wrap justify-center">
                             <PaginationPrevious
