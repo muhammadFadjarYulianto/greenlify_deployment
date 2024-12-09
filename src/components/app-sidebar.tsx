@@ -53,7 +53,7 @@ const data = {
 		},
 		{
 			title: "Manajemen Konten",
-			url: "/dashboard",
+			url: "/dashboard/blog",
 			icon: TableOfContents,
 			items: [
 				{
@@ -62,7 +62,7 @@ const data = {
 				},
 				{
 					title: "Manajemen Komentar",
-					url: "#",
+					url: "/dashboard/comment",
 				},
 			],
 		},

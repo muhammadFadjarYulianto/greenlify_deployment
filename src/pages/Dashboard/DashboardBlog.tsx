@@ -319,7 +319,7 @@ export default function DashboardBlog() {
             <TableCell>{blog.views.toLocaleString("id-ID")}</TableCell>
             <TableCell>
               {blog.approved_comments_count.toLocaleString("id-ID")}
-            </TableCell>{" "}
+            </TableCell>
             <TableCell>{formatDate(blog.created_at)}</TableCell>
             <TableCell>
               <TooltipProvider>
