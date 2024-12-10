@@ -430,7 +430,7 @@ export default function DashboardBlog() {
               onClick={() => setIsAddModalOpen(true)}
             >
               <Plus className="w-5 h-5" />
-              Tambah Produk
+              Tambah Blog
             </Button>
           </div>
         </div>
@@ -441,7 +441,7 @@ export default function DashboardBlog() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xl">Gambar</TableHead>
-                    <TableHead className="text-xl">Author</TableHead>
+                    <TableHead className="text-xl">Penulis</TableHead>
                     <TableHead className="text-xl">Nama Blog</TableHead>
                     <TableHead className="text-xl text-center">Di Baca</TableHead>
                     <TableHead className="text-xl text-center">Komentar</TableHead>
@@ -569,7 +569,7 @@ export default function DashboardBlog() {
                     <Input
                       id="img_file"
                       name="img_file"
-                      type="text"
+                      type="file"
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
                       placeholder="Url"
                       required
@@ -590,7 +590,7 @@ export default function DashboardBlog() {
                     name="content"
                     className="col-span-3 min-h-[90px] text-justify text-slate-900 border border-slate-50 focus:border-slate-100"
                     placeholder="Masukkan konten blog"
-                    rows={10}
+                    rows={15}
                     required
                   />
                 </div>
@@ -668,8 +668,8 @@ export default function DashboardBlog() {
                     <Input
                       id="img_file"
                       name="img_file"
-                      type="text"
-                      defaultValue={currentBlog?.img_file}
+                      type="file"
+                      // defaultValue={currentBlog?.img_file}
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
                       placeholder="Url"
                       required
@@ -691,7 +691,7 @@ export default function DashboardBlog() {
                     defaultValue={currentBlog?.content}
                     className="col-span-3 min-h-[90px] text-justify text-slate-900 border border-slate-50 focus:border-slate-100"
                     placeholder="Masukkan konten blog"
-                    rows={10}
+                    rows={15}
                     required
                   />
                 </div>
