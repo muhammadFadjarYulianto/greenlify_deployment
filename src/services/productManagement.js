@@ -1,5 +1,5 @@
 import axios from "axios";
-import {PRODUCT_MANAGEMENT_ENDPOINT, PRODUCT_PAGINATION_ENDPOINT} from "@/constants/routesAPI";
+import {PRODUCT_MANAGEMENT_ENDPOINT, PRODUCT_PAGINATION_ENDPOINT, PRODUCT_ENDPOINT} from "@/constants/routesAPI";
 import {getAdmin} from "@/services/admin.js";
 
 
@@ -36,7 +36,6 @@ import {getAdmin} from "@/services/admin.js";
             },
         });
         const data = response.data.data;
-        console.log(data);
         return {
             categories: data.categories,
             products: data.pagination.results,
@@ -143,13 +142,7 @@ export async function getProductsBySearchManagement(search) {
 
 export async function getDetailsProductManagement(productId) {
     try {
-        const token = localStorage.getItem("access_token");
-
-        const response = await axios.get(`${PRODUCT_MANAGEMENT_ENDPOINT}/${productId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await axios.get(`${PRODUCT_ENDPOINT}/${productId}`);
         return response.data.data.id;
     } catch (error) {
         console.error("Gagal mendapatkan data produk:", error.response || error.message);
