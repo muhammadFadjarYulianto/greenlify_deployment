@@ -2,7 +2,7 @@ from flask import request
 from app import db, response
 from app.model.comments import Comments, StatusEnum
 from app.model.articles import Articles
-import re
+import re, os
 
 def formatArray(comments):
     return [singleComment(comment) for comment in comments]
@@ -129,7 +129,7 @@ def paginateAndFilterCommentsManage():
             'results': [singleComment(comment) for comment in comments],
         }
 
-        base_url = "http://127.0.0.1:5000/api/comment"
+        base_url = f"{os.getenv('BASE_URL')}api/comment"
 
         filter_query = f"keyword={keyword}" if keyword else ""
 

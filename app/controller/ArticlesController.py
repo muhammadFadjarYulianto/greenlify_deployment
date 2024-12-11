@@ -2,8 +2,9 @@ from flask import request
 from app.model.articles import Articles
 from app.model.admins import Admins
 from app.model.comments import Comments, StatusEnum
-from app import response, db
-import re
+from app import response, db, app, uploadconfig
+import re, os, uuid
+from werkzeug.utils import secure_filename
 
 def indexArticles():
     try:
@@ -79,7 +80,7 @@ def detailArticle(id):
             } for comment in comments]
         }
 
-        base_url = f"http://127.0.0.1:5000/api/article/guest/{id}"
+        base_url = f"{os.getenv('BASE_URL')}api/article/guest/{id}"
 
         if start > 1:
             previous_start = max(1, start - limit)
@@ -122,73 +123,20 @@ def detailArticleManage(id):
         print(e)
         return response.serverError([], "Gagal mengambil detail artikel.")
 
-def tambahArticle():
-    try:
-        title = request.form.get('title') or request.json.get('title')
-        content = request.form.get('content') or request.json.get('content')
-        created_by = request.form.get('created_by') or request.json.get('created_by')
-        author = request.form.get('author') or request.json.get('author')
-        img_file = request.form.get('img_file') or request.json.get('img_file')
-
-        # Validasi 'title'
-        if not title:
-            return response.badRequest([], "Kolom title wajib diisi.")
-        if not re.match(r'^[a-zA-Z0-9 ]*$', title):
-            return response.badRequest([], "Title tidak boleh mengandung karakter khusus.")
-        if len(title) < 3 or len(title) > 255:
-            return response.badRequest([], "Title harus memiliki panjang antara 3 hingga 255 karakter.")
-
-        # Validasi 'content'
-        if content and (len(content) < 10 or len(content) > 10000):
-            return response.badRequest([], "Content harus memiliki panjang antara 10 hingga 10000 karakter.")
-
-        # Validasi 'created_by'
-        if not created_by:
-            return response.badRequest([], "Kolom created_by wajib diisi.")
-        admin = Admins.query.filter_by(id=created_by).first()
-        if not admin:
-            return response.notFound([], "Admin ID tidak valid.")
-
-        # Validasi 'author'
-        if author:
-            if not re.match(r'^[a-zA-Z ]*$', author):
-                return response.badRequest([], "Author hanya boleh mengandung huruf dan spasi.")
-            if len(author) < 3 or len(author) > 100:
-                return response.badRequest([], "Author harus memiliki panjang antara 3 hingga 100 karakter.")
-
-        article = Articles(
-            title=title,
-            content=content,
-            created_by=created_by,
-            author=author,
-            img_file=img_file
-        )
-
-        db.session.add(article)
-        db.session.commit()
-        return response.created([], "Sukses menambahkan artikel.")
-    except Exception as e:
-        db.session.rollback()
-        print(e)
-        return response.serverError([], "Gagal menambahkan artikel.")
-
 def tambahCommentForArticle(id):
     try:
         username = request.form.get('username') or request.json.get('username')
         email = request.form.get('email') or request.json.get('email')
         comment = request.form.get('comment') or request.json.get('comment')
 
-        # Validasi 'username'
         if not username:
             return response.badRequest([], "Kolom username wajib diisi.")
         if len(username) < 3 or len(username) > 100:
             return response.badRequest([], "Username harus memiliki panjang antara 3 hingga 100 karakter.")
 
-        # Validasi 'email'
         if email and not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
             return response.badRequest([], "Format email tidak valid.")
 
-        # Validasi 'comment'
         if not comment:
             return response.badRequest([], "Kolom comment wajib diisi.")
         if len(comment) < 3:
@@ -216,52 +164,116 @@ def tambahCommentForArticle(id):
         print(e)
         return response.serverError([], "Gagal menambahkan komentar.")
 
+def tambahArticle():
+    try:
+        created_by = request.form.get('created_by') 
+        title = request.form.get('title') 
+        content = request.form.get('content') 
+        author = request.form.get('author') 
+
+        if not all([created_by, title]):
+            return response.badRequest([], "Kolom created_by dan title wajib diisi.")
+        
+        if not re.match(r'^[a-zA-Z0-9 ]*$', title):
+            return response.badRequest([], "Judul artikel tidak boleh mengandung karakter khusus.")
+
+        if len(title) < 3 or len(title) > 255:
+            return response.badRequest([], "Judul artikel harus antara 3 hingga 255 karakter.")
+
+        if 'img_file' not in request.files:
+            return response.badRequest([], 'File tidak tersedia')
+
+        file = request.files['img_file']
+
+        if file.filename == '':
+            return response.badRequest([], 'File tidak tersedia')
+
+        if file and uploadconfig.allowed_file(file.filename):
+            uid = uuid.uuid4()
+            filename = secure_filename(file.filename)
+            renamefile = f"GreenLify-Article-{uid}-{filename}"
+
+            save_path = os.path.join(app.config['ARTICLE_FOLDER'], renamefile)        
+            file.save(save_path)
+        
+            img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['ARTICLE_URL_PATH'], renamefile).replace('\\', '/')}"
+
+        article = Articles(
+            created_by=created_by,
+            title=title,
+            content=content,
+            author=author,
+            img_file=img_url
+        )
+
+        db.session.add(article)
+        db.session.commit()
+
+        return response.created([], 'Sukses menambahkan artikel.')
+
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return response.serverError([], f"Gagal menambahkan artikel: {str(e)}")
+
 def ubahArticle(id):
     try:
         article = Articles.query.filter_by(id=id).first()
         if not article:
             return response.notFound([], "Artikel tidak ditemukan.")
 
-        created_by = request.form.get('created_by') or request.json.get('created_by')
-        title = request.form.get('title') or request.json.get('title')
-        content = request.form.get('content') or request.json.get('content')
-        author = request.form.get('author') or request.json.get('author')
-        img_file = request.form.get('img_file') or request.json.get('img_file')
-
-        # Validasi input
-        if not created_by or not title or not author:
-            return response.badRequest([], "Kolom created_by, title, dan author wajib diisi.")
+        created_by = request.form.get('created_by')
+        title = request.form.get('title')
+        content = request.form.get('content')
+        author = request.form.get('author')
         
-        # Validasi 'title'
+        if not all([created_by, title]):
+            return response.badRequest([], "Kolom created_by dan title wajib diisi.")
+        
         if not re.match(r'^[a-zA-Z0-9 ]*$', title):
-            return response.badRequest([], "Title tidak boleh mengandung karakter khusus.")
+            return response.badRequest([], "Judul artikel tidak boleh mengandung karakter khusus.")
+
         if len(title) < 3 or len(title) > 255:
-            return response.badRequest([], "Title harus memiliki panjang antara 3 hingga 255 karakter.")
+            return response.badRequest([], "Judul artikel harus antara 3 hingga 255 karakter.")
         
-        # Validasi 'content'
         if content and (len(content) < 10 or len(content) > 10000):
             return response.badRequest([], "Content harus memiliki panjang antara 10 hingga 10000 karakter.")
 
-        # Validasi 'author'
         if not re.match(r'^[a-zA-Z ]*$', author):
             return response.badRequest([], "Author hanya boleh mengandung huruf dan spasi.")
         if len(author) < 3 or len(author) > 100:
             return response.badRequest([], "Author harus memiliki panjang antara 3 hingga 100 karakter.")
 
+        if 'img_file' in request.files:
+            file = request.files['img_file']
+            if file.filename != '' and uploadconfig.allowed_file(file.filename):
+                if article.img_file:
+                    old_img_path = os.path.join(app.config['ARTICLE_FOLDER'], article.img_file.split('/')[-1])
+                    if os.path.exists(old_img_path):
+                        os.remove(old_img_path)
+
+                uid = uuid.uuid4()
+                filename = secure_filename(file.filename)
+                img_file = f"GreenLify-Article-{uid}-{filename}"
+                save_path = os.path.join(app.config['ARTICLE_FOLDER'], img_file)
+                file.save(save_path)
+
+                img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['ARTICLE_URL_PATH'], img_file).replace('\\', '/')}"
+
+
         article.created_by = created_by
         article.title = title
         article.content = content
         article.author = author
-        article.img_file = img_file
-
+        article.img_file = img_url
         db.session.commit()
 
         return response.success(singleArticle(article))
-    
+
     except Exception as e:
         db.session.rollback()
         print(e)
-        return response.serverError([], "Gagal mengubah data artikel.")
+        return response.serverError([], "Gagal mengubah artikel.")
 
 def hapusArticle(id):
     try:
@@ -269,9 +281,16 @@ def hapusArticle(id):
         if not article:
             return response.notFound([], "Artikel tidak ditemukan.")
 
+        if article.img_file:
+            img_filename = article.img_file.split('/')[-1]
+            img_path = os.path.join(app.config['ARTICLE_FOLDER'], img_filename)
+            if os.path.exists(img_path):
+                os.remove(img_path)
+
         db.session.delete(article)
         db.session.commit()
-        return response.success("Artikel berhasil dihapus.")
+        return response.success('Sukses menghapus artikel!')
+
     except Exception as e:
         db.session.rollback()
         print(e)
@@ -312,9 +331,9 @@ def paginateAndFilterArticles():
             'per_page': limit,
             'total_data': total_data,
             'results': formatArray(articles),
-        }
+        }   
 
-        base_url = "http://127.0.0.1:5000/api/article/guest"
+        base_url = f"{os.getenv('BASE_URL')}api/article/guest"
         
         filter_query = f"keyword={keyword}" if keyword else ""
 
@@ -382,7 +401,7 @@ def paginateAndFilterArticlesManage():
             article_data['approved_comments_count'] = approved_comments_count
             pagination_data['results'].append(article_data)
 
-        base_url = "http://127.0.0.1:5000/api/article"
+        base_url =  f"{os.getenv('BASE_URL')}api/article"
         
         filter_query = f"keyword={keyword}" if keyword else ""
 

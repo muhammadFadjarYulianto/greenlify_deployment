@@ -2,9 +2,9 @@ from flask import request
 from app.model.products import Products
 from app.model.admins import Admins
 from app.model.categories import Categories
-from app import response, db, app
-import math
-import re
+from app import response, db, app, uploadconfig
+import re, os, uuid
+from werkzeug.utils import secure_filename
 
 def indexProduct():
     try:
@@ -46,13 +46,12 @@ def detail_product(id):
 
 def tambahProduct():
     try:
-        created_by = request.form.get('created_by') or request.json.get('created_by')
-        category_id = request.form.get('category_id') or request.json.get('category_id')
-        product_name = request.form.get('product_name') or request.json.get('product_name')
-        description = request.form.get('description') or request.json.get('description')
-        price = request.form.get('price') or request.json.get('price')
-        contact = request.form.get('contact') or request.json.get('contact')
-        img_file = request.form.get('img_file') or request.json.get('img_file')
+        created_by = request.form.get('created_by') 
+        category_id = request.form.get('category_id') 
+        product_name = request.form.get('product_name') 
+        description = request.form.get('description') 
+        price = request.form.get('price') 
+        contact = request.form.get('contact') 
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -67,7 +66,27 @@ def tambahProduct():
             return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")
 
         # if contact and not re.match(r'^\d+$', contact):
-        #     return response.badRequest([], "Kontak harus berupa angka.")
+        #     return response.badRequest([], "Kontak harus berupa angka.")        
+
+        if 'img_file' not in request.files:
+            return response.badRequest([], 'File tidak tersedia')
+
+        file = request.files['img_file']
+
+        if file.filename == '':
+            return response.badRequest([], 'File tidak tersedia')
+
+        if file and uploadconfig.allowed_file(file.filename):
+            uid = uuid.uuid4()
+            filename = secure_filename(file.filename)
+            renamefile = f"GreenLify-Product-{uid}-{filename}"
+
+            save_path = os.path.join(app.config['PRODUCT_FOLDER'], renamefile)        
+            file.save(save_path)
+        
+            img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')}"
+            
+
 
         try:
             price = float(price)
@@ -98,7 +117,7 @@ def tambahProduct():
             description=description,
             price=price,
             contact=contact,
-            img_file=img_file
+            img_file= img_url
         )
 
         db.session.add(product)
@@ -117,13 +136,12 @@ def ubahProduct(id):
         if not product:
             return response.notFound([], "Produk tidak ditemukan.")
 
-        created_by = request.form.get('created_by') or request.json.get('created_by')
-        category_id = request.form.get('category_id') or request.json.get('category_id')
-        product_name = request.form.get('product_name') or request.json.get('product_name')
-        description = request.form.get('description') or request.json.get('description')
-        price = request.form.get('price') or request.json.get('price')
-        contact = request.form.get('contact') or request.json.get('contact')
-        img_file = request.form.get('img_file') or request.json.get('img_file')
+        created_by = request.form.get('created_by')
+        category_id = request.form.get('category_id')
+        product_name = request.form.get('product_name')
+        description = request.form.get('description')
+        price = request.form.get('price')
+        contact = request.form.get('contact')
 
         if not all([created_by, category_id, product_name, price]):
             return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
@@ -136,7 +154,7 @@ def ubahProduct(id):
         
         if description and (len(description) < 10 or len(description) > 10000):
             return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")
-
+        
         # if contact and not re.match(r'^\d+$', contact):
         #     return response.badRequest([], "Kontak harus berupa angka.")
 
@@ -146,6 +164,23 @@ def ubahProduct(id):
                 return response.badRequest([], "Harga harus lebih besar dari 0.")
         except ValueError:
             return response.badRequest([], "Harga harus berupa angka.")
+        
+        if 'img_file' in request.files:
+            file = request.files['img_file']
+            if file.filename != '' and uploadconfig.allowed_file(file.filename):
+                if product.img_file:
+                    old_img_path = os.path.join(app.config['PRODUCT_FOLDER'], product.img_file.split('/')[-1])
+                    if os.path.exists(old_img_path):
+                        os.remove(old_img_path)
+
+                uid = uuid.uuid4()
+                filename = secure_filename(file.filename)
+                img_file = f"GreenLify-Product-{uid}-{filename}"
+                save_path = os.path.join(app.config['PRODUCT_FOLDER'], img_file)
+                file.save(save_path)
+
+                img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['PRODUCT_URL_PATH'], img_file).replace('\\', '/')}"                
+
 
         product.created_by = created_by
         product.category_id = category_id
@@ -153,7 +188,7 @@ def ubahProduct(id):
         product.description = description
         product.price = price
         product.contact = contact
-        product.img_file = img_file
+        product.img_file = img_url
 
         db.session.commit()
 
@@ -167,10 +202,15 @@ def ubahProduct(id):
 def hapusProduct(id):
     try:
         product = Products.query.filter_by(id=id).first()
-        
         if not product:
             return response.notFound([], "Produk tidak ditemukan.")
-        
+
+        if product.img_file:
+            img_filename = product.img_file.split('/')[-1]
+            img_path = os.path.join(app.config['PRODUCT_FOLDER'], img_filename)
+            if os.path.exists(img_path):
+                os.remove(img_path)
+
         db.session.delete(product)
         db.session.commit()
         return response.success('Sukses menghapus produk!')
@@ -183,7 +223,7 @@ def hapusProduct(id):
 def paginate_and_filter():
     try:
         start = request.args.get('start', default=1, type=int)
-        limit = request.args.get('limit', default=4, type=int)
+        limit = request.args.get('limit', default=2, type=int)
 
         category_name = request.args.get('category_name', type=str)
         min_price = request.args.get('min_price', type=float)
@@ -235,7 +275,7 @@ def paginate_and_filter():
             'results': format_array(products),
         }
 
-        base_url = "http://127.0.0.1:5000/api/product/guest"
+        base_url =   f"{os.getenv('BASE_URL')}api/product/guest"
 
         filter_params = []
         if category_name:
@@ -328,7 +368,7 @@ def paginate_and_filter_manage():
             'results': format_array(products),
         }
 
-        base_url = "http://127.0.0.1:5000/api/product"
+        base_url = f"{os.getenv('BASE_URL')}api/product"
 
         filter_params = []
         if category_name:
