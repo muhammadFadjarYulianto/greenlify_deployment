@@ -241,10 +241,15 @@ def loginAdmin():
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh, additional_claims=additional_claims)
 
+        access_token_expiry_time = datetime.utcnow() + expires
+        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+
         return response.success({
             "data" : data,
             "access_token" : access_token,
             "refresh_token" : refresh_token,
+            "access_token_expiry_time": access_token_expiry_time.isoformat(),
+            "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
         })
     except Exception as e:
         print(e)
