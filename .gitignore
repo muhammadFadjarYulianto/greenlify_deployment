@@ -1,2 +1,4 @@
 .env
-/migrations/
+__pycache__/
+app/new_model.weights.h5
+env

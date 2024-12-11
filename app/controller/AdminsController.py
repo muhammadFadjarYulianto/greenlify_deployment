@@ -5,7 +5,8 @@ from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import *
 from datetime import datetime, timedelta
-import redis
+import re
+import os
 
 def indexAdmin():
     try:
@@ -78,8 +79,20 @@ def tambahAdmin():
         phone_number = request.form.get('phone_number') or request.json.get('phone_number')
         gender = request.form.get('gender') or request.json.get('gender')
 
-        if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.")
+        if not (name):
+            return response.badRequest([], "Kolom name wajib diisi.")
+        
+        if not (email):
+            return response.badRequest([], "Kolom email wajib diisi.")
+        
+        if not (password):
+            return response.badRequest([], "Kolom password wajib diisi.")
+        
+        if not (phone_number):
+            return response.badRequest([], "Kolom phone_number wajib diisi.")
+        
+        if not (gender):
+            return response.badRequest([], "Kolom gender wajib diisi.")
 
         if len(password) < 8:
             return response.badRequest([], "Kata sandi harus terdiri dari minimal 8 karakter.")
@@ -92,6 +105,18 @@ def tambahAdmin():
 
         if Admins.query.filter_by(phone_number=phone_number).first():
             return response.badRequest([], "Nomor telepon sudah terdaftar.")
+        
+        if not re.match("^[a-zA-Z\s]+$", name) or len(name) < 3 or len(name) > 50:
+            return response.badRequest([], "Nama hanya boleh huruf, panjang 3-50 karakter.")
+
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        if not re.match("^\d{10,15}$", phone_number):
+            return response.badRequest([], "Nomor telepon hanya boleh angka, panjang 10-15 digit.")
+
+        if not re.match(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password):
+            return response.badRequest([], "Password harus memiliki minimal 8 karakter, 1 huruf besar, 1 angka, dan 1 simbol.")
 
 
         admin = Admins(
@@ -122,11 +147,35 @@ def ubahAdmin(id):
         phone_number = request.form.get('phone_number') or request.json.get('phone_number')
         gender = request.form.get('gender') or request.json.get('gender')
 
-        if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.")
+        if not (name):
+            return response.badRequest([], "Kolom name wajib diisi.")
+        
+        if not (email):
+            return response.badRequest([], "Kolom email wajib diisi.")
+        
+        if not (password):
+            return response.badRequest([], "Kolom password wajib diisi.")
+        
+        if not (phone_number):
+            return response.badRequest([], "Kolom phone_number wajib diisi.")
+        
+        if not (gender):
+            return response.badRequest([], "Kolom gender wajib diisi.")
 
         if gender not in ["Laki-Laki", "Perempuan"]:
             return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")
+        
+        if name and (not re.match("^[a-zA-Z\s]+$", name) or len(name) < 3 or len(name) > 50):
+            return response.badRequest([], "Nama hanya boleh huruf, panjang 3-50 karakter.")
+
+        if email and not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        if phone_number and not re.match("^\d{10,15}$", phone_number):
+            return response.badRequest([], "Nomor telepon hanya boleh angka, panjang 10-15 digit.")
+
+        if password and not re.match(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password):
+            return response.badRequest([], "Password harus memiliki minimal 8 karakter, 1 huruf besar, 1 angka, dan 1 simbol.")
 
         admin.name = name
         admin.email = email
@@ -161,6 +210,10 @@ def loginAdmin():
     try:
         email = request.form.get('email') or request.json.get('email')
         password = request.form.get('password') or request.json.get('password')
+        remember_me = request.form.get('remember_me') or request.json.get('remember_me')
+
+        if not isinstance(remember_me, bool):
+            return response.badRequest([], 'Nilai remember_me harus berupa boolean')
 
         admin = Admins.query.filter_by(email=email).first()
 
@@ -172,14 +225,21 @@ def loginAdmin():
         
         if not admin.checkPassword(password):
             return response.unauthorized([], 'Kombinasi password salah')
+  
+        if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return response.badRequest([], "Format email tidak valid.")
+
+        if password and len(password) > 50:  
+            return response.badRequest([], "Password terlalu panjang, maksimal 50 karakter.")
         
         data = single_object(admin)
 
         expires = timedelta(hours=12)
-        expires_refresh = timedelta(days=3)
+        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        additional_claims = {'remember_me': remember_me}
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
-        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
+        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh, additional_claims=additional_claims)
 
         return response.success({
             "data" : data,
@@ -193,43 +253,71 @@ def loginAdmin():
 def refreshToken():
     try:
         current_user = get_jwt_identity()
+        jwt_claims = get_jwt()
+        remember_me = jwt_claims.get('remember_me', False)
 
-        expires = timedelta(hours=12)
-        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires)
+        expires_access = timedelta(hours=12)
+        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        additional_claims = {'remember_me': remember_me}
 
-        return response.success({
-            "access_token": new_access_token
-        })
+        access_token_expiry_time = datetime.utcnow() + expires_access
+        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+
+        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
+        new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
+
+        data = {
+            "access_token": new_access_token,
+            "refresh_token": new_refresh_token,
+            "access_token_expiry_time": access_token_expiry_time.isoformat(),
+            "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+        }
+        return response.success(data)
     except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal memperbarui token")
+        return response.serverError([],"Gagal memperbarui token")
 
+def get_me():
+        try:
+            current_user_email = get_jwt_identity()
 
-# # Setup Redis 
-# redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+            admin = Admins.query.filter_by(email=current_user_email).first()
 
-# def logoutAdmin():
-#     try:
-#         # Mengambil identitas pengguna dari token JWT yang sedang digunakan
-#         identity = get_jwt_identity()
+            if not admin:
+                return response.notFound([],"Admin tidak ditemukan")
 
-#         # Mendapatkan JWT ID (jti) yang unik untuk token yang sedang digunakan
-#         jti = get_jwt()['jti']
+            data = single_object(admin)
 
-#         # Menambahkan jti ke dalam Redis untuk menandakan bahwa token ini tidak valid
-#         # Mengatur waktu kedaluwarsa (misalnya 12 jam)
-#         redis_client.setex(jti, timedelta(hours=12), "revoked")  # Token ini tidak dapat digunakan lagi setelah logout
+            return response.success(data)
+        
+        except Exception as e:
+            print(e)
+            return response.serverError([],"Gagal mengambil data admin")
 
-#         # Mengirim respons sukses
-#         return response.success("Sukses logout, token telah dinonaktifkan.")
-#     except Exception as e:
-#         print(e)
-#         return response.serverError([], "Gagal melakukan logout.")
-
-def logoutAdmin():
+def defaultAdmin():
     try:
-        identity = get_jwt_identity()
-        return response.success([],"Sukses logout. Token dihapus dari frontend.")
+        default_admin = Admins.query.filter_by(email='admin1@gmail.com').first()
+
+        if os.getenv('FLASK_ENV') == 'production':
+            return response.forbidden([], "Tidak dapat membuat admin default di lingkungan produksi.")
+
+        if default_admin:
+            return response.success([], "Admin default sudah ada. Tidak perlu ditambah lagi.")
+
+        admin = Admins(
+            name="Admin",
+            email="admin1@gmail.com",
+            phone_number="1234567890",
+            gender="Laki-Laki"
+        )
+
+        # Set password dan simpan ke database
+        admin.setPassword('14141414')
+        db.session.add(admin)
+        db.session.commit()
+
+        return response.created([], "Akun admin default berhasil dibuat.")
+
     except Exception as e:
-        print(e)
-        return response.serverError([],"Gagal melakukan logout.")
+        print(e)  # Untuk debugging di konsol
+        return response.serverError([], "Terjadi kesalahan saat membuat admin default.")
+
