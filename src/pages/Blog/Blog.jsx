@@ -181,7 +181,7 @@ const Blog = () => {
                             <Typography variant="title"
                                         className="text-background text-4xl md:text-5xl lg:text-6xl font-bold mb-4">{latestArticle.title}</Typography>
                             <Typography variant="p"
-                                        className="text-background">{latestArticle?.content?.split('.').slice(0, 1).join('.') + '.'}</Typography>
+                                        className="text-background">{latestArticle?.content?.replace(/<[^>]*>/g, '').split('.').slice(0, 1).join('.') + '.'}</Typography>
                         </div>
                         <div className="absolute bottom-10 left-8 text-white w-10/12">
                             <div
