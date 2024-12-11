@@ -1,5 +1,5 @@
 import axios from "axios";
-import {BLOG_MANAGEMENT_ENDPOINT} from "@/constants/routesAPI";
+import {BLOG_ENDPOINT, BLOG_MANAGEMENT_ENDPOINT} from "@/constants/routesAPI";
 import {getAdmin} from "@/services/admin.js";
 
 export const getBlogManagement = async (filters) => {
@@ -61,6 +61,7 @@ export async function createBlogManagement(blog) {
         const response = await axios.post(BLOG_MANAGEMENT_ENDPOINT, formData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "multipart/form-data",
             },
         });
 
@@ -101,5 +102,18 @@ export async function deleteBlogManagement(blogId) {
     } catch (error) {
         console.error("Gagal menghapus blog:", error.response || error.message);
         throw new Error("Gagal menghapus blog. Silakan coba lagi.");
+    }
+}
+
+export async function getBlogByIdManagement(blogId) {
+    try {
+        const response = await axios.get(`${BLOG_MANAGEMENT_ENDPOINT}/${blogId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+        });
+        return response.data.data.id;
+    } catch (error) {
+        throw new Error("Gagal mengambil blog. Silakan coba lagi.");
     }
 }

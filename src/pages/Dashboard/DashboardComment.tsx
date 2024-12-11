@@ -596,43 +596,50 @@ export default function DashboardComment() {
             <Dialog open={isDetailModalOpen} onOpenChange={setIsDetailModalOpen}>
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle>Detail Komentar</DialogTitle>
+                        <DialogTitle className="text-center text-[30px] font-bold leading-[36px]">Detail
+                            Komentar</DialogTitle>
                     </DialogHeader>
+                    <Typography
+                        variant="p-regular"
+                        className="text-left text-slate-500 px-6"
+                    >
+                        Informasi detail komentar. Anda dapat melihat informasi lebih lanjut dan mengelola komentar ini.
+                    </Typography>
                     {currentComment && (
                         <div className="grid gap-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label className="font-bold">Status</Label>
-                                <div className="col-span-3">
-                                    <Badge
-                                        variant={
-                                            currentComment.status === "APPROVED"
-                                                ? "success"
-                                                : currentComment.status === "REJECTED"
-                                                    ? "destructive"
-                                                    : "secondary"
-                                        }
-                                    >
-                                        {currentComment.status}
-                                    </Badge>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label className="font-bold">Username</Label>
-                                <div className="col-span-3">{currentComment.username}</div>
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label className="font-bold">Email</Label>
-                                <div className="col-span-3">{currentComment.email}</div>
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label className="font-bold">Tanggal Dibuat</Label>
-                                <div className="col-span-3">
-                                    {formatDate(currentComment.created_at)}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label className="font-bold">Komentar</Label>
-                                <div className="col-span-3 whitespace-pre-wrap">
+                            {/*<div className="grid grid-cols-4 items-center gap-4">*/}
+                            {/*    <Label className="text-[16px] font-bold text-emerald-600">Status</Label>*/}
+                            {/*    <div className="col-span-3">*/}
+                            {/*        <Badge*/}
+                            {/*            variant={*/}
+                            {/*                currentComment.status === "APPROVED"*/}
+                            {/*                    ? "success"*/}
+                            {/*                    : currentComment.status === "REJECTED"*/}
+                            {/*                        ? "destructive"*/}
+                            {/*                        : "secondary"*/}
+                            {/*            }*/}
+                            {/*        >*/}
+                            {/*            {currentComment.status}*/}
+                            {/*        </Badge>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                            {/*<div className="grid grid-cols-4 items-center gap-4">*/}
+                            {/*    <Label className="text-[16px] font-bold text-emerald-600">Username</Label>*/}
+                            {/*    <div className="col-span-3">{currentComment.username}</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="grid grid-cols-4 items-center gap-4">*/}
+                            {/*    <Label className="text-[16px] font-bold text-emerald-600">Email</Label>*/}
+                            {/*    <div className="col-span-3">{currentComment.email}</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="grid grid-cols-4 items-center gap-4">*/}
+                            {/*    <Label className="text-[16px] font-bold text-emerald-600">Tanggal Dibuat</Label>*/}
+                            {/*    <div className="col-span-3">*/}
+                            {/*        {formatDate(currentComment.created_at)}*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                            <div className="flex flex-col gap-2 px-6">
+                                <Label className="text-[20px] font-bold text-emerald-600 mb-4">Komentar</Label>
+                                <div className="col-span-3 text-justify whitespace-pre-wrap">
                                     {currentComment.comment}
                                 </div>
                             </div>

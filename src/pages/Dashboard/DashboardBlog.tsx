@@ -42,7 +42,7 @@ import {
   getBlogManagement,
   createBlogManagement,
   updateBlogManagement,
-  deleteBlogManagement,
+  deleteBlogManagement, getBlogByIdManagement,
 } from "@/services/blogManagement.js";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -53,6 +53,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {getDetailsProductManagement} from "@/services/productManagement";
 
 interface Blog {
   id: number;
@@ -181,6 +182,19 @@ export default function DashboardBlog() {
       });
     }
   };
+
+  const handleBlogDetails = async (blogId: number) => {
+      try {
+          const response = await getBlogByIdManagement(blogId);
+          window.location.href = `/blog/${response}`;
+      } catch (error) {
+          toast({
+              title: "Gagal Mengambil Detail Produk",
+              description: "Terjadi kesalahan saat mengambil detail produk.",
+              variant: "destructive",
+          });
+      }
+  }
 
   const handleEditBlog = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -324,6 +338,18 @@ export default function DashboardBlog() {
             <TableCell>
               <TooltipProvider>
                 <div className="flex justify-end gap-2">
+                  <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button variant="outline" size="icon" onClick={
+                                                () => handleBlogDetails(blog.id)
+                                            }>
+                                                <Eye className="w-4 h-4"/>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent className="bg-emerald-600">
+                                            <p className="text-background">Lihat Detail</p>
+                                        </TooltipContent>
+                                    </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -669,10 +695,7 @@ export default function DashboardBlog() {
                       id="img_file"
                       name="img_file"
                       type="file"
-                      // defaultValue={currentBlog?.img_file}
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
-                      placeholder="Url"
-                      required
                     />
                   </div>
                 </div>
