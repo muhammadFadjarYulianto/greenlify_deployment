@@ -53,6 +53,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Editor } from "@/components/ui/editor";
 
 interface Blog {
   id: number;
@@ -192,13 +193,13 @@ export default function DashboardBlog() {
       fetchBlogs();
       setIsEditModalOpen(false);
       toast({
-        title: "Produk Berhasil Diperbarui",
-        description: "Produk telah berhasil diperbarui.",
+        title: "Blog Berhasil Diperbarui",
+        description: "Blog telah berhasil diperbarui.",
       });
     } catch (error) {
       toast({
-        title: "Gagal Memperbarui Produk",
-        description: "Terjadi kesalahan saat memperbarui produk.",
+        title: "Gagal Memperbarui Blog",
+        description: "Terjadi kesalahan saat memperbarui blog.",
         variant: "destructive",
       });
     }
@@ -316,11 +317,15 @@ export default function DashboardBlog() {
             </TableCell>
             <TableCell>{blog.author}</TableCell>
             <TableCell className="max-w-20">{blog.title}</TableCell>
-            <TableCell className="text-center">{blog.views.toLocaleString("id-ID")}</TableCell>
+            <TableCell className="text-center">
+              {blog.views.toLocaleString("id-ID")}
+            </TableCell>
             <TableCell className="text-center">
               {blog.approved_comments_count.toLocaleString("id-ID")}
             </TableCell>{" "}
-            <TableCell className="text-center">{formatDate(blog.created_at)}</TableCell>
+            <TableCell className="text-center">
+              {formatDate(blog.created_at)}
+            </TableCell>
             <TableCell>
               <TooltipProvider>
                 <div className="flex justify-end gap-2">
@@ -417,7 +422,7 @@ export default function DashboardBlog() {
             <div className="relative w-full sm:w-[300px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
-                placeholder="Cari produk berdasarkan nama"
+                placeholder="Cari blog berdasarkan judul blog"
                 value={filters.keyword}
                 onChange={(e) => handleFilterChange("keyword", e.target.value)}
                 className="h-11 pl-10 text-emerald-600 border-2 border-emerald-500 w-full focus:ring-emerald-500 focus:border-emerald-500"
@@ -430,7 +435,7 @@ export default function DashboardBlog() {
               onClick={() => setIsAddModalOpen(true)}
             >
               <Plus className="w-5 h-5" />
-              Tambah Produk
+              Tambah Blog
             </Button>
           </div>
         </div>
@@ -443,9 +448,15 @@ export default function DashboardBlog() {
                     <TableHead className="text-xl">Gambar</TableHead>
                     <TableHead className="text-xl">Author</TableHead>
                     <TableHead className="text-xl">Nama Blog</TableHead>
-                    <TableHead className="text-xl text-center">Di Baca</TableHead>
-                    <TableHead className="text-xl text-center">Komentar</TableHead>
-                    <TableHead className="text-xl text-center">Tanggal Dibuat</TableHead>
+                    <TableHead className="text-xl text-center">
+                      Di Baca
+                    </TableHead>
+                    <TableHead className="text-xl text-center">
+                      Komentar
+                    </TableHead>
+                    <TableHead className="text-xl text-center">
+                      Tanggal Dibuat
+                    </TableHead>
                     <TableHead className="text-xl text-right">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -585,12 +596,23 @@ export default function DashboardBlog() {
                   >
                     Konten Blog
                   </Label>
+                  <div className="bg-white rounded-lg shadow-sm border border-slate-200">
+                    <Editor
+                      value=""
+                      onChange={(content) => {
+                        const textareaElement = document.getElementById(
+                          "content"
+                        ) as HTMLTextAreaElement;
+                        if (textareaElement) {
+                          textareaElement.value = content;
+                        }
+                      }}
+                    />
+                  </div>
                   <Textarea
                     id="content"
                     name="content"
-                    className="col-span-3 min-h-[90px] text-justify text-slate-900 border border-slate-50 focus:border-slate-100"
-                    placeholder="Masukkan konten blog"
-                    rows={10}
+                    style={{ display: "none" }}
                     required
                   />
                 </div>
@@ -678,30 +700,53 @@ export default function DashboardBlog() {
                 </div>
               </div>
               <div className="lg:col-span-6">
-                <div className="space-y-4">
-                  <Label
-                    htmlFor="content"
-                    className="text-[16px] font-bold text-emerald-600"
-                  >
-                    Konten Blog
-                  </Label>
-                  <Textarea
-                    id="content"
-                    name="content"
-                    defaultValue={currentBlog?.content}
-                    className="col-span-3 min-h-[90px] text-justify text-slate-900 border border-slate-50 focus:border-slate-100"
-                    placeholder="Masukkan konten blog"
-                    rows={10}
-                    required
-                  />
+                <div className="space-y-6">
+                  <div className="editor-container">
+                    <Label
+                      htmlFor="content"
+                      className="text-[16px] font-bold text-emerald-600 mb-2 block"
+                    >
+                      Konten Blog
+                    </Label>
+
+                    <div className="bg-white rounded-lg shadow-sm border border-slate-200">
+                      <Editor
+                        value={currentBlog?.content || ""}
+                        onChange={(content) => {
+                          const textareaElement = document.getElementById(
+                            "content"
+                          ) as HTMLTextAreaElement;
+                          if (textareaElement) {
+                            textareaElement.value = content;
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <Textarea
+                      id="content"
+                      name="content"
+                      defaultValue={currentBlog?.content}
+                      style={{ display: "none" }}
+                      required
+                    />
+                  </div>
                 </div>
-                <DialogFooter className="mt-4">
+
+                <DialogFooter className="mt-8 flex justify-end gap-4">
                   <DialogClose asChild>
-                    <Button type="button" variant="destructive">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="px-6 hover:opacity-90 transition-opacity"
+                    >
                       Batal
                     </Button>
                   </DialogClose>
-                  <Button type="submit" className="mb-3 md:mb-0">
+                  <Button
+                    type="submit"
+                    className="px-6 bg-emerald-600 hover:bg-emerald-700 transition-colors"
+                  >
                     Simpan
                   </Button>
                 </DialogFooter>
