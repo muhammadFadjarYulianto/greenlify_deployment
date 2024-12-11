@@ -43,6 +43,7 @@ import {
   createBlogManagement,
   updateBlogManagement,
   deleteBlogManagement,
+    getBlogByIdManagement,
 } from "@/services/blogManagement.js";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -54,6 +55,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Editor } from "@/components/ui/editor";
+import {getDetailsProductManagement} from "@/services/productManagement";
 
 interface Blog {
   id: number;
@@ -182,6 +184,19 @@ export default function DashboardBlog() {
       });
     }
   };
+
+  const handleBlogDetails = async (blogId: number) => {
+      try {
+          const response = await getBlogByIdManagement(blogId);
+          window.location.href = `/blog/${response}`;
+      } catch (error) {
+          toast({
+              title: "Gagal Mengambil Detail Produk",
+              description: "Terjadi kesalahan saat mengambil detail produk.",
+              variant: "destructive",
+          });
+      }
+  }
 
   const handleEditBlog = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -330,6 +345,18 @@ export default function DashboardBlog() {
               <TooltipProvider>
                 <div className="flex justify-end gap-2">
                   <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button variant="outline" size="icon" onClick={
+                                                () => handleBlogDetails(blog.id)
+                                            }>
+                                                <Eye className="w-4 h-4"/>
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent className="bg-emerald-600">
+                                            <p className="text-background">Lihat Detail</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                  <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="outline"
@@ -446,7 +473,7 @@ export default function DashboardBlog() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xl">Gambar</TableHead>
-                    <TableHead className="text-xl">Author</TableHead>
+                    <TableHead className="text-xl">Penulis</TableHead>
                     <TableHead className="text-xl">Nama Blog</TableHead>
                     <TableHead className="text-xl text-center">
                       Di Baca
@@ -580,7 +607,7 @@ export default function DashboardBlog() {
                     <Input
                       id="img_file"
                       name="img_file"
-                      type="text"
+                      type="file"
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
                       placeholder="Url"
                       required
@@ -612,6 +639,9 @@ export default function DashboardBlog() {
                   <Textarea
                     id="content"
                     name="content"
+                    className="col-span-3 min-h-[90px] text-justify text-slate-900 border border-slate-50 focus:border-slate-100"
+                    placeholder="Masukkan konten blog"
+                    rows={15}
                     style={{ display: "none" }}
                     required
                   />
@@ -690,11 +720,8 @@ export default function DashboardBlog() {
                     <Input
                       id="img_file"
                       name="img_file"
-                      type="text"
-                      defaultValue={currentBlog?.img_file}
+                      type="file"
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
-                      placeholder="Url"
-                      required
                     />
                   </div>
                 </div>

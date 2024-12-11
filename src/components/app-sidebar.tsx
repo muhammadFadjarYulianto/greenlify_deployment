@@ -37,11 +37,6 @@ const data = {
 			isActive: true,
 		},
 		{
-			title: "Manajemen AI",
-			url: "#",
-			icon: Bot,
-		},
-		{
 			title: "Manajemen Category",
 			url: "/dashboard/category",
 			icon: Tags,

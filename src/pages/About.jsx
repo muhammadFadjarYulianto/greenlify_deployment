@@ -69,7 +69,7 @@ const teamMembers = [
     },
     {
         id: 8,
-        name: "TIFANI AQLICIA",
+        name: "TIVANY AQLICIA",
         role: "Data Science",
         imageSrc: "https://ik.imagekit.io/cv0glgi4n/member/Tivany%20Aqlicia.png?updatedAt=1732961598119",
     },

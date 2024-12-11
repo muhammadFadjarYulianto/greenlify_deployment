@@ -756,7 +756,7 @@ export default function DashboardProduct() {
                                         <Input
                                             id="img_file"
                                             name="img_file"
-                                            type="text"
+                                            type="file"
                                             className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
                                             placeholder="Url"
                                             required
@@ -901,11 +901,9 @@ export default function DashboardProduct() {
                                         <Input
                                             id="img_file"
                                             name="img_file"
-                                            type="text"
-                                            defaultValue={currentProduct?.img_file}
+                                            type="file"
+                                            // defaultValue={currentProduct?.img_file}
                                             className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
-                                            placeholder="Url"
-                                            required
                                         />
                                     </div>
                                     <div className="grid grid-cols-4 items-center gap-4">

@@ -66,7 +66,7 @@ export async function createProductManagement(product) {
         const response = await axios.post(PRODUCT_MANAGEMENT_ENDPOINT, product, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
         });
         return response.data.data;
@@ -83,6 +83,7 @@ export async function updateProductManagement(productId, product) {
         const response = await axios.put(`${PRODUCT_MANAGEMENT_ENDPOINT}/${productId}`, product, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "multipart/form-data",
             },
         });
         return response.data.data;
