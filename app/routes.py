@@ -1,5 +1,5 @@
 from app import app, response
-from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController
+from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController, PredictionController, HistoryController
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.controller.ProductsController import Products, format_array
@@ -129,6 +129,17 @@ def commentDetail(id):
         return CommentsController.ubahComment(id)
     elif request.method == "DELETE":
         return CommentsController.hapusComment(id)
+    
+@app.route('/api/predict', methods=['POST'])
+def prediction():
+    return PredictionController.predict()
 
+@app.route('/api/history', methods=['GET'])
+@jwt_required()
+def get_all_history():
+    return HistoryController.get_history()
 
-
+@app.route('/api/history/<int:history_id>', methods=['DELETE'])
+@jwt_required()
+def delete_history(history_id):
+    return HistoryController.delete_history(history_id)

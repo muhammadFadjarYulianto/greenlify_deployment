@@ -99,6 +99,7 @@ def detailArticle(id):
             'article': {
                 'id': article.id,
                 'title': article.title,
+                'img_file': article.img_file,
                 'content': article.content,
                 'views': article.views,
                 'author': article.author,
