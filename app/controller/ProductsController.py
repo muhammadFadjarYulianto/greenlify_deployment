@@ -84,9 +84,9 @@ def tambahProduct():
             save_path = os.path.join(app.config['PRODUCT_FOLDER'], renamefile)        
             file.save(save_path)
         
-            img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')}"
+            file_path = os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')
+            img_url = f"{os.getenv('BASE_URL')}{file_path}"
             
-
 
         try:
             price = float(price)
@@ -179,8 +179,9 @@ def ubahProduct(id):
                 save_path = os.path.join(app.config['PRODUCT_FOLDER'], img_file)
                 file.save(save_path)
 
-                img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['PRODUCT_URL_PATH'], img_file).replace('\\', '/')}"                
-
+                file_path = os.path.join(app.config['PRODUCT_URL_PATH'], img_file).replace('\\', '/')
+                img_url = f"{os.getenv('BASE_URL')}{file_path}"                
+                product.img_file = img_url
 
         product.created_by = created_by
         product.category_id = category_id
@@ -188,8 +189,6 @@ def ubahProduct(id):
         product.description = description
         product.price = price
         product.contact = contact
-        product.img_file = img_url
-
         db.session.commit()
 
         return response.success(single_object(product))

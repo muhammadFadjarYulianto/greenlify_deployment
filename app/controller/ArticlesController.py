@@ -195,8 +195,9 @@ def tambahArticle():
 
             save_path = os.path.join(app.config['ARTICLE_FOLDER'], renamefile)        
             file.save(save_path)
-        
-            img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['ARTICLE_URL_PATH'], renamefile).replace('\\', '/')}"
+                    
+            file_path = os.path.join(app.config['ARTICLE_URL_PATH'], renamefile).replace('\\', '/')
+            img_url = f"{os.getenv('BASE_URL')}{file_path}"
 
         article = Articles(
             created_by=created_by,
@@ -258,14 +259,14 @@ def ubahArticle(id):
                 save_path = os.path.join(app.config['ARTICLE_FOLDER'], img_file)
                 file.save(save_path)
 
-                img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['ARTICLE_URL_PATH'], img_file).replace('\\', '/')}"
-
+                file_path = os.path.join(app.config['ARTICLE_URL_PATH'], img_file).replace('\\', '/')
+                img_url = f"{os.getenv('BASE_URL')}{file_path}"
+                article.img_file = img_url
 
         article.created_by = created_by
         article.title = title
         article.content = content
-        article.author = author
-        article.img_file = img_url
+        article.author = author        
         db.session.commit()
 
         return response.success(singleArticle(article))
