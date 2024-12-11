@@ -8,3 +8,5 @@ export const PRODUCT_PAGINATION_ENDPOINT = `${END_POINT}/api/product/page`;
 export const CATEGORIES_MANAGEMENT_ENDPOINT = `${END_POINT}/api/category`;
 export const BLOG_MANAGEMENT_ENDPOINT = `${END_POINT}/api/article`;
 export const COMMENT_MANAGEMENT_ENDPOINT = `${END_POINT}/api/comment`;
+
+export const PREDICT = `${END_POINT}/api/predict`; // Endpoint untuk prediksi gambar
