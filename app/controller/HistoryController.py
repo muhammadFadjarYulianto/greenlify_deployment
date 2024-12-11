@@ -3,6 +3,7 @@ from app import db, response
 from app.model.history import History
 from app.model.products import Products
 from sqlalchemy import func
+import os
 
 
 def get_history():
@@ -78,7 +79,7 @@ def paginateAndFilterHistoryManage():
             'results': formatArray(histories),
         }
 
-        base_url = "http://127.0.0.1:5000/api/history"
+        base_url = f"{os.getenv('BASE_URL')}api/history"
 
         if start > 1:
             previous_start = max(1, start - limit)
@@ -93,6 +94,7 @@ def paginateAndFilterHistoryManage():
             pagination_data['next'] = f"{base_url}?{next_query}"
         else:
             pagination_data['next'] = None
+
 
         return response.success(pagination_data)
 

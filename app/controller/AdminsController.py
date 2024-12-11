@@ -79,8 +79,20 @@ def tambahAdmin():
         phone_number = request.form.get('phone_number') or request.json.get('phone_number')
         gender = request.form.get('gender') or request.json.get('gender')
 
-        if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.")
+        if not (name):
+            return response.badRequest([], "Kolom name wajib diisi.")
+        
+        if not (email):
+            return response.badRequest([], "Kolom email wajib diisi.")
+        
+        if not (password):
+            return response.badRequest([], "Kolom password wajib diisi.")
+        
+        if not (phone_number):
+            return response.badRequest([], "Kolom phone_number wajib diisi.")
+        
+        if not (gender):
+            return response.badRequest([], "Kolom gender wajib diisi.")
 
         if len(password) < 8:
             return response.badRequest([], "Kata sandi harus terdiri dari minimal 8 karakter.")
@@ -135,8 +147,20 @@ def ubahAdmin(id):
         phone_number = request.form.get('phone_number') or request.json.get('phone_number')
         gender = request.form.get('gender') or request.json.get('gender')
 
-        if not all([name, email, password, phone_number, gender]):
-            return response.badRequest([], "Semua kolom wajib diisi.")
+        if not (name):
+            return response.badRequest([], "Kolom name wajib diisi.")
+        
+        if not (email):
+            return response.badRequest([], "Kolom email wajib diisi.")
+        
+        if not (password):
+            return response.badRequest([], "Kolom password wajib diisi.")
+        
+        if not (phone_number):
+            return response.badRequest([], "Kolom phone_number wajib diisi.")
+        
+        if not (gender):
+            return response.badRequest([], "Kolom gender wajib diisi.")
 
         if gender not in ["Laki-Laki", "Perempuan"]:
             return response.badRequest([], "Jenis kelamin tidak valid. Gunakan 'Laki-Laki' atau 'Perempuan'.")

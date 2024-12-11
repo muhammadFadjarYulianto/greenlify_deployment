@@ -53,8 +53,23 @@ def tambahProduct():
         price = request.form.get('price') 
         contact = request.form.get('contact') 
 
-        if not all([created_by, category_id, product_name, price]):
-            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+        if not (created_by):
+            return response.badRequest([], "Kolom created_by wajib diisi.")
+        
+        if not (category_id):
+            return response.badRequest([], "Kolom category_id wajib diisi.")
+        
+        if not (product_name):
+            return response.badRequest([], "Kolom product_name wajib diisi.")
+        
+        if not (description):
+            return response.badRequest([], "Kolom description wajib diisi.")
+        
+        if not (price):
+            return response.badRequest([], "Kolom price wajib diisi.")
+        
+        if not (contact):
+            return response.badRequest([], "Kolom contact wajib diisi.")
         
         if not re.match(r'^[a-zA-Z0-9 ]*$', product_name):
             return response.badRequest([], "Nama produk tidak boleh mengandung karakter khusus.")
@@ -84,7 +99,8 @@ def tambahProduct():
             save_path = os.path.join(app.config['PRODUCT_FOLDER'], renamefile)        
             file.save(save_path)
         
-            img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')}"
+            file_path = os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')
+            img_url = f"{os.getenv('BASE_URL')}{file_path}"
             
 
 
@@ -143,8 +159,23 @@ def ubahProduct(id):
         price = request.form.get('price')
         contact = request.form.get('contact')
 
-        if not all([created_by, category_id, product_name, price]):
-            return response.badRequest([], "Kolom created_by, category_id, product_name, dan price wajib diisi.")
+        if not (created_by):
+            return response.badRequest([], "Kolom created_by wajib diisi.")
+        
+        if not (category_id):
+            return response.badRequest([], "Kolom category_id wajib diisi.")
+        
+        if not (product_name):
+            return response.badRequest([], "Kolom product_name wajib diisi.")
+        
+        if not (description):
+            return response.badRequest([], "Kolom description wajib diisi.")
+        
+        if not (price):
+            return response.badRequest([], "Kolom price wajib diisi.")
+        
+        if not (contact):
+            return response.badRequest([], "Kolom contact wajib diisi.")
         
         if not re.match(r'^[a-zA-Z0-9 ]*$', product_name):
             return response.badRequest([], "Nama produk tidak boleh mengandung karakter khusus.")
@@ -179,7 +210,8 @@ def ubahProduct(id):
                 save_path = os.path.join(app.config['PRODUCT_FOLDER'], img_file)
                 file.save(save_path)
 
-                img_url = f"{os.getenv('BASE_URL')}{os.path.join(app.config['PRODUCT_URL_PATH'], img_file).replace('\\', '/')}"                
+                file_path = os.path.join(app.config['PRODUCT_URL_PATH'], filename).replace('\\', '/')
+                img_url = f"{os.getenv('BASE_URL')}{file_path}"        
 
 
         product.created_by = created_by
