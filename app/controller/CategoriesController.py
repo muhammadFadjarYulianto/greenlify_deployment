@@ -6,7 +6,7 @@ import re
 
 def indexCategory():
     try:
-        categories = Categories.query.all()
+        categories = Categories.query.order_by(Categories.created_at.desc()).all()
         data = [
             {
                 'id': category.id,

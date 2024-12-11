@@ -102,7 +102,7 @@ def paginateAndFilterCommentsManage():
         if keyword and len(keyword) > 50:
             return response.badRequest([], "Keyword tidak boleh lebih dari 50 karakter.")
 
-        query = Comments.query
+        query = Comments.query.order_by(Comments.created_at.desc())
 
         if keyword:
             keyword = f"%{keyword}%"

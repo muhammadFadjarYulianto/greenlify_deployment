@@ -230,7 +230,7 @@ def paginate_and_filter():
         max_price = request.args.get('max_price', type=float)
         keyword = request.args.get('keyword', type=str)
 
-        query = Products.query
+        query = Products.query.order_by(Products.created_at.desc())
 
         if category_name:
             category = Categories.query.filter_by(category_name=category_name).first()
@@ -324,7 +324,7 @@ def paginate_and_filter_manage():
         max_price = request.args.get('max_price', type=float)
         keyword = request.args.get('keyword', type=str)
 
-        query = Products.query
+        query = Products.query.order_by(Products.created_at.desc())
 
         if category_name:
             category = Categories.query.filter_by(category_name=category_name).first()

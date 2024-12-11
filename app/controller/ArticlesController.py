@@ -57,7 +57,7 @@ def detailArticle(id):
         query_approved = Comments.query.filter_by(id_article=id, status=StatusEnum.APPROVED)
         total_approved = query_approved.count()
 
-        query = Comments.query.filter_by(id_article=id, status=StatusEnum.APPROVED)
+        query = Comments.query.filter_by(id_article=id, status=StatusEnum.APPROVED).order_by(Comments.created_at.desc())
         total_data = query.count()
 
         if start < 1 or limit < 1:
@@ -368,7 +368,7 @@ def paginateAndFilterArticlesManage():
         limit = request.args.get('limit', default=4, type=int)
         keyword = request.args.get('keyword', type=str)
 
-        query = Articles.query
+        query = Articles.query.order_by(Articles.created_at.desc())
 
         if keyword:
             keyword = f"%{keyword}%"
