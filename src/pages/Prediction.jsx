@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, {useState, useRef, useCallback, useEffect} from "react";
 import UploadIcon from "../assets/images/upload-cloud.svg";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,8 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+import {gsap} from "gsap";
+gsap.registerPlugin(ScrollTrigger);
 import Kaca from "../assets/images/kaca.png";
 import Kardus from "../assets/images/kardus.png";
 import Kertas from "../assets/images/kertas.png";
@@ -23,6 +24,7 @@ import Organik from "../assets/images/organik.png";
 import Plastik from "../assets/images/plastik.png";
 import CloseIcon from "../assets/images/x-square.svg";
 import Craft from "../assets/images/craft.png";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
 
 const CardSampah = [
 	{
@@ -64,6 +66,8 @@ const CardSampah = [
 ];
 
 const Prediction = () => {
+	const heroSectionRef = React.useRef(null);
+	const classtificationRef = useRef([]);
 	const [imagePreview, setImagePreview] = useState(null);
 	const [isError, setIsError] = useState(false);
 	const [isPrediction, setIsPrediction] = useState(false); //test tampilan
@@ -97,17 +101,58 @@ const Prediction = () => {
 		}
 	};
 
+	useEffect(() => {
+        gsap.timeline({
+            scrollTrigger: {
+                trigger: heroSectionRef.current,
+                start: "top 80%",
+                end: "bottom top",
+                toggleActions: "play none none none",
+            },
+        })
+            .fromTo(
+                ".hero-title",
+                {opacity: 0, x: 50},
+                {opacity: 1, x: 0, duration: 0.8, ease: "power2.out"}
+            )
+            .fromTo(
+                ".hero-description",
+                {opacity: 0, y: 50},
+                {opacity: 1, y: 0, duration: 0.8, ease: "power2.out"},
+                "-=0.4"
+            )
+
+		classtificationRef.current.forEach((step, index) => {
+            gsap.fromTo(
+                step,
+                {opacity: 0, x: 100},
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1.0,
+                    delay: index * 0.5,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: step,
+                        start: "top 80%",
+                        toggleActions: "play none none none",
+                    },
+                }
+            );
+        });
+    });
+
 	return (
 		<main>
 			{/* Title */}
-			<div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
+			<div className="w-full mt-[99px] h-auto flex flex-col items-center gap-[33px]">
 				<div className="max-w-3x1 text-center lg:text-center">
-					<Typography variant="title">
+					<Typography variant="title" className="hero-title">
 						<strong className="text-emerald-700">Prediksi</strong> Sampah
 					</Typography>
 				</div>
 				<div className="max-w-4xl text-center lg:text-center">
-					<Typography variant="p">
+					<Typography variant="p" className="hero-description">
 						Sistem canggih kami akan menganalisis gambar dan memberikan saran
 						pengelolaan sampah yang tepat, mulai dari pemilahan hingga metode
 						daur ulang yang ramah lingkungan. Dengan teknologi ini, mengelola
@@ -448,13 +493,13 @@ const Prediction = () => {
 				{/* Title section */}
 				<div className="col-span-4 text-center md:text-left place-self-start flex flex-col gap-2">
 					<div>
-						<Typography variant="h1">
+						<Typography variant="h1" className="hero-title">
 							<strong className="text-emerald-600">Kategori Sampah</strong> Yang
 							Tersedia
 						</Typography>
 					</div>
 					<div className="max-w-[300px] mx-auto md:mx-0">
-						<Typography variant="p">
+						<Typography variant="p" className="hero-description">
 							Jenis Sampah Yang Dapat Kami Deteksi Klasifikasi
 						</Typography>
 					</div>
@@ -463,13 +508,13 @@ const Prediction = () => {
 				<div className="col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-4 md:gap-y-8">
 					{CardSampah.map((item) => (
 						<figure
-							className="ring-0 transition hover:ring-1 hover:ring-emerald-500 rounded-md"
 							key={item.id}
+							ref={(el) => (classtificationRef.current[item.id] = el)}
 						>
 							<img
 								src={item.img}
 								alt={item.heading}
-								className="rounded-t-md w-full"
+								className="rounded-t-md w-full shadow-md"
 							/>
 							<figcaption className="px-2 py-4">
 								<Typography variant="lead">

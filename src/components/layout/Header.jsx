@@ -192,7 +192,7 @@ export default function Header() {
                 <div className="flex items-center gap-4">
                     <div className="hidden md:flex gap-4 items-center">
                         <Button size="md" asChild className="shadow-md">
-                            <Link to="/klasifikasi">Klasifikasi</Link>
+                            <Link to="/prediksi">Klasifikasi</Link>
                         </Button>
                         <div ref={authButtonRef}>
                             {renderDesktopAuthButton()}
