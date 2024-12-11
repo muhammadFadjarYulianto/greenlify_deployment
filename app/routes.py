@@ -130,16 +130,16 @@ def commentDetail(id):
     elif request.method == "DELETE":
         return CommentsController.hapusComment(id)
     
-@app.route('/api/predict', methods=['POST'])
+@app.route('/api/predict/guest', methods=['POST'])
 def prediction():
     return PredictionController.predict()
 
 @app.route('/api/history', methods=['GET'])
 @jwt_required()
 def get_all_history():
-    return HistoryController.get_history()
+    return HistoryController.paginateAndFilterHistoryManage()
 
-@app.route('/api/history/<int:history_id>', methods=['DELETE'])
+@app.route('/api/history/<id>', methods=['DELETE'])
 @jwt_required()
-def delete_history(history_id):
-    return HistoryController.delete_history(history_id)
+def delete_history(id):
+    return HistoryController.delete_history(id)
