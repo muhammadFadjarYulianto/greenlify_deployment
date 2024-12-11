@@ -212,7 +212,7 @@ def ubahProduct(id):
 
                 file_path = os.path.join(app.config['PRODUCT_URL_PATH'], filename).replace('\\', '/')
                 img_url = f"{os.getenv('BASE_URL')}{file_path}"        
-
+                product.img_file = img_url
 
         product.created_by = created_by
         product.category_id = category_id
@@ -220,7 +220,7 @@ def ubahProduct(id):
         product.description = description
         product.price = price
         product.contact = contact
-        product.img_file = img_url
+        
 
         db.session.commit()
 

@@ -283,13 +283,13 @@ def ubahArticle(id):
 
                 file_path = os.path.join(app.config['ARTICLE_URL_PATH'], img_file).replace('\\', '/')
                 img_url = f"{os.getenv('BASE_URL')}{file_path}"
+                article.img_file = img_url
 
 
         article.created_by = created_by
         article.title = title
         article.content = content
         article.author = author
-        article.img_file = img_url
         db.session.commit()
 
         return response.success(singleArticle(article))
