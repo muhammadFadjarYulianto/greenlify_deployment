@@ -11,11 +11,11 @@
 
 [//]: # ()
 
-# Trashure
+# Greenlify
 
-![Trashure Logo](/api/placeholder/300/100)
+![Trashure Logo](https://ik.imagekit.io/3s8oi0rad/Members/logo-erstalent.png?updatedAt=1734036269066)
 
-Trashure is a waste management application designed to help users effectively manage and recycle their waste. With an intuitive interface and innovative features, Trashure aims to raise awareness about sustainability and support better waste management practices.
+Greenlify is a waste management application designed to help users effectively manage and recycle their waste. With an intuitive interface and innovative features, Trashure aims to raise awareness about sustainability and support better waste management practices.
 
 ## Our Team
 
@@ -23,16 +23,16 @@ Trashure is a waste management application designed to help users effectively ma
 
 | Name | Role | Avatar |
 |------|------|--------|
-| Damar Galih | Lead Developer | ![Damar](/api/placeholder/100/100) |
-| Aisyah Putri | UX/UI Designer | ![Aisyah](/api/placeholder/100/100) |
-| Raka Siwi | Backend Engineer | ![Raka](/api/placeholder/100/100) |
-| Bella Permata | Product Manager | ![Bella](/api/placeholder/100/100) |
-| Muhammad Rizky | Frontend Developer | ![Rizky](/api/placeholder/100/100) |
-| Sarah Andriani | Data Analyst | ![Sarah](/api/placeholder/100/100) |
-| Arief Rahman | DevOps Engineer | ![Arief](/api/placeholder/100/100) |
-| Nadya Kusuma | Mobile Developer | ![Nadya](/api/placeholder/100/100) |
-| Fajar Setia | Quality Assurance | ![Fajar](/api/placeholder/100/100) |
-| Dina Amelia | Marketing Specialist | ![Dina](/api/placeholder/100/100) |
+| I NGURAH KOMANG AGUS SURYADIYATMIKA. S | Project Manager | ![Komang]() |
+| ANNA BERTTRIA NOVEM BUDIA | UX/UI Designer | ![Anna]() |
+| NATASYA HELMALIA PUTRI | Backend Engineer | ![Raka]() |
+| Bella Permata | Product Manager | ![Bella]() |
+| Muhammad Rizky | Frontend Developer | ![Rizky]() |
+| Sarah Andriani | Data Analyst | ![Sarah]() |
+| Arief Rahman | DevOps Engineer | ![Arief]() |
+| Nadya Kusuma | Mobile Developer | ![Nadya]() |
+| Fajar Setia | Quality Assurance | ![Fajar]() |
+| Dina Amelia | Marketing Specialist | ![Dina]() |
 
 
 ## Prerequisites
