@@ -26,7 +26,7 @@ Greenlify is a waste management application designed to help users effectively m
 
 | Name | Role | Avatar |
 |------|------|--------|
-| I NGURAH KOMANG AGUS SURYADIYATMIKA. S | Project Manager | ![Komang](<p align="center"><img src="/api/placeholder/80/80" alt="Komang" class="rounded-full"></p>) |
+| I NGURAH KOMANG AGUS SURYADIYATMIKA. S | Project Manager | ![Komang](<p align="center"><img src="https://ik.imagekit.io/3s8oi0rad/Members/logo-erstalent.png?updatedAt=1734036269066" alt="Komang" class="rounded-full"></p>) |
 | ANNA BERTTRIA NOVEM BUDIA | UX/UI Designer | ![Anna]() |
 | NATASYA HELMALIA PUTRI | UX/UI Designer | ![Tasya]() |
 | DAMAR GALIH | Frontend Developer | ![Bella](Damar) |
