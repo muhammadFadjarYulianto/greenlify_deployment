@@ -98,6 +98,7 @@ def detailArticle(id):
             'article': {
                 'id': article.id,
                 'title': article.title,
+                'img_file': article.img_file,
                 'content': article.content,
                 'views': article.views,
                 'author': article.author,
@@ -134,6 +135,9 @@ def tambahCommentForArticle(id):
         if len(username) < 3 or len(username) > 100:
             return response.badRequest([], "Username harus memiliki panjang antara 3 hingga 100 karakter.")
 
+        if not email:
+            return response.badRequest([], "Kolom email wajib diisi.")
+        
         if email and not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
             return response.badRequest([], "Format email tidak valid.")
 
@@ -171,8 +175,17 @@ def tambahArticle():
         content = request.form.get('content') 
         author = request.form.get('author') 
 
-        if not all([created_by, title]):
-            return response.badRequest([], "Kolom created_by dan title wajib diisi.")
+        if not (created_by):
+            return response.badRequest([], "Kolom created_by wajib diisi.")
+        
+        if not (title):
+            return response.badRequest([], "Kolom title wajib diisi.")
+        
+        if not (content):
+            return response.badRequest([], "Kolom content wajib diisi.")
+        
+        if not (author):
+            return response.badRequest([], "Kolom author wajib diisi.")
         
         if not re.match(r'^[a-zA-Z0-9 ]*$', title):
             return response.badRequest([], "Judul artikel tidak boleh mengandung karakter khusus.")
@@ -195,7 +208,7 @@ def tambahArticle():
 
             save_path = os.path.join(app.config['ARTICLE_FOLDER'], renamefile)        
             file.save(save_path)
-                    
+        
             file_path = os.path.join(app.config['ARTICLE_URL_PATH'], renamefile).replace('\\', '/')
             img_url = f"{os.getenv('BASE_URL')}{file_path}"
 
@@ -228,8 +241,17 @@ def ubahArticle(id):
         content = request.form.get('content')
         author = request.form.get('author')
         
-        if not all([created_by, title]):
-            return response.badRequest([], "Kolom created_by dan title wajib diisi.")
+        if not (created_by):
+            return response.badRequest([], "Kolom created_by wajib diisi.")
+        
+        if not (title):
+            return response.badRequest([], "Kolom title wajib diisi.")
+        
+        if not (content):
+            return response.badRequest([], "Kolom content wajib diisi.")
+        
+        if not (author):
+            return response.badRequest([], "Kolom author wajib diisi.")
         
         if not re.match(r'^[a-zA-Z0-9 ]*$', title):
             return response.badRequest([], "Judul artikel tidak boleh mengandung karakter khusus.")
@@ -263,10 +285,11 @@ def ubahArticle(id):
                 img_url = f"{os.getenv('BASE_URL')}{file_path}"
                 article.img_file = img_url
 
+
         article.created_by = created_by
         article.title = title
         article.content = content
-        article.author = author        
+        article.author = author
         db.session.commit()
 
         return response.success(singleArticle(article))
