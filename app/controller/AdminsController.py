@@ -234,52 +234,52 @@ def loginAdmin():
         
         data = single_object(admin)
 
-        expires = timedelta(hours=12)
-        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+        expires = timedelta(days=3) if remember_me else timedelta(hours=12)
+        # expires_refresh = timedelta(hours=12)
         additional_claims = {'remember_me': remember_me}
 
-        access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires)
-        refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh, additional_claims=additional_claims)
+        access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires, additional_claims=additional_claims)
+        # refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
 
         access_token_expiry_time = datetime.utcnow() + expires
-        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+        # refresh_token_expiry_time = datetime.utcnow() + expires_refresh
 
         return response.success({
             "data" : data,
             "access_token" : access_token,
-            "refresh_token" : refresh_token,
+            # "refresh_token" : refresh_token,
             "access_token_expiry_time": access_token_expiry_time.isoformat(),
-            "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+            # "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
         })
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal login")
     
-def refreshToken():
-    try:
-        current_user = get_jwt_identity()
-        jwt_claims = get_jwt()
-        remember_me = jwt_claims.get('remember_me', False)
+# def refreshToken():
+#     try:
+#         current_user = get_jwt_identity()
+#         jwt_claims = get_jwt()
+#         remember_me = jwt_claims.get('remember_me', False)
 
-        expires_access = timedelta(hours=12)
-        expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
-        additional_claims = {'remember_me': remember_me}
+#         expires_access = timedelta(hours=12)
+#         expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
+#         additional_claims = {'remember_me': remember_me}
 
-        access_token_expiry_time = datetime.utcnow() + expires_access
-        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+#         access_token_expiry_time = datetime.utcnow() + expires_access
+#         refresh_token_expiry_time = datetime.utcnow() + expires_refresh
 
-        new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
-        new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
+#         new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
+#         new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
 
-        data = {
-            "access_token": new_access_token,
-            "refresh_token": new_refresh_token,
-            "access_token_expiry_time": access_token_expiry_time.isoformat(),
-            "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
-        }
-        return response.success(data)
-    except Exception as e:
-        return response.serverError([],"Gagal memperbarui token")
+#         data = {
+#             "access_token": new_access_token,
+#             "refresh_token": new_refresh_token,
+#             "access_token_expiry_time": access_token_expiry_time.isoformat(),
+#             "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+#         }
+#         return response.success(data)
+#     except Exception as e:
+#         return response.serverError([],"Gagal memperbarui token")
 
 def get_me():
         try:
