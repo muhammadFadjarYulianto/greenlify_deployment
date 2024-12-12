@@ -26,7 +26,6 @@ const CommentDialog = ({isOpen, onOpenChange, articleId}) => {
                 toast({
                     title: "Komentar Terkirim",
                     description: "Komentar Anda akan kami review terlebih dahulu sebelum ditampilkan.",
-                    variant: "success",
                 });
                 onOpenChange(false);
             } else {

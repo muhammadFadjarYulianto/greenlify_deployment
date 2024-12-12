@@ -122,7 +122,7 @@ export default function DashboardComment() {
             setError(null);
         } catch (err) {
             console.error("Fetch error:", err);
-            setError(err instanceof Error ? err.message : "Gagal mengambil komentar");
+            setError(err instanceof Error ? "Tidak ada komentar yang sesuai" : "Gagal mengambil komentar");
         } finally {
             setLoading(false);
         }

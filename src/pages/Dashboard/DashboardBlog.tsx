@@ -115,8 +115,7 @@ export default function DashboardBlog() {
       setCurrentPage(filters.page);
       setError(null);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Gagal mengambil blog";
+      const errorMessage = err instanceof Error ? "Blog tidak ditemukan saat ini" : "Gagal mengambil blog";
       setError(errorMessage);
     } finally {
       setLoading(false);
