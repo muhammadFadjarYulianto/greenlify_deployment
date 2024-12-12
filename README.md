@@ -14,10 +14,11 @@
 # Greenlify
 
 <p align="center">
-  <img src="https://ik.imagekit.io/3s8oi0rad/Members/logo-erstalent.png?updatedAt=1734036269066" alt="Trashure Logo" width="80" height="80">
+  <img src="https://ik.imagekit.io/3s8oi0rad/Members/logo-erstalent.png?updatedAt=1734036269066" alt="Trashure Logo" width="240" height="240">
 </p>
-
+<p align="justify">
 Greenlify is a waste management application designed to help users effectively manage and recycle their waste. With an intuitive interface and innovative features, Trashure aims to raise awareness about sustainability and support better waste management practices.
+</p>
 
 ## Our Team
 
@@ -25,16 +26,16 @@ Greenlify is a waste management application designed to help users effectively m
 
 | Name | Role | Avatar |
 |------|------|--------|
-| I NGURAH KOMANG AGUS SURYADIYATMIKA. S | Project Manager | ![Komang]() |
+| I NGURAH KOMANG AGUS SURYADIYATMIKA. S | Project Manager | ![Komang](<p align="center"><img src="/api/placeholder/80/80" alt="Komang" class="rounded-full"></p>) |
 | ANNA BERTTRIA NOVEM BUDIA | UX/UI Designer | ![Anna]() |
-| NATASYA HELMALIA PUTRI | Backend Engineer | ![Raka]() |
-| Bella Permata | Product Manager | ![Bella]() |
-| Muhammad Rizky | Frontend Developer | ![Rizky]() |
-| Sarah Andriani | Data Analyst | ![Sarah]() |
-| Arief Rahman | DevOps Engineer | ![Arief]() |
-| Nadya Kusuma | Mobile Developer | ![Nadya]() |
-| Fajar Setia | Quality Assurance | ![Fajar]() |
-| Dina Amelia | Marketing Specialist | ![Dina]() |
+| NATASYA HELMALIA PUTRI | UX/UI Designer | ![Tasya]() |
+| DAMAR GALIH | Frontend Developer | ![Bella](Damar) |
+| TAUFIQ KURNIAWAN AKBAR | Frontend Developer | ![Taufiq]() |
+| HILHAM YULISTIO | Backend Developer | ![Ilham]() |
+| NAUFAL FAHMI KARTIKA | Backend Developer | ![Fahmi]() |
+| TIVANY AQLICIA | Data Science | ![Tivani]() |
+| ABDILLAAH | Data Science | ![Abdillah]() |
+| MUHAMMAD FADJAR YULIANTO | Quality Assurance | ![Fadjar]() |
 
 
 ## Prerequisites
