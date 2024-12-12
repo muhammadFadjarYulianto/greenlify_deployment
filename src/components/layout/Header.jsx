@@ -49,7 +49,13 @@ export default function Header() {
                 setUserEmail(admin.email);
                 setName(admin.name);
             } catch (error) {
-                console.error("Gagal mendapatkan data admin:", error.response || error.message);
+                console.log(error.message);
+                if (error.message.includes("Gagal mengambil data admin. Silakan coba lagi")) {
+                    setIsLoggedIn(false);
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    window.location.href = "/login";
+                }
             }
         }
 
@@ -192,7 +198,7 @@ export default function Header() {
                 <div className="flex items-center gap-4">
                     <div className="hidden md:flex gap-4 items-center">
                         <Button size="md" asChild className="shadow-md">
-                            <Link to="/klasifikasi">Klasifikasi</Link>
+                            <Link to="/prediksi">Klasifikasi</Link>
                         </Button>
                         <div ref={authButtonRef}>
                             {renderDesktopAuthButton()}

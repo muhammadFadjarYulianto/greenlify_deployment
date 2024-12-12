@@ -12,11 +12,9 @@ export async function getAdmin() {
         if (response.data && response.data.data) {
             return response.data.data;
         } else {
-            console.error("Data admin tidak ditemukan di respons API.");
             throw new Error("Data admin tidak ditemukan.");
         }
     } catch (error) {
-        console.error("Gagal mendapatkan data admin:", error.response || error.message);
         throw new Error("Gagal mengambil data admin. Silakan coba lagi.");
     }
 }
