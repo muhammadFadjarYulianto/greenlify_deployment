@@ -23,8 +23,8 @@ To set up this project in your local environment, follow these steps:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/damar-glh/trashure.git
-   cd trashure
+   https://github.com/damar-glh/greenlify.git
+   cd greenlify
    ```
 
 2. **Install Dependencies & Set Up Pre-commit Scripts**
