@@ -178,6 +178,8 @@ const TableRow = ({ label, value }) => (
 );
 
 const Prediction = () => {
+  const heroSectionRef = useRef(null);
+  const classtificationRef = useRef([]);
   const [imgPreview, setImgPreview] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);

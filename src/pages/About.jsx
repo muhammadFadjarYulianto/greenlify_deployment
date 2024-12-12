@@ -196,7 +196,8 @@ const About = () => {
                     effect="blur"
                 />
             </div>
-            <div className="w-full mt-[66px] flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
+            <div
+                className="w-full mt-[66px] flex flex-col lg:flex-row justify-around items-center px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
                 <div className="max-w-2x1 text-center lg:text-left">
                     <Typography variant="h1">Visi</Typography>
                 </div>
@@ -211,7 +212,8 @@ const About = () => {
                     </Typography>
                 </div>
             </div>
-            <div className="w-full flex flex-col-reverse lg:flex-row justify-around items-center mt-[33px] px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
+            <div
+                className="w-full flex flex-col-reverse lg:flex-row justify-around items-center mt-[33px] px-4 sm:px-8 md:px-[65px] gap-8 lg:gap-0 fade-in">
                 <div className="max-w-2xl text-justify lg:text-justify">
                     <Typography variant="p">
                         Meningkatkan kesadaran masyarakat tentang pentingnya pengelolaan
@@ -259,8 +261,10 @@ const About = () => {
                     </Typography>
                 </div>
                 <div className="w-full mt-[33px] flex justify-center team-members-section">
-                    <div ref={membersContainerRef}
-                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[33px] max-w-7xl">
+                    <div
+                        ref={membersContainerRef}
+                        className="flex flex-wrap justify-center gap-[33px] max-w-8xl"
+                    >
                         {window.innerWidth < 1024
                             ? teamMembers.map((member) => (
                                 <div
