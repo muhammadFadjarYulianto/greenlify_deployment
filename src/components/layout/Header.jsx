@@ -49,7 +49,13 @@ export default function Header() {
                 setUserEmail(admin.email);
                 setName(admin.name);
             } catch (error) {
-                console.error("Gagal mendapatkan data admin:", error.response || error.message);
+                console.log(error.message);
+                if (error.message.includes("Gagal mengambil data admin. Silakan coba lagi")) {
+                    setIsLoggedIn(false);
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
+                    window.location.href = "/login";
+                }
             }
         }
 
