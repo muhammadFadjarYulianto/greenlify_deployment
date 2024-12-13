@@ -113,7 +113,6 @@ export default function DashboardComment() {
             );
 
             const {comments, pagination} = await getCommentManagement(cleanFilters);
-            console.log("Fetched data:", {comments, pagination}); // Debug log
 
             setComments(comments);
             setTotalData(pagination.total_data);

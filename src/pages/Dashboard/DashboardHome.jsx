@@ -91,7 +91,6 @@ export default function DashboardHome() {
                 previous: response.previous,
             });
         } catch (error) {
-            console.error(error);
             toast({
                 title: "Gagal Memuat Riwayat",
                 description: "Terjadi kesalahan saat memuat riwayat.",
