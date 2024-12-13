@@ -244,12 +244,15 @@ def loginAdmin():
         access_token_expiry_time = datetime.utcnow() + expires
         # refresh_token_expiry_time = datetime.utcnow() + expires_refresh
 
+        access_token_expiry_time = datetime.utcnow() + expires
+        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
+
         return response.success({
             "data" : data,
             "access_token" : access_token,
             # "refresh_token" : refresh_token,
             "access_token_expiry_time": access_token_expiry_time.isoformat(),
-            # "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+            # "refresh_token_expiry_time": refresh_token_expiry_time.is
         })
     except Exception as e:
         print(e)
