@@ -12,7 +12,6 @@ export const getHistory = async (start, limit) => {
         });
         return response.data.data;
     } catch (error) {
-        console.error(error);
         throw error;
     }
 };

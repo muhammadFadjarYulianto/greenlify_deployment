@@ -27,7 +27,7 @@ export default class AuthServices {
             const formattedRememberMe = !!remember_me;
             const response = await axios.post(LOGIN, {email, password, remember_me: formattedRememberMe}, {
                 headers: {"Content-Type": "application/json"},
-                timeout: 8000,
+                timeout: 10000,
             });
 
             const {access_token, refresh_token} = response.data.data;
@@ -37,7 +37,6 @@ export default class AuthServices {
 
             return response.data;
         } catch (error) {
-            console.error("Login gagal:", error.response || error.message);
             throw new Error("Login gagal. Periksa kembali kredensial Anda.");
         }
     }

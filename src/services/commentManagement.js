@@ -26,10 +26,7 @@ export const getCommentManagement = async (filters) => {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-  
-      // Log response for debugging
-      console.log('API Response:', response.data);
-  
+
       // Return formatted data
       return {
         comments: response.data.data.results.map(comment => ({

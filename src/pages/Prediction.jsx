@@ -195,7 +195,7 @@ const Prediction = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
+      if (file.size > 10 * 1024 * 1024) {
         // Maksimal ukuran file 2MB
         setIsError(true);
         setImgPreview(null);

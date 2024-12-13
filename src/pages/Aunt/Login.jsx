@@ -29,7 +29,6 @@ export default function Login() {
             navigate("/dashboard");
         } catch (error) {
             setErrorMessage("Login gagal. Periksa email dan password Anda.");
-            console.error("Login Error:", error);
         } finally {
             setLoading(false);
         }
