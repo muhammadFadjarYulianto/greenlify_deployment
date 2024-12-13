@@ -379,7 +379,7 @@ const Prediction = () => {
 
         // Filter products based on the mapped category name
         const filteredProducts = products.filter((prod) =>
-            prod.category_name.toLocaleLowerCase() === categoryName.toLowerCase()
+            prod.category_name.toLocaleLowerCase() === categoryName
         );
 
         console.log("Filtered Products:", filteredProducts);
