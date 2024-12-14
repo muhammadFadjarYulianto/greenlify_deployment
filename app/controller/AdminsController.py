@@ -239,7 +239,7 @@ def loginAdmin():
         additional_claims = {'remember_me': remember_me}
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires, additional_claims=additional_claims)
-        # refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
+        #refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
 
         access_token_expiry_time = datetime.utcnow() + expires
         # refresh_token_expiry_time = datetime.utcnow() + expires_refresh
@@ -249,7 +249,7 @@ def loginAdmin():
             "access_token" : access_token,
             # "refresh_token" : refresh_token,
             "access_token_expiry_time": access_token_expiry_time.isoformat(),
-            # "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+            # "refresh_token_expiry_time": refresh_token_expiry_time.is
         })
     except Exception as e:
         print(e)
@@ -271,6 +271,15 @@ def loginAdmin():
 #         new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
 #         new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
 
+#         data = {
+#             "access_token": new_access_token,
+#             "refresh_token": new_refresh_token,
+#             "access_token_expiry_time": access_token_expiry_time.isoformat(),
+#             "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
+#         }
+#         return response.success(data)
+#     except Exception as e:
+#         return response.serverError([],"Gagal memperbarui token")
 #         data = {
 #             "access_token": new_access_token,
 #             "refresh_token": new_refresh_token,
@@ -315,7 +324,6 @@ def defaultAdmin():
             gender="Laki-Laki"
         )
 
-        # Set password dan simpan ke database
         admin.setPassword('14141414')
         db.session.add(admin)
         db.session.commit()
@@ -323,6 +331,6 @@ def defaultAdmin():
         return response.created([], "Akun admin default berhasil dibuat.")
 
     except Exception as e:
-        print(e)  # Untuk debugging di konsol
+        print(e)
         return response.serverError([], "Terjadi kesalahan saat membuat admin default.")
 
