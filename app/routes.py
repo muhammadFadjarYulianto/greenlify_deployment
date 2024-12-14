@@ -1,5 +1,5 @@
 from app import app, response
-from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController, PredictionController, HistoryController
+from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController, PredictionController, HistoryController, MemberController
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.controller.ProductsController import Products, format_array
@@ -11,11 +11,6 @@ def index():
 @app.route('/api/login', methods=['POST'])
 def loginAdmin():
     return AdminsController.loginAdmin()
-
-# @app.route('/api/refresh', methods=['POST'])
-# @jwt_required(refresh=True)
-# def refresh_token():
-#     return AdminsController.refreshToken()
 
 @app.route('/api/me', methods=['GET'])
 @jwt_required()
@@ -143,3 +138,19 @@ def get_all_history():
 @jwt_required()
 def delete_history(id):
     return HistoryController.delete_history(id)
+
+@app.route('/api/member', methods=['GET', 'POST'])
+def member():
+    if request.method == 'GET':
+        return MemberController.ambilMembers()
+    else:
+        return MemberController.tambahMember()
+    
+@app.route('/api/member/<id>', methods=['GET', 'PUT', 'DELETE'])
+def memberDetail(id):
+    if request.method == 'GET':
+        return MemberController.ambilMemberBerdasarkanId(id)
+    elif request.method == 'PUT':
+        return MemberController.memperbaruiMember(id)
+    elif request.method == 'DELETE':
+        return MemberController.hapusMember(id)
