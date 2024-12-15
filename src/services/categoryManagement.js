@@ -6,7 +6,7 @@ export async function getCategoriesManagement() {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.get(CATEGORIES_MANAGEMENT_ENDPOINT, {
@@ -19,11 +19,11 @@ export async function getCategoriesManagement() {
             return response.data.data;
         } else {
             console.error("Data kategori tidak ditemukan di respons API.");
-            throw new Error("Data kategori tidak ditemukan.");
+            return ("Data kategori tidak ditemukan.");
         }
     } catch (error) {
         console.error("Gagal mendapatkan data kategori:", error.response || error.message);
-        throw new Error("Gagal mengambil data kategori. Silakan coba lagi.");
+        return ("Gagal mengambil data kategori. Silakan coba lagi.");
     }
 }
 
@@ -32,7 +32,7 @@ export async function addCategory(categoryData) {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.post(CATEGORIES_MANAGEMENT_ENDPOINT, categoryData, {
@@ -45,7 +45,7 @@ export async function addCategory(categoryData) {
         return response.data;
     } catch (error) {
         console.error("Gagal menambahkan kategori:", error.response || error.message);
-        throw new Error("Gagal menambahkan kategori. Silakan coba lagi.");
+        return ("Gagal menambahkan kategori. Silakan coba lagi.");
     }
 }
 
@@ -54,7 +54,7 @@ export async function updateCategory(categoryId, categoryData) {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.put(`${CATEGORIES_MANAGEMENT_ENDPOINT}/${categoryId}`, categoryData, {
@@ -67,7 +67,7 @@ export async function updateCategory(categoryId, categoryData) {
         return response.data;
     } catch (error) {
         console.error("Gagal memperbarui kategori:", error.response || error.message);
-        throw new Error("Gagal memperbarui kategori. Silakan coba lagi.");
+        return ("Gagal memperbarui kategori. Silakan coba lagi.");
     }
 }
 
@@ -76,7 +76,7 @@ export async function deleteCategory(categoryId) {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.delete(`${CATEGORIES_MANAGEMENT_ENDPOINT}/${categoryId}`, {
@@ -88,6 +88,6 @@ export async function deleteCategory(categoryId) {
         return response.data;
     } catch (error) {
         console.error("Gagal menghapus kategori:", error.response || error.message);
-        throw new Error("Gagal menghapus kategori. Silakan coba lagi.");
+        return ("Gagal menghapus kategori. Silakan coba lagi.");
     }
 }

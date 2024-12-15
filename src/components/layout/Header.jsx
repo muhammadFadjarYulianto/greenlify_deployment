@@ -38,6 +38,7 @@ export default function Header() {
         {label: "Prediksi", path: "prediksi"},
         {label: "Produk", path: "produk"},
         {label: "Blog", path: "blog"},
+        {label: "Partisipasi", path: "anggotakami"},
         {label: "Tentang Kami", path: "tentangkami"},
     ];
 
@@ -61,7 +62,7 @@ export default function Header() {
 
         if (accessToken) {
             setIsLoggedIn(true);
-            fetchAdmin();
+            fetchAdmin().catch(error => console.error(error));
         }
 
         gsap.fromTo(

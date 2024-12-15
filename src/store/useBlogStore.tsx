@@ -6,7 +6,7 @@ export const useBlogStore = create((set) => ({
     comments: [],
     next: null,
     previous: null,
-    total_approved: 0,
+    total_data: 0,
     per_page: 4,
     loading: false,
     error: null,
@@ -21,7 +21,7 @@ export const useBlogStore = create((set) => ({
                 comments: response.pagination_comment.results,
                 next: response.pagination_comment.next,
                 previous: response.pagination_comment.previous,
-                total_approved: response.pagination_comment.total_approved,
+                total_data: response.pagination_comment.total_data,
                 per_page: response.pagination_comment.per_page,
                 loading: false,
             });

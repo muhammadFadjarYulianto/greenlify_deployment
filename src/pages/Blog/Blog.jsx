@@ -13,12 +13,14 @@ import {
 } from "@/components/ui/pagination";
 import {LatestBlogSkeleton} from "@/components/Blog/LatestBlogSkeleton";
 import BlogCardSkeletonList from "@/components/Blog/BlogCardSkeletonList";
+import useDateStore from "@/store/useDateStore";
 import {gsap} from "gsap";
 
 const Blog = () => {
     const articlesContainerRef = useRef(null);
     const noArticlesRef = useRef(null);
     const searchParams = new URLSearchParams(window.location.search);
+    const {formatDate} = useDateStore();
     const [latestArticle, setLatestArticle] = useState([]);
     const [articles, setArticles] = useState([]);
     const [searchQuery, setSearchQuery] = useState(searchParams.get("keyword") || "");
@@ -61,7 +63,7 @@ const Blog = () => {
                 setIsLoading(false);
             }
         };
-        fetchBlogs();
+        fetchBlogs().catch(console.error);
     }, [searchQuery, currentPage]);
 
     useEffect(() => {
@@ -147,17 +149,6 @@ const Blog = () => {
         window.history.pushState(null, "", newURL.toString());
     };
 
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        const day = days[date.getDay()];
-        const dateNum = date.getDate();
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-        return `${day}, ${dateNum} ${month} ${year}`;
-    };
-
     const renderLatestArticle = () => {
         if (error === 'ERR_CONNECTION_REFUSED') {
             return (
@@ -187,7 +178,7 @@ const Blog = () => {
                             <div
                                 className="flex flex-col md:flex-row items-start md:items-center mt-4 gap-2 md:gap-5">
                                 <Typography variant="p-semibold"
-                                            className="text-background">{latestArticle.author}</Typography>
+                                            className="text-background">{latestArticle.created_by}</Typography>
                                 <strong className="hidden md:block">●</strong>
                                 <Typography variant="p-semibold"
                                             className="text-background">
@@ -249,7 +240,7 @@ const Blog = () => {
                 <Link to={`/blog/${article.id}`}>
                     <BlogCard
                         key={article.id}
-                        author={article.author}
+                        created_by={article.created_by}
                         content={article.content}
                         created_at={article.created_at}
                         img_file={article.img_file}

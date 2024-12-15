@@ -12,7 +12,7 @@ export async function getAdmin() {
         if (response.data && response.data.data) {
             return response.data.data;
         } else {
-            throw new Error("Data admin tidak ditemukan.");
+            return null;
         }
     } catch (error) {
         throw new Error("Gagal mengambil data admin. Silakan coba lagi.");

@@ -50,7 +50,7 @@ export async function getDetailsCommentManagement(commentId) {
       const token = localStorage.getItem("access_token");
       
       if (!token) {
-        throw new Error("Token not found");
+        return ("Token not found");
       }
   
       const response = await axios.get(`${COMMENT_MANAGEMENT_ENDPOINT}/${commentId}`, {

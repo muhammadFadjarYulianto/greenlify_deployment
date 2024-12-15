@@ -78,7 +78,7 @@ export default function Products() {
             }
         }
 
-        fetchProducts();
+        fetchProducts().catch(console.error);
     }, [searchQuery, selectedCategory, selectedPriceRange, currentPage, pagination.per_page]);
 
     useEffect(() => {

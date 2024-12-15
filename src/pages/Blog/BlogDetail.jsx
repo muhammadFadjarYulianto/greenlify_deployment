@@ -17,31 +17,11 @@ import { useBlogStore } from "@/store/useBlogStore";
 import { Plus } from "lucide-react";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const months = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ];
-  return `${days[date.getDay()]}, ${date.getDate()} ${
-    months[date.getMonth()]
-  } ${date.getFullYear()}`;
-};
+import useDateStore from "@/store/useDateStore";
 
 const BlogDetail = () => {
   const { id } = useParams();
+  const { formatDate } = useDateStore();
   const {
     article,
     comments,
@@ -49,17 +29,17 @@ const BlogDetail = () => {
     addComment,
     next,
     previous,
-    total_approved,
+    total_data,
     per_page,
     error,
   } = useBlogStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(total_approved / per_page);
+  const totalPages = Math.ceil(total_data / per_page);
 
   useEffect(() => {
-    fetchArticle(id, currentPage, per_page);
+    fetchArticle(id, currentPage, per_page).catch(console.error);
   }, [currentPage, fetchArticle, id, per_page]);
 
   const handleAddComment = (newComment) => {
@@ -104,7 +84,7 @@ const BlogDetail = () => {
         <div className="w-full flex flex-col items-center space-y-6 md:space-y-8">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Badge className="h-6 bg-emerald-600 text-background text-sm sm:text-base font-semibold px-2 py-1 rounded-md shadow-md">
-              {article.author}
+              {article.created_by}
             </Badge>
             <Typography
               variant="p-semibold"
@@ -145,7 +125,7 @@ const BlogDetail = () => {
       <section className="w-full px-4 sm:px-6 lg:px-8 flex flex-col space-y-6 md:space-y-8 mt-[33px]">
         <div className="flex justify-between w-full max-w-7xl mx-auto">
           <Typography variant="h3" className="text-left text-2xl md:text-3xl">
-            Komentar ({total_approved})
+            Komentar ({total_data})
           </Typography>
           <Button
             variant="primary"
@@ -174,7 +154,7 @@ const BlogDetail = () => {
                   email={comment.email}
                 />
               ))}
-              {total_approved > per_page && (
+              {total_data > per_page && (
                 <Pagination className="gap-5 flex flex-wrap justify-center">
                   <PaginationPrevious
                     className="cursor-pointer"

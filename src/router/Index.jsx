@@ -8,10 +8,11 @@ const Home = lazy(() => import("@/pages/Home"));
 const Statistic = lazy(() => import("@/pages/Statistic"));
 const Blog = lazy(() => import("@/pages/Blog/Blog"));
 const BlogDetail = lazy(() => import("@/pages/Blog/BlogDetail"));
-const Prediction = lazy(() => import("@/pages/Prediction"));
+const Stepper = lazy(() => import("@/pages/Prediksi/Stepper"));
 const Products = lazy(() => import("@/pages/Produk/Products"));
 const ProductDetails = lazy(() => import("@/pages/Produk/ProductDetails"));
 const About = lazy(() => import("@/pages/About"));
+const Members = lazy(() => import("@/pages/Members"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const TermsConditions = lazy(() => import("@/pages/TermConditions"));
 const Errors = lazy(() => import("@/pages/Errors"));
@@ -20,7 +21,8 @@ const DashboardHome = lazy(() => import("@/pages/Dashboard/DashboardHome"));
 const DashboardCategory = lazy(() => import("@/pages/Dashboard/DashboardCategory"));
 const DashboardProduct = lazy(() => import("@/pages/Dashboard/DashboardProduct"));
 const DashboardBlog = lazy(() => import("@/pages/Dashboard/DashboardBlog"));
-const DashboardComment = lazy(() => import("@/pages/Dashboard/DashboardComment"));
+// const DashboardComment = lazy(() => import("@/pages/Dashboard/DashboardComment"));
+const DashboardMembers = lazy(() => import("@/pages/Dashboard/DashboardKeanggotaan"));
 
 
 export default function Index() {
@@ -32,19 +34,21 @@ export default function Index() {
                 <Route path="/blog" element={lazyWrap(Blog)()}/>
                 <Route path="/blog/:id" element={lazyWrap(BlogDetail)()}/>
                 <Route path="/statistik" element={lazyWrap(Statistic)()}/>
-                <Route path="/prediksi" element={lazyWrap(Prediction)()}/>
+                <Route path="/prediksi" element={lazyWrap(Stepper)()}/>
                 <Route path="/produk" element={lazyWrap(Products)()}/>
                 <Route path="/produk/:id" element={lazyWrap(ProductDetails)()}/>
                 <Route path="/tentangkami" element={lazyWrap(About)()}/>
+                <Route path="/anggotakami" element={lazyWrap(Members)()}/>
                 <Route path="/privacy+policy" element={lazyWrap(PrivacyPolicy)()}/>
                 <Route path="/terms+conditions" element={lazyWrap(TermsConditions)()}/>
             </Route>
             <Route path="/dashboard" element={<LayoutSidebarDashboard/>}>
                 <Route path="/dashboard" element={lazyWrap(DashboardHome)()}/>
                 <Route path="/dashboard/category" element={lazyWrap(DashboardCategory)()}/>
+                <Route path="/dashboard/member" element={lazyWrap(DashboardMembers)()}/>
                 <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()}/>
                 <Route path="/dashboard/blog" element={lazyWrap(DashboardBlog)()}/>
-                <Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>
+                {/*<Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>*/}
             </Route>
             <Route path="/login" element={lazyWrap(Login)()}/>
             <Route path={"*"} element={lazyWrap(Errors)()}/>

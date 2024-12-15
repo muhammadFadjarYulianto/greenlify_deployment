@@ -1,5 +1,5 @@
 import axios from "axios";
-import {BLOG_ENDPOINT, BLOG_MANAGEMENT_ENDPOINT} from "@/constants/routesAPI";
+import { BLOG_MANAGEMENT_ENDPOINT} from "@/constants/routesAPI";
 import {getAdmin} from "@/services/admin.js";
 
 export const getBlogManagement = async (filters) => {

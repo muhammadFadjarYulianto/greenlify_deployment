@@ -1,7 +1,5 @@
 import * as React from "react";
 import {
-	Bot,
-	Settings2,
 	LayoutDashboardIcon,
 	StoreIcon,
 	TableOfContents,
@@ -37,6 +35,11 @@ const data = {
 			isActive: true,
 		},
 		{
+			title: "Manajemen Anggota",
+			url: "/dashboard/member",
+			icon: Tags,
+		},		
+		{
 			title: "Manajemen Category",
 			url: "/dashboard/category",
 			icon: Tags,
@@ -47,19 +50,19 @@ const data = {
 			icon: StoreIcon,
 		},
 		{
-			title: "Manajemen Konten",
+			title: "Manajemen Blog",
 			url: "/dashboard/blog",
 			icon: TableOfContents,
-			items: [
-				{
-					title: "Manajemen Blog",
-					url: "/dashboard/blog",
-				},
-				{
-					title: "Manajemen Komentar",
-					url: "/dashboard/comment",
-				},
-			],
+			// items: [
+			// 	{
+			// 		title: "Manajemen Blog",
+			// 		url: "/dashboard/blog",
+			// 	},
+			// 	{
+			// 		title: "Manajemen Komentar",
+			// 		url: "/dashboard/comment",
+			// 	},
+			// ],
 		},
 	],
 };
