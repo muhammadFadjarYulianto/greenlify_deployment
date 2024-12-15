@@ -21,6 +21,7 @@ const DashboardCategory = lazy(() => import("@/pages/Dashboard/DashboardCategory
 const DashboardProduct = lazy(() => import("@/pages/Dashboard/DashboardProduct"));
 const DashboardBlog = lazy(() => import("@/pages/Dashboard/DashboardBlog"));
 const DashboardComment = lazy(() => import("@/pages/Dashboard/DashboardComment"));
+const DashboardMembers = lazy(() => import("@/pages/Dashboard/DashboardKeanggotaan"));
 
 
 export default function Index() {
@@ -42,6 +43,7 @@ export default function Index() {
             <Route path="/dashboard" element={<LayoutSidebarDashboard/>}>
                 <Route path="/dashboard" element={lazyWrap(DashboardHome)()}/>
                 <Route path="/dashboard/category" element={lazyWrap(DashboardCategory)()}/>
+                <Route path="/dashboard/member" element={lazyWrap(DashboardMembers)()}/>
                 <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()}/>
                 <Route path="/dashboard/blog" element={lazyWrap(DashboardBlog)()}/>
                 <Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>

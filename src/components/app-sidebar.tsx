@@ -37,6 +37,11 @@ const data = {
 			isActive: true,
 		},
 		{
+			title: "Manajemen Keanggotaan",
+			url: "/dashboard/member",
+			icon: Tags,
+		},		
+		{
 			title: "Manajemen Category",
 			url: "/dashboard/category",
 			icon: Tags,
