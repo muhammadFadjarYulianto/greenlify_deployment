@@ -49,14 +49,14 @@ const BlogDetail = () => {
     addComment,
     next,
     previous,
-    total_approved,
+    total_data,
     per_page,
     error,
   } = useBlogStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(total_approved / per_page);
+  const totalPages = Math.ceil(total_data / per_page);
 
   useEffect(() => {
     fetchArticle(id, currentPage, per_page);
@@ -145,7 +145,7 @@ const BlogDetail = () => {
       <section className="w-full px-4 sm:px-6 lg:px-8 flex flex-col space-y-6 md:space-y-8 mt-[33px]">
         <div className="flex justify-between w-full max-w-7xl mx-auto">
           <Typography variant="h3" className="text-left text-2xl md:text-3xl">
-            Komentar ({total_approved})
+            Komentar ({total_data})
           </Typography>
           <Button
             variant="primary"
@@ -174,7 +174,7 @@ const BlogDetail = () => {
                   email={comment.email}
                 />
               ))}
-              {total_approved > per_page && (
+              {total_data > per_page && (
                 <Pagination className="gap-5 flex flex-wrap justify-center">
                   <PaginationPrevious
                     className="cursor-pointer"

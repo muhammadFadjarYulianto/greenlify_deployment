@@ -77,7 +77,7 @@ export default function Members() {
                 <div className="w-full max-w-6xl overflow-x-auto">
                     <Table className="mx-4 md:mx-0">
                         <TableHeader>
-                            <TableRow className="bg-emerald-600 text-white">
+                            <TableRow className="bg-emerald-700 text-white">
                                 <TableHead className="text-center">No</TableHead>
                                 <TableHead className="text-center">RT/RW</TableHead>
                                 <TableHead className="text-center">Desa</TableHead>

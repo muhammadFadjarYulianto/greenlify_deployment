@@ -20,6 +20,8 @@ const CommentDialog = ({isOpen, onOpenChange, articleId}) => {
             email: formData.get('email'),
             comment: formData.get('comment')
         };
+        console.log(comment);
+
         try {
             const response = await addComment(articleId, comment);
             if (response && response.status === 'success') {
