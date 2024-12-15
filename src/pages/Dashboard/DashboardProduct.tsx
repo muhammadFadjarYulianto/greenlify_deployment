@@ -109,12 +109,12 @@ export default function DashboardProduct() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-    const [currentPage, setCurrentPage] = useState(1);
+    // const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [itemsPerPage] = useState(5);
-    const [selectedPriceRange, setSelectedPriceRange] = useState(
-        "Pilih Rentang Harga"
-    );
+    // const [itemsPerPage] = useState(5);
+    // const [selectedPriceRange, setSelectedPriceRange] = useState(
+    //     "Pilih Rentang Harga"
+    // );
     const DEFAULT_PRICE_RANGE = "Pilih Rentang Harga";
     const [selectedPriceValue, setSelectedPriceValue] = useState<string>("");
 
@@ -148,7 +148,7 @@ export default function DashboardProduct() {
             setProducts(products);
             setTotalData(pagination.total_data);
             setTotalPages(Math.ceil(pagination.total_data / filters.limit));
-            setCurrentPage(filters.page);
+            // setCurrentPage(filters.page);
             setError(null);
         } catch (err) {
             const errorMessage =
@@ -186,7 +186,7 @@ export default function DashboardProduct() {
             page: 1,
             limit: 5,
         });
-        setSelectedPriceRange(DEFAULT_PRICE_RANGE);
+        // setSelectedPriceRange(DEFAULT_PRICE_RANGE);
         setSelectedPriceValue("");
     };
 
@@ -508,7 +508,7 @@ export default function DashboardProduct() {
                                     if (selectedRange) {
                                         handleFilterChange("min_price", selectedRange.min);
                                         handleFilterChange("max_price", selectedRange.max);
-                                        setSelectedPriceRange(selectedRange.label);
+                                        // setSelectedPriceRange(selectedRange.label);
                                     }
                                 }}
                             >

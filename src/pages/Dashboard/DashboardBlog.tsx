@@ -87,7 +87,6 @@ export default function DashboardBlog() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [currentBlog, setCurrentBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
@@ -116,7 +115,6 @@ export default function DashboardBlog() {
       setBlogs(blogs);
       setTotalData(pagination.total_data);
       setTotalPages(Math.ceil(pagination.total_data / filters.limit));
-      setCurrentPage(filters.page);
       setError(null);
     } catch (err) {
       const errorMessage = err instanceof Error ? "Blog tidak ditemukan saat ini" : "Gagal mengambil blog";
@@ -225,8 +223,6 @@ export default function DashboardBlog() {
     try {
       await deleteBlogManagement(blogId);
       setIsDeleteModalOpen(false);
-      const newTotalData = totalData - 1;
-      const newTotalPages = Math.ceil(newTotalData / filters.limit);
       fetchBlogs();
       toast({
         title: "Blog Berhasil Dihapus",
@@ -641,22 +637,6 @@ export default function DashboardBlog() {
                       defaultValue={currentBlog?.title}
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
                       placeholder="Masukkan judul blog"
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label
-                      htmlFor="author"
-                      className="text-[16px] font-bold text-emerald-600"
-                    >
-                      Author
-                    </Label>
-                    <Input
-                      id="author"
-                      name="author"
-                      defaultValue={currentBlog?.author}
-                      className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
-                      placeholder="Masukkan nama author"
                       required
                     />
                   </div>

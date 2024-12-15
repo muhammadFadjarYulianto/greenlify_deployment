@@ -47,7 +47,6 @@ import useDateStore from "@/store/useDateStore";
 
 export default function DashboardMembership() {
   const [members, setMembers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -57,7 +56,6 @@ export default function DashboardMembership() {
 
   const fetchMembers = async () => {
     try {
-      setIsLoading(true);
       const fetchedMembers = await getMembersManagement();
       setMembers(fetchedMembers);
     } catch (error) {
@@ -67,7 +65,9 @@ export default function DashboardMembership() {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+        setIsAddModalOpen(false);
+        setIsEditModalOpen(false);
+        setIsDeleteModalOpen(false);
     }
   };
 

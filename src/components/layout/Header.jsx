@@ -62,7 +62,7 @@ export default function Header() {
 
         if (accessToken) {
             setIsLoggedIn(true);
-            fetchAdmin();
+            fetchAdmin().catch(error => console.error(error));
         }
 
         gsap.fromTo(

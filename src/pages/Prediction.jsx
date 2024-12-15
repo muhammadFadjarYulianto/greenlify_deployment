@@ -27,7 +27,6 @@ import CloseIcon from "../assets/images/x-square.svg";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
 import {uploadImage} from "@/services/uploadService"; // Mengimpor service upload
 import Loading from "../components/loading";
-import {getProducts} from "@/services/product";
 
 const CardSampah = [
     {
@@ -179,7 +178,7 @@ const TableRow = ({label, value}) => (
 const Prediction = () => {
     const heroSectionRef = useRef(null);
     const classtificationRef = useRef([]);
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
     const [imgPreview, setImgPreview] = useState(null);
     const [imgSrc, setImgSrc] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -344,20 +343,20 @@ const Prediction = () => {
         });
     });
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const name = predictionResult?.prediction;
-                const data = await getProducts(name ? {category_name: name} : {});
-                // Log full product data to inspect structure
-                setProducts(data.products);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        };
-
-        fetchProducts();
-    }, []);
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         try {
+    //             const name = predictionResult?.prediction;
+    //             const data = await getProducts(name ? {category_name: name} : {});
+    //             // Log full product data to inspect structure
+    //             setProducts(data.products);
+    //         } catch (error) {
+    //             console.error("Error fetching products:", error);
+    //         }
+    //     };
+    //
+    //     fetchProducts();
+    // }, []);
 
 
     // Fungsi untuk mendapatkan gambar berdasarkan kategori dari produk
@@ -635,7 +634,7 @@ const Prediction = () => {
                                                         {predictionResult.prediction}{" "}
                                                     </Typography>
                                                     <div>
-                                                        <table class="w-full text-sm text-left text-emerald-600">
+                                                        <table className="w-full text-sm text-left text-emerald-600">
                                                             <tbody className="py-4">
                                                             {dataTabel.map((row, index) => (
                                                                 <TableRow
