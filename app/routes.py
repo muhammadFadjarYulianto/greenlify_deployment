@@ -137,20 +137,18 @@ def get_all_history():
 @app.route('/api/history/<id>', methods=['DELETE'])
 @jwt_required()
 def delete_history(id):
-    return HistoryController.delete_history(id)
+    return HistoryController.hapusHistory(id)
 
 @app.route('/api/member', methods=['GET', 'POST'])
 def member():
     if request.method == 'GET':
-        return MemberController.ambilMembers()
+        return MemberController.indexMember()
     else:
         return MemberController.tambahMember()
     
-@app.route('/api/member/<id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/member/<id>', methods=['PUT', 'DELETE'])
 def memberDetail(id):
-    if request.method == 'GET':
-        return MemberController.ambilMemberBerdasarkanId(id)
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         return MemberController.memperbaruiMember(id)
-    elif request.method == 'DELETE':
+    else:
         return MemberController.hapusMember(id)

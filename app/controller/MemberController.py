@@ -5,78 +5,104 @@ from app.model.member import Member
 
 def tambahMember():
     try:
-        if request.is_json:
-            data = request.get_json()
-        else:
-            data = request.form
-        
-        nama_wilayah = data.get('nama_wilayah')
+        desa = request.form.get('desa') or request.json.get('desa')
+        rw = request.form.get('rw') or request.json.get('rw')
+        rt = request.form.get('rt') or request.json.get('rt')
 
-        if not nama_wilayah:
-            return response.badRequest([], "Kolom nama_wilayah wajib diisi.")
+        if not desa:
+            return response.badRequest([], "Kolom desa wajib diisi.")
+        if len(desa) < 3 or len(desa) > 100:
+            return response.badRequest([], "Nama desa harus antara 3 hingga 100 karakter.")
 
-        if len(nama_wilayah) < 3 or len(nama_wilayah) > 100:
-            return response.badRequest([], "Nama wilayah harus antara 3 hingga 100 karakter.")
+        if not rw:
+            return response.badRequest([], "Kolom rw wajib diisi.")
+        try:
+            rw = int(rw)
+            if rw <= 0:
+                return response.badRequest([], "Kolom rw harus berupa angka positif.")
+        except ValueError:
+            return response.badRequest([], "Kolom rw harus berupa angka.")
 
-        newMember = Member(
-            nama_wilayah=nama_wilayah
+        if not rt:
+            return response.badRequest([], "Kolom rt wajib diisi.")
+        try:
+            rt = int(rt)
+            if rt <= 0:
+                return response.badRequest([], "Kolom rt harus berupa angka positif.")
+        except ValueError:
+            return response.badRequest([], "Kolom rt harus berupa angka.")
+
+        memberBaru = Member(
+            desa=desa,
+            rw=rw,
+            rt=rt
         )
-        db.session.add(newMember)
+        db.session.add(memberBaru)
         db.session.commit()
-        return response.created({'id': newMember.id}, 'Member berhasil dibuat!')
+        return response.created([], 'Member berhasil dibuat!')
     except Exception as e:
-        return response.badRequest([], f"Gagal membuat member: {str(e)}")
+        print(e)
+        return response.serverError([], "Gagal membuat member")
 
+def formatArray(members):
+    return [satuMember(member) for member in members]
 
-def ambilMembers():
+def satuMember(member):
+    return {
+        'id': member.id,
+        'desa': member.desa,
+        'rw': member.rw,
+        'rt': member.rt,
+        'created_at': member.created_at,
+        'updated_at': member.updated_at
+    }
+
+def indexMember():
     try:
         members = Member.query.all()
-        memberList = [
-            {
-                'id': member.id,
-                'nama_wilayah': member.nama_wilayah,
-                'waktu_bergabung': member.waktu_bergabung,
-                'updated_at': member.updated_at
-            }
-            for member in members
-        ]
-        return response.success({'members': memberList})
+        data = formatArray(members)
+        return response.success(data)
     except Exception as e:
-        return response.badRequest([], f"Gagal mengambil data member: {str(e)}")
-
-
-def ambilMemberBerdasarkanId(id):
-    try:
-        member = Member.query.get(id)
-        if not member:
-            return response.notFound([], "Member tidak ditemukan")
-        
-        memberData = {
-            'id': member.id,
-            'nama_wilayah': member.nama_wilayah,
-            'waktu_bergabung': member.waktu_bergabung,
-            'updated_at': member.updated_at
-        }
-        return response.success({'member': memberData})
-    except Exception as e:
-        return response.badRequest([], f"Gagal mengambil data member: {str(e)}")
-
+        print(e)
+        return response.serverError([], "Gagal mengambil data member")
 
 def memperbaruiMember(id):
-    data = request.get_json() if request.is_json else request.form
+    desa = request.form.get('desa') or request.json.get('desa')
+    rw = request.form.get('rw') or request.json.get('rw')
+    rt = request.form.get('rt') or request.json.get('rt')
     try:
         member = Member.query.get(id)
         if not member:
             return response.notFound([], "Member tidak ditemukan")
 
-        member.nama_wilayah = data.get('nama_wilayah', member.nama_wilayah)
-        
+        if desa:
+            if len(desa) < 3 or len(desa) > 100:
+                return response.badRequest([], "Nama desa harus antara 3 hingga 100 karakter.")
+            member.desa = desa
+
+        if rw:
+            try:
+                rw = int(rw)
+                if rw <= 0:
+                    return response.badRequest([], "Kolom rw harus berupa angka positif.")
+                member.rw = rw
+            except ValueError:
+                return response.badRequest([], "Kolom rw harus berupa angka.")
+
+        if rt:
+            try:
+                rt = int(rt)
+                if rt <= 0:
+                    return response.badRequest([], "Kolom rt harus berupa angka positif.")
+                member.rt = rt
+            except ValueError:
+                return response.badRequest([], "Kolom rt harus berupa angka.")
+
         db.session.commit()
-
-        return response.success({'id': member.id, 'message': 'Member berhasil diperbarui!'})
+        return response.success('Member berhasil diperbarui!')
     except Exception as e:
-        return response.badRequest([], f"Gagal memperbarui member: {str(e)}")
-
+        print(e)
+        return response.serverError([], "Gagal memperbarui member")
 
 def hapusMember(id):
     try:
@@ -87,7 +113,7 @@ def hapusMember(id):
         db.session.delete(member)
         db.session.commit()
 
-        return response.success({'id': member.id, 'message': 'Member berhasil dihapus!'})
+        return response.success('Member berhasil dihapus!')
     except Exception as e:
-        return response.badRequest([], f"Gagal menghapus member: {str(e)}")
-
+        print(e)
+        return response.serverError([], "Gagal menghapus member")

@@ -6,26 +6,7 @@ from sqlalchemy import func
 import os
 
 
-def get_history():
-    try:
-        histories = History.query.all()
-        
-        result = [
-            {
-                "id": history.id,
-                "timestamp": history.timestamp,
-                "waste_type": history.waste_type,
-                "accuracy": float(history.accuracy)
-            } for history in histories
-        ]
-        
-        return jsonify(result)
-    except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal mengambil data riwayat")
-
-
-def delete_history(id):
+def hapusHistory(id):
     try:
         history = History.query.get_or_404(id)
         
