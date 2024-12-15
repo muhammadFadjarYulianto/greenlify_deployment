@@ -8,7 +8,7 @@ const Home = lazy(() => import("@/pages/Home"));
 const Statistic = lazy(() => import("@/pages/Statistic"));
 const Blog = lazy(() => import("@/pages/Blog/Blog"));
 const BlogDetail = lazy(() => import("@/pages/Blog/BlogDetail"));
-const Prediction = lazy(() => import("@/pages/Prediction"));
+const Stepper = lazy(() => import("@/pages/Prediksi/Stepper"));
 const Products = lazy(() => import("@/pages/Produk/Products"));
 const ProductDetails = lazy(() => import("@/pages/Produk/ProductDetails"));
 const About = lazy(() => import("@/pages/About"));
@@ -32,7 +32,7 @@ export default function Index() {
                 <Route path="/blog" element={lazyWrap(Blog)()}/>
                 <Route path="/blog/:id" element={lazyWrap(BlogDetail)()}/>
                 <Route path="/statistik" element={lazyWrap(Statistic)()}/>
-                <Route path="/prediksi" element={lazyWrap(Prediction)()}/>
+                <Route path="/prediksi" element={lazyWrap(Stepper)()}/>
                 <Route path="/produk" element={lazyWrap(Products)()}/>
                 <Route path="/produk/:id" element={lazyWrap(ProductDetails)()}/>
                 <Route path="/tentangkami" element={lazyWrap(About)()}/>

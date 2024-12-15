@@ -1,73 +1,19 @@
-import React, {useState, useRef, useCallback, useEffect} from "react";
-import UploadIcon from "../assets/images/upload-cloud.svg";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import UploadIcon from "../../assets/images/upload-cloud.svg";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import { Typography } from "@/components/ui/Typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-	AlertDialog,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {gsap} from "gsap";
-gsap.registerPlugin(ScrollTrigger);
-import Kaca from "../assets/images/kaca.png";
-import Kardus from "../assets/images/kardus.png";
-import Kertas from "../assets/images/kertas.png";
-import Metal from "../assets/images/metal.png";
-import Organik from "../assets/images/organik.png";
-import Plastik from "../assets/images/plastik.png";
-import CloseIcon from "../assets/images/x-square.svg";
-import Craft from "../assets/images/craft.png";
-import {ScrollTrigger} from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Sesuaikan dengan library UI yang Anda gunakan
 import { uploadImage } from "@/services/uploadService"; // Mengimpor service upload
-import Loading from "../components/loading";
+import Loading from "../../components/loading";
 
-const CardSampah = [
-  {
-    id: 1,
-    img: Kardus,
-    heading: "Kardus atau Cardboard",
-    subHeading: "Kertas dengan bahan tebal",
-  },
-  {
-    id: 2,
-    img: Kaca,
-    heading: "Kaca",
-    subHeading: "Sampah berbahan dasar kaca",
-  },
-  {
-    id: 3,
-    img: Metal,
-    heading: "Metal",
-    subHeading: "Sampah berbahan metal seperti kaleng",
-  },
-  {
-    id: 4,
-    img: Kertas,
-    heading: "Kertas",
-    subHeading: "Majalah, koran bekas, kertas bekas",
-  },
-  {
-    id: 5,
-    img: Plastik,
-    heading: "Plastik",
-    subHeading: "Sampah berbahan dasar plastik",
-  },
-  {
-    id: 6,
-    img: Organik,
-    heading: "Organik",
-    subHeading: "Sisa-sisa makanan, sampah dapur",
-  },
-];
+import { gsap } from "gsap";
+gsap.registerPlugin(ScrollTrigger);
 
 const CaraPengolahan = {
   organic: [
@@ -159,27 +105,27 @@ const InformasiLengkap = {
 // Komponen untuk setiap baris tabel
 const TableRow = ({ label, value }) => (
   <tr>
-    <td className="px-2 py-1">
-      <Typography variant="p-regular" className="font-bold text-emerald-600">
+    <td className="p-2">
+      <Typography variant="large" className="font-bold text-emerald-600">
         {label}
       </Typography>
     </td>
-    <td className="px-2 py-1">
-      <Typography variant="p-regular" className="font-bold text-emerald-600">
+    <td className="p-2">
+      <Typography variant="large" className="font-bold text-emerald-600">
         :
       </Typography>
     </td>
-    <td className="px-2 py-1">
-      <Typography variant="small" className="text-emerald-600">
+    <td className="p-2">
+      <Typography variant="large" className="text-emerald-600">
         {value}
       </Typography>
     </td>
   </tr>
 );
 
-const Prediction = () => {
-  const heroSectionRef = useRef(null);
-  const classtificationRef = useRef([]);
+const PredictionSection = ({ onPredictionComplete }) => {
+  //   const heroSectionRef = useRef(null);
+  //   const classtificationRef = useRef([]);
   const [imgPreview, setImgPreview] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -188,7 +134,7 @@ const Prediction = () => {
   const [isNullImg, setIsNullImg] = useState(false);
   const [isPrediction, setIsPrediction] = useState(false);
   const [predictionResult, setPredictionResult] = useState(null);
-  const [isFileInput, setIsFileInput] = useState(false); // Menandakan jenis input yang dipilih
+  const [isFileInput, setIsFileInput] = useState(false);
   const webcamRef = useRef(null);
 
   // Fungsi untuk menangani perubahan file gambar
@@ -207,7 +153,9 @@ const Prediction = () => {
         setImgPreview(reader.result);
       };
       reader.readAsDataURL(file);
-      setIsFileInput(true); // Menandakan input dari file
+      setIsFileInput(true);
+      setIsNullImg(false);
+      setIsError(false);
     }
   };
 
@@ -216,7 +164,7 @@ const Prediction = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     if (typeof imageSrc === "string") {
       setImgSrc(imageSrc);
-      setIsFileInput(false); // Menandakan input dari kamera
+      setIsFileInput(false);
     }
   }, []);
 
@@ -241,11 +189,11 @@ const Prediction = () => {
 
     let imageData;
     if (isFileInput && imgPreview) {
-      imageData = imgPreview; // Gambar dari file upload
+      imageData = imgPreview;
       setIsNullImg(false);
       setIsError(false);
     } else if (imgSrc) {
-      imageData = imgSrc; // Gambar dari capture kamera
+      imageData = imgSrc;
       setIsNullImg(false);
       setIsError(false);
     } else {
@@ -256,11 +204,12 @@ const Prediction = () => {
     setIsLoading(true);
     try {
       const response = await uploadImage(imageData);
-      setPredictionResult(response);
+      setPredictionResult(response); // Update state
       setIsPrediction(true); // Tampilkan hasil prediksi
-      setIsLoading(false);
     } catch (error) {
       console.error("Error during image upload:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -302,67 +251,16 @@ const Prediction = () => {
         : "Belum ada data",
     },
   ];
-
+  // Mengirim hasil ke Parent setelah predictionResult terupdate
   useEffect(() => {
-        gsap.timeline({
-            scrollTrigger: {
-                trigger: heroSectionRef.current,
-                start: "top 80%",
-                end: "bottom top",
-                toggleActions: "play none none none",
-            },
-        })
-            .fromTo(
-                ".hero-title",
-                {opacity: 0, x: 50},
-                {opacity: 1, x: 0, duration: 0.8, ease: "power2.out"}
-            )
-            .fromTo(
-                ".hero-description",
-                {opacity: 0, y: 50},
-                {opacity: 1, y: 0, duration: 0.8, ease: "power2.out"},
-                "-=0.4"
-            )
-
-		classtificationRef.current.forEach((step, index) => {
-            gsap.fromTo(
-                step,
-                {opacity: 0, x: 100},
-                {
-                    opacity: 1,
-                    x: 0,
-                    duration: 1.0,
-                    delay: index * 0.5,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: step,
-                        start: "top 80%",
-                        toggleActions: "play none none none",
-                    },
-                }
-            );
-        });
-    });
+    if (predictionResult) {
+      // Pastikan bahwa predictionResult sudah ada
+      onPredictionComplete(predictionResult, dataTabel, CaraPengolahan);
+    }
+  }, [predictionResult, onPredictionComplete]); // Dependency array agar hanya dipanggil saat predictionResult berubah
 
   return (
-    <main>
-      {/* Title */}
-      <div className="w-full mt-[66px] h-auto flex flex-col items-center gap-[33px]">
-        <div className="max-w-3x1 text-center lg:text-center">
-          <Typography variant="title">
-            <strong className="text-emerald-700">Prediksi</strong> Sampah
-          </Typography>
-        </div>
-        <div className="max-w-4xl text-center lg:text-center">
-          <Typography variant="p">
-            Sistem canggih kami akan menganalisis gambar dan memberikan saran
-            pengelolaan sampah yang tepat, mulai dari pemilahan hingga metode
-            daur ulang yang ramah lingkungan. Dengan teknologi ini, mengelola
-            sampah menjadi lebih mudah dan efisien, membantu Anda berperan aktif
-            dalam menjaga kebersihan dan kelestarian bumi.
-          </Typography>
-        </div>
-      </div>
+    <section>
       {/* Section input gambar */}
       <div className="w-full mt-[31px] mx-auto px-16 ">
         {/* Form handle gambar */}
@@ -370,6 +268,24 @@ const Prediction = () => {
           className="flex flex-col items-center space-y-5"
           onSubmit={handleSubmit}
         >
+          {isError && (
+            <Alert variant="destructive" className="mb-5">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                Ukuran file gambar anda melebihi batas maksimal 2MB
+              </AlertDescription>
+            </Alert>
+          )}
+          {isNullImg && (
+            <Alert variant="destructive" className="mb-5">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                Tidak ada Gambar Yang Diupload
+              </AlertDescription>
+            </Alert>
+          )}
           <Tabs
             defaultValue="upload-file"
             className="w-full flex flex-col items-center"
@@ -380,25 +296,6 @@ const Prediction = () => {
             </TabsList>
 
             <TabsContent value="upload-file">
-              {isError && (
-                <Alert variant="destructive" className="mb-5">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>
-                    Ukuran file gambar anda melebihi batas maksimal 2MB
-                  </AlertDescription>
-                </Alert>
-              )}
-              {isNullImg && (
-                <Alert variant="destructive" className="mb-5">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>
-                    Tidak ada Gambar Yang Diupload
-                  </AlertDescription>
-                </Alert>
-              )}
-
               <div className="relative border-2 border-dashed border-emerald-500 rounded-lg p-8 flex flex-col md:flex-row items-center justify-center gap-4 bg-[#EAF0E4] transition hover:bg-[rgb(221,230,212)] w-full md:w-[1312px] min-h-[412px]">
                 {imgPreview && (
                   <div className="mt-4">
@@ -468,9 +365,7 @@ const Prediction = () => {
         </form>
       </div>
       {isLoading ? (
-        <>
-          <Loading />
-        </>
+        <Loading />
       ) : (
         isPrediction &&
         predictionResult && (
@@ -508,218 +403,53 @@ const Prediction = () => {
                   {predictionResult.prediction}{" "}
                   <span>{(predictionResult.confidence * 100).toFixed(2)}%</span>
                 </Typography>
-                <div className="flex flex-col gap-1 items-center md:items-start">
-                  <Typography
-                    variant="lead"
-                    className="font-bold text-emerald-600"
-                  >
-                    Kategori :
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    className="px-6 py-2 text-emerald-600 border border-emerald-600 rounded-full max-w-fit"
-                  >
-                    {getCategory(predictionResult.prediction)}
-                  </Typography>
-                </div>
                 <div>
-                  <Typography
-                    variant="lead"
-                    className="font-bold text-emerald-600"
-                  >
-                    Saran Pengolahan :{" "}
-                  </Typography>
-                  <ul className="list-decimal pl-6 text-justify leading-loose">
-                    {CaraPengolahan[predictionResult.prediction]
-                      .slice(0, 2)
-                      .map((method, index) => (
-                        <li key={index} className="text-emerald-600">
-                          {method}
-                        </li>
+                  <table className="w-full text-sm text-left text-emerald-600">
+                    <tbody>
+                      {dataTabel.map((row, index) => (
+                        <TableRow
+                          key={index}
+                          label={row.label}
+                          value={row.value}
+                        />
                       ))}
-                  </ul>
-                </div>
-                <div>
-                  {/* Modal Box */}
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      {/* trigger modal */}
-                      <Typography
-                        variant="p"
-                        className="text-right italic font-bold text-emerald-600 cursor-pointer"
-                      >
-                        {" "}
-                        Lihat lebih banyak...{" "}
-                      </Typography>
-                    </AlertDialogTrigger>
-                    {/* Deskripsi Modal */}
-                    <AlertDialogContent className="overflow-y-auto max-h-[90vh] p-4">
-                      {/* header modal */}
-                      <AlertDialogTitle className="text-emerald-600 flex justify-between items-center">
-                        <Typography
-                          variant="p"
-                          className="font-bold text-emerald-600 cursor-pointer"
-                        >
-                          Detail Informasi
-                        </Typography>
-                        <AlertDialogCancel className="p-0 border-0 transition hover:bg-transparent">
-                          <img src={CloseIcon} alt="" className="" />
-                        </AlertDialogCancel>
-                      </AlertDialogTitle>
-                      {/* body modal */}
-                      <AlertDialogDescription className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-                        {/* gambar */}
-                        <div className="">
-                          <img
-                            src={imagePreview}
-                            alt="sampah-kardus"
-                            className="w-full rounded-md"
-                          />
-                        </div>
-                        {/* deskripsi */}
-                        <div className="flex flex-col space-y-2">
+                      <tr>
+                        <td className="p-2">
                           <Typography
-                            variant="h4"
-                            className="w-full rounded-full bg-emerald-600 text-white text-center py-2 uppercase"
+                            variant="large"
+                            className="text-emerald-600 font-bold"
                           >
-                            {predictionResult.prediction}{" "}
+                            Cara Pengolahan
                           </Typography>
-                          <div>
-                            <table class="w-full text-sm text-left text-emerald-600">
-                              <tbody>
-                                {dataTabel.map((row, index) => (
-                                  <TableRow
-                                    key={index}
-                                    label={row.label}
-                                    value={row.value}
-                                  />
-                                ))}
-                                {/* Saran Pengolahan */}
-                                <tr>
-                                  <td className="px-2 py-1">
-                                    <Typography
-                                      variant="p-regular"
-                                      className="font-bold text-emerald-600"
-                                    >
-                                      Saran Pengolahan
-                                    </Typography>
-                                  </td>
-                                  <td className="px-2 py-1">
-                                    <Typography
-                                      variant="p-regular"
-                                      className="font-bold text-emerald-600"
-                                    >
-                                      :
-                                    </Typography>
-                                  </td>
-                                  <td className="px-2 py-1"></td>
-                                </tr>
-                                <tr>
-                                  <td className="px-2 py-1" colSpan={3}>
-                                    <ul className="list-decimal pl-6 text-justify leading-loose">
-                                      {CaraPengolahan[
-                                        predictionResult.prediction
-                                      ].map((method, index) => (
-                                        <li
-                                          key={index}
-                                          className="text-emerald-600"
-                                        >
-                                          {method}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </td>
-                                </tr>
-
-                                {/* Rekomendasi Produk Kerajinan */}
-                                <tr>
-                                  <td className="px-2 py-1" colSpan={2}>
-                                    <Typography
-                                      variant="p-regular"
-                                      className="font-bold text-emerald-600"
-                                    >
-                                      Rekomendasi Produk Kerajinan
-                                    </Typography>
-                                  </td>
-                                  <td className="px-2 py-1">
-                                    <Typography
-                                      variant="p-regular"
-                                      className="font-bold text-emerald-600"
-                                    >
-                                      :
-                                    </Typography>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className="px-2 py-1" colSpan={3}>
-                                    <div className="max-w-xl flex gap overflow-auto gap-4">
-                                      {[Craft, Craft, Craft].map(
-                                        (src, index) => (
-                                          <img
-                                            key={index}
-                                            src={src}
-                                            alt={`Craft-${index}`}
-                                            className="rounded-md"
-                                          />
-                                        )
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </AlertDialogDescription>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                        </td>
+                        <td>:</td>
+                        <td className="p-2 w-full">
+                          <ul className="list-decimal pl-4 text-justify leading-loose">
+                            {CaraPengolahan[predictionResult.prediction]
+                              .slice(0, 2)
+                              .map((method, index) => (
+                                <li key={index} className="text-emerald-600">
+                                  <Typography
+                                    variant="p-regular"
+                                    className="text-emerald-600"
+                                  >
+                                    {method}
+                                  </Typography>
+                                </li>
+                              ))}
+                          </ul>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         )
       )}
-
-			{/* Section kategori sampah */}
-			<div className="grid grid-cols-1 md:grid-cols-12 place-items-center mx-auto max-w-[1512px] px-8 md:px-12 lg:px-16 mt-10 md:mt-14 lg:mt-16">
-				{/* Title section */}
-				<div className="col-span-4 text-center md:text-left place-self-start flex flex-col gap-2">
-					<div>
-						<Typography variant="h1" className="hero-title">
-							<strong className="text-emerald-600">Kategori Sampah</strong> Yang
-							Tersedia
-						</Typography>
-					</div>
-					<div className="max-w-[300px] mx-auto md:mx-0">
-						<Typography variant="p" className="hero-description">
-							Jenis Sampah Yang Dapat Kami Deteksi Klasifikasi
-						</Typography>
-					</div>
-				</div>
-				{/* Container card sampah */}
-				<div className="col-span-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-4 md:gap-y-8">
-					{CardSampah.map((item) => (
-						<figure
-							key={item.id}
-							ref={(el) => (classtificationRef.current[item.id] = el)}
-						>
-							<img
-								src={item.img}
-								alt={item.heading}
-								className="rounded-t-md w-full shadow-md"
-							/>
-							<figcaption className="px-2 py-4">
-								<Typography variant="lead">
-									<strong className="text-emerald-600">{item.heading} </strong>
-								</Typography>
-								<Typography variant="p">{item.subHeading}</Typography>
-							</figcaption>
-						</figure>
-					))}
-				</div>
-			</div>
-		</main>
-	);
+    </section>
+  );
 };
 
-export default Prediction;
+export default PredictionSection;
