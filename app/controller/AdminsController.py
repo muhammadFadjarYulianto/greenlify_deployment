@@ -211,6 +211,9 @@ def loginAdmin():
         email = request.form.get('email') or request.json.get('email')
         password = request.form.get('password') or request.json.get('password')
         remember_me = request.form.get('remember_me') or request.json.get('remember_me')
+        
+        if remember_me is None:
+            remember_me = False
 
         if not isinstance(remember_me, bool):
             return response.badRequest([], 'Nilai remember_me harus berupa boolean')
