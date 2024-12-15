@@ -53,7 +53,7 @@ def detailArticle(id):
         start = request.args.get('start', default=1, type=int)
         limit = request.args.get('limit', default=4, type=int)
 
-        query = Comments.query.order_by(Comments.created_at.desc())
+        query = Comments.query.filter_by(id_article=id).order_by(Comments.created_at.desc())
         total_data = query.count()
 
         if start < 1 or limit < 1:
