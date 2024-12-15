@@ -6,7 +6,7 @@ export async function getMembersManagement() {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.get(MEMBERS_MANAGEMENT_ENDPOINT, {
@@ -19,7 +19,7 @@ export async function getMembersManagement() {
             return response.data.data;
         } else {
             console.error("Data member tidak ditemukan di respons API.");
-            throw new Error("Data member tidak ditemukan.");
+            return ("Data member tidak ditemukan.");
         }
     } catch (error) {
         console.error("Gagal mendapatkan data member:", error.response || error.message);
@@ -32,7 +32,7 @@ export async function addMember(memberData) {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.post(MEMBERS_MANAGEMENT_ENDPOINT, memberData, {
@@ -54,7 +54,7 @@ export async function updateMember(memberId, memberData) {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return  ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.put(`${MEMBERS_MANAGEMENT_ENDPOINT}/${memberId}`, memberData, {
@@ -76,7 +76,7 @@ export async function deleteMember(memberId) {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-            throw new Error("Token tidak tersedia. Silakan login kembali.");
+            return ("Token tidak tersedia. Silakan login kembali.");
         }
 
         const response = await axios.delete(`${MEMBERS_MANAGEMENT_ENDPOINT}/${memberId}`, {

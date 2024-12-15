@@ -21,7 +21,7 @@ const DashboardHome = lazy(() => import("@/pages/Dashboard/DashboardHome"));
 const DashboardCategory = lazy(() => import("@/pages/Dashboard/DashboardCategory"));
 const DashboardProduct = lazy(() => import("@/pages/Dashboard/DashboardProduct"));
 const DashboardBlog = lazy(() => import("@/pages/Dashboard/DashboardBlog"));
-const DashboardComment = lazy(() => import("@/pages/Dashboard/DashboardComment"));
+// const DashboardComment = lazy(() => import("@/pages/Dashboard/DashboardComment"));
 const DashboardMembers = lazy(() => import("@/pages/Dashboard/DashboardKeanggotaan"));
 
 

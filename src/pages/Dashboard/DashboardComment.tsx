@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useCallback} from "react";
+
+import React, {useState, useEffect} from "react";
 import {Typography} from "@/components/ui/Typography";
 import {Card, CardContent} from "@/components/ui/card";
 import {
@@ -9,7 +10,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import {Checkbox} from "@/components/ui/checkbox";
 import {Eye, Check, X, Trash2, Search} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {SidebarTrigger} from "@/components/ui/sidebar";
@@ -34,7 +34,6 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter,
-    DialogClose,
 } from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {useToast} from "@/hooks/use-toast";

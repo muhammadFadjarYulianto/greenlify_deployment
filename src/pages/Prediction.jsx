@@ -24,7 +24,6 @@ import Metal from "../assets/images/metal.png";
 import Organik from "../assets/images/organik.png";
 import Plastik from "../assets/images/plastik.png";
 import CloseIcon from "../assets/images/x-square.svg";
-import Craft from "../assets/images/craft.png";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
 import {uploadImage} from "@/services/uploadService"; // Mengimpor service upload
 import Loading from "../components/loading";
@@ -363,29 +362,29 @@ const Prediction = () => {
 
     // Fungsi untuk mendapatkan gambar berdasarkan kategori dari produk
 
-    const getCraftImagesByCategory = (prediction) => {
-        // Map prediction result to category name
-        const categoryMapping = {
-            'glass': 'Glass',
-            'plastic': 'Plastic',
-            'paper': 'Paper',
-            'metal': 'Metal',
-            'cardboard': 'Cardboard'
-        };
-
-        const categoryName = categoryMapping[prediction];
-
-        // Filter products based on the mapped category name
-        const filteredProducts = products.filter((prod) =>
-            prod.category_name.toLocaleLowerCase() === categoryName
-        );
-
-        console.log("Filtered Products:", filteredProducts);
-        console.log("Prediction:", prediction);
-        console.log("Mapped Category:", categoryName);
-
-        return filteredProducts.map((prod) => prod.img_file);
-    };
+    // const getCraftImagesByCategory = (prediction) => {
+    //     // Map prediction result to category name
+    //     const categoryMapping = {
+    //         'glass': 'Glass',
+    //         'plastic': 'Plastic',
+    //         'paper': 'Paper',
+    //         'metal': 'Metal',
+    //         'cardboard': 'Cardboard'
+    //     };
+    //
+    //     const categoryName = categoryMapping[prediction];
+    //
+    //     // Filter products based on the mapped category name
+    //     const filteredProducts = products.filter((prod) =>
+    //         prod.category_name.toLocaleLowerCase() === categoryName
+    //     );
+    //
+    //     console.log("Filtered Products:", filteredProducts);
+    //     console.log("Prediction:", prediction);
+    //     console.log("Mapped Category:", categoryName);
+    //
+    //     return filteredProducts.map((prod) => prod.img_file);
+    // };
 
 
     return (

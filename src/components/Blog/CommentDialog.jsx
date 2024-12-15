@@ -31,7 +31,7 @@ const CommentDialog = ({isOpen, onOpenChange, articleId}) => {
                 });
                 onOpenChange(false);
             } else {
-                throw new Error(response.message || 'Gagal menambahkan komentar.');
+                return (response.message || 'Gagal menambahkan komentar.');
             }
         } catch (error) {
             throw new Error(error.message || 'Gagal menambahkan komentar.');

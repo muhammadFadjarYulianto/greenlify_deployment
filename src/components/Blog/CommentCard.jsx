@@ -22,7 +22,7 @@ const formatTimeAgo = (dateString) => {
     }
 };
 
-const CommentCard = ({username, created_at, comment, email}) => {
+const CommentCard = ({username, created_at, comment}) => {
     const [bgColor, setBgColor] = useState("");
 
     useEffect(() => {

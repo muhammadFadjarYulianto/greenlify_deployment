@@ -1,5 +1,5 @@
 import axios from "axios";
-import {LOGIN, REFRESH} from "@/constants/routesAPI";
+import {LOGIN} from "@/constants/routesAPI";
 
 export default class AuthServices {
     static validateLoginInputs(email, password, remember_me) {

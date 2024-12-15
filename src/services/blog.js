@@ -76,7 +76,7 @@ export const addComment = async (articleId, comment) => {
         if (response.data.status === 'success') {
             return response.data;
         } else {
-            throw new Error(response.data.message || 'Gagal menambahkan komentar');
+            return (response.data.message || 'Gagal menambahkan komentar');
         }
     } catch (error) {
         if (error.response) {

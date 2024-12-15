@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Typography } from "@/components/ui/Typography";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
 
 const formatDate = (dateStr) => {
   const date = new Date(dateStr);
