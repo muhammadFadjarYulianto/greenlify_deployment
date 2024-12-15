@@ -26,10 +26,7 @@ export const getCommentManagement = async (filters) => {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-  
-      // Log response for debugging
-      console.log('API Response:', response.data);
-  
+
       // Return formatted data
       return {
         comments: response.data.data.results.map(comment => ({
@@ -53,7 +50,7 @@ export async function getDetailsCommentManagement(commentId) {
       const token = localStorage.getItem("access_token");
       
       if (!token) {
-        throw new Error("Token not found");
+        return ("Token not found");
       }
   
       const response = await axios.get(`${COMMENT_MANAGEMENT_ENDPOINT}/${commentId}`, {

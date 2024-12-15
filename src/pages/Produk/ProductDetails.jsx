@@ -26,7 +26,7 @@ function ProductDetails() {
             }
         };
 
-        fetchProduct();
+        fetchProduct().catch(console.error);
 
         return () => {
             resetSelectedProduct();

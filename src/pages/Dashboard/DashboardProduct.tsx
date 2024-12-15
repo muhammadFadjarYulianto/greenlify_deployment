@@ -65,6 +65,8 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import useDateStore from "@/store/useDateStore";
+
 interface Product {
     id: number;
     product_name: string;
@@ -99,18 +101,20 @@ export default function DashboardProduct() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
         null
     );
+    // @ts-ignore
+    const {formatDate} = useDateStore();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-    const [currentPage, setCurrentPage] = useState(1);
+    // const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [itemsPerPage] = useState(5);
-    const [selectedPriceRange, setSelectedPriceRange] = useState(
-        "Pilih Rentang Harga"
-    );
+    // const [itemsPerPage] = useState(5);
+    // const [selectedPriceRange, setSelectedPriceRange] = useState(
+    //     "Pilih Rentang Harga"
+    // );
     const DEFAULT_PRICE_RANGE = "Pilih Rentang Harga";
     const [selectedPriceValue, setSelectedPriceValue] = useState<string>("");
 
@@ -144,7 +148,7 @@ export default function DashboardProduct() {
             setProducts(products);
             setTotalData(pagination.total_data);
             setTotalPages(Math.ceil(pagination.total_data / filters.limit));
-            setCurrentPage(filters.page);
+            // setCurrentPage(filters.page);
             setError(null);
         } catch (err) {
             const errorMessage =
@@ -182,7 +186,7 @@ export default function DashboardProduct() {
             page: 1,
             limit: 5,
         });
-        setSelectedPriceRange(DEFAULT_PRICE_RANGE);
+        // setSelectedPriceRange(DEFAULT_PRICE_RANGE);
         setSelectedPriceValue("");
     };
 
@@ -196,11 +200,15 @@ export default function DashboardProduct() {
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts().catch(error => {
+            console.error("Gagal mengambil data produk", error);
+        });
     }, [filters]);
 
     useEffect(() => {
-        fetchCategories();
+        fetchCategories().catch(error => {
+            console.error("Gagal mengambil data categori", error);
+        });
     }, []);
 
     const fetchCategories = async () => {
@@ -239,7 +247,7 @@ export default function DashboardProduct() {
 
         try {
             await createProductManagement(formData);
-            fetchProducts();
+            await fetchProducts();
             setIsAddModalOpen(false);
             toast({
                 title: "Produk Berhasil Ditambahkan",
@@ -266,7 +274,7 @@ export default function DashboardProduct() {
 
         try {
             await updateProductManagement(currentProduct.id, formData);
-            fetchProducts();
+            await fetchProducts();
             setIsEditModalOpen(false);
             toast({
                 title: "Produk Berhasil Diperbarui",
@@ -308,41 +316,6 @@ export default function DashboardProduct() {
                 variant: "destructive",
             });
         }
-    };
-
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-
-        const days = [
-            "Minggu",
-            "Senin",
-            "Selasa",
-            "Rabu",
-            "Kamis",
-            "Jumat",
-            "Sabtu",
-        ];
-        const months = [
-            "Januari",
-            "Februari",
-            "Maret",
-            "April",
-            "Mei",
-            "Juni",
-            "Juli",
-            "Agustus",
-            "September",
-            "Oktober",
-            "November",
-            "Desember",
-        ];
-
-        const day = days[date.getDay()];
-        const dateNum = date.getDate();
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-
-        return `${day}, ${dateNum} ${month} ${year}`;
     };
 
     const openEditModal = (product: Product) => {
@@ -539,7 +512,7 @@ export default function DashboardProduct() {
                                     if (selectedRange) {
                                         handleFilterChange("min_price", selectedRange.min);
                                         handleFilterChange("max_price", selectedRange.max);
-                                        setSelectedPriceRange(selectedRange.label);
+                                        // setSelectedPriceRange(selectedRange.label);
                                     }
                                 }}
                             >
@@ -1011,7 +984,9 @@ export default function DashboardProduct() {
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                handleDeleteProduct(currentProduct.id);
+                                handleDeleteProduct(currentProduct.id).catch(error => {
+                                    console.error("Gagal menghapus produk", error);
+                                });
                             }}
                         >
                             Hapus

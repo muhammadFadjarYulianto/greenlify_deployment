@@ -7,7 +7,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import {ChevronDown, ChevronDownIcon} from "lucide-react";
+import { ChevronDownIcon} from "lucide-react";
 import {ChevronsUpDownIcon} from "lucide-react";
 import BarChartComponent from "../components/layout/BarChartComponent ";
 import PieChartComponent from "../components/layout/PieChartComponent";

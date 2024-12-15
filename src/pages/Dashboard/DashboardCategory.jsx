@@ -32,7 +32,6 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
@@ -44,6 +43,7 @@ import {
     updateCategory,
     deleteCategory
 } from "@/services/categoryManagement";
+import useDateStore from "@/store/useDateStore";
 
 export default function CategoryManagement() {
     const [categories, setCategories] = useState([]);
@@ -52,6 +52,7 @@ export default function CategoryManagement() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
+    const {formatDate} = useDateStore();
     const {toast} = useToast();
 
     const fetchCategories = async () => {
@@ -140,22 +141,10 @@ export default function CategoryManagement() {
     };
 
     useEffect(() => {
-        fetchCategories();
+        fetchCategories().catch(error => {
+            console.error("Gagal mengambil data categori", error);
+        });
     }, []);
-
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-
-        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-        const day = days[date.getDay()];
-        const dateNum = date.getDate();
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-
-        return `${day}, ${dateNum} ${month} ${year}`;
-    };
 
     return (
         <>
@@ -360,9 +349,9 @@ export default function CategoryManagement() {
                         </Button>
                         <Button
                             variant="destructive"
-                            onClick={() => {
-                                handleDeleteCategory(currentCategory.id);
-                            }}
+                            onClick={() =>
+                                handleDeleteCategory(currentCategory.id)
+                            }
                         >
                             Hapus
                         </Button>

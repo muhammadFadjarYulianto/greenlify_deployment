@@ -52,7 +52,6 @@ export const uploadImage = async (image) => {
     });
     return response.data; // Mengembalikan hasil prediksi
   } catch (error) {
-    console.error("Error uploading image:", error);
     throw error; // Mengembalikan error jika ada
   }
 };

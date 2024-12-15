@@ -20,6 +20,8 @@ const CommentDialog = ({isOpen, onOpenChange, articleId}) => {
             email: formData.get('email'),
             comment: formData.get('comment')
         };
+        console.log(comment);
+
         try {
             const response = await addComment(articleId, comment);
             if (response && response.status === 'success') {
@@ -29,7 +31,7 @@ const CommentDialog = ({isOpen, onOpenChange, articleId}) => {
                 });
                 onOpenChange(false);
             } else {
-                throw new Error(response.message || 'Gagal menambahkan komentar.');
+                return (response.message || 'Gagal menambahkan komentar.');
             }
         } catch (error) {
             throw new Error(error.message || 'Gagal menambahkan komentar.');

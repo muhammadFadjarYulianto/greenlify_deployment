@@ -1,5 +1,5 @@
 import axios from "axios";
-import {PRODUCT_MANAGEMENT_ENDPOINT, PRODUCT_PAGINATION_ENDPOINT, PRODUCT_ENDPOINT} from "@/constants/routesAPI";
+import {PRODUCT_MANAGEMENT_ENDPOINT, PRODUCT_ENDPOINT} from "@/constants/routesAPI";
 import {getAdmin} from "@/services/admin.js";
 
 

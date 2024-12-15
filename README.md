@@ -10,6 +10,16 @@
 [//]: # (-)
 
 [//]: # ()
+
+# Greenlify
+
+<p align="center">
+  <img src="https://ik.imagekit.io/3s8oi0rad/Members/logo-erstalent.png?updatedAt=1734036269066" alt="Trashure Logo" width="200" height="220">
+</p>
+<p align="justify">
+Greenlify is a waste management application designed to help users effectively manage and recycle their waste. With an intuitive interface and innovative features, Trashure aims to raise awareness about sustainability and support better waste management practices.
+</p>
+
 ## Prerequisites
 
 Before you begin, ensure you have the following software installed on your system:
@@ -23,8 +33,8 @@ To set up this project in your local environment, follow these steps:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/damar-glh/trashure.git
-   cd trashure
+   https://github.com/damar-glh/greenlify.git
+   cd greenlify
    ```
 
 2. **Install Dependencies & Set Up Pre-commit Scripts**
