@@ -38,6 +38,7 @@ export default function Header() {
         {label: "Prediksi", path: "prediksi"},
         {label: "Produk", path: "produk"},
         {label: "Blog", path: "blog"},
+        {label: "Partisipasi", path: "anggotakami"},
         {label: "Tentang Kami", path: "tentangkami"},
     ];
 

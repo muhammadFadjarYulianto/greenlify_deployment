@@ -187,7 +187,7 @@ const Blog = () => {
                             <div
                                 className="flex flex-col md:flex-row items-start md:items-center mt-4 gap-2 md:gap-5">
                                 <Typography variant="p-semibold"
-                                            className="text-background">{latestArticle.author}</Typography>
+                                            className="text-background">{latestArticle.created_by}</Typography>
                                 <strong className="hidden md:block">●</strong>
                                 <Typography variant="p-semibold"
                                             className="text-background">
@@ -249,7 +249,7 @@ const Blog = () => {
                 <Link to={`/blog/${article.id}`}>
                     <BlogCard
                         key={article.id}
-                        author={article.author}
+                        created_by={article.created_by}
                         content={article.content}
                         created_at={article.created_at}
                         img_file={article.img_file}

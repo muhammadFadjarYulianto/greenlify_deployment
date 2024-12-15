@@ -67,7 +67,7 @@ interface Blog {
   updated_at: string;
   img_file: string;
   created_by: string;
-  approved_comments_count: number;
+  total_comment: number;
 }
 
 interface BlogTableProps {
@@ -335,7 +335,7 @@ export default function DashboardBlog() {
               {blog.views.toLocaleString("id-ID")}
             </TableCell>
             <TableCell className="text-center">
-              {blog.approved_comments_count.toLocaleString("id-ID")}
+              {blog.total_comment.toLocaleString("id-ID")}
             </TableCell>{" "}
             <TableCell className="text-center">
               {formatDate(blog.created_at)}
@@ -580,23 +580,6 @@ export default function DashboardBlog() {
                       required
                     />
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label
-                      htmlFor="author"
-                      className="text-[16px] font-bold text-emerald-600"
-                    >
-                      Author
-                    </Label>
-                    <Input
-                      id="author"
-                      name="author"
-                      className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
-                      placeholder="Masukkan nama author"
-                      value={"Admin"}
-                      // required
-                    />
-                  </div>
-
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label
                       htmlFor="img_file"

@@ -12,3 +12,4 @@ export const COMMENT_MANAGEMENT_ENDPOINT = `${END_POINT}/api/comment`;
 export const PREDICT = `${END_POINT}/api/predict/guest`;
 export const HISTORY_MANAGEMENT_ENDPOINT = `${END_POINT}/api/history`;
 export const MEMBERS_MANAGEMENT_ENDPOINT = `${END_POINT}/api/member`;
+export const MEMBER_ENDPOINT = `${END_POINT}/api/member/guest`;
