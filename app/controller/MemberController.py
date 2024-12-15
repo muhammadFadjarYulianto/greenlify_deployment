@@ -16,21 +16,13 @@ def tambahMember():
 
         if not rw:
             return response.badRequest([], "Kolom rw wajib diisi.")
-        try:
-            rw = int(rw)
-            if rw <= 0:
-                return response.badRequest([], "Kolom rw harus berupa angka positif.")
-        except ValueError:
-            return response.badRequest([], "Kolom rw harus berupa angka.")
+        if len(rw) < 1 or len(rw) > 3:  
+            return response.badRequest([], "Kolom rw harus berupa string dengan panjang 1 hingga 3 karakter.")
 
         if not rt:
             return response.badRequest([], "Kolom rt wajib diisi.")
-        try:
-            rt = int(rt)
-            if rt <= 0:
-                return response.badRequest([], "Kolom rt harus berupa angka positif.")
-        except ValueError:
-            return response.badRequest([], "Kolom rt harus berupa angka.")
+        if len(rt) < 1 or len(rt) > 3:  
+            return response.badRequest([], "Kolom rt harus berupa string dengan panjang 1 hingga 3 karakter.")
 
         memberBaru = Member(
             desa=desa,
@@ -43,28 +35,6 @@ def tambahMember():
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal membuat member")
-
-def formatArray(members):
-    return [satuMember(member) for member in members]
-
-def satuMember(member):
-    return {
-        'id': member.id,
-        'desa': member.desa,
-        'rw': member.rw,
-        'rt': member.rt,
-        'created_at': member.created_at,
-        'updated_at': member.updated_at
-    }
-
-def indexMember():
-    try:
-        members = Member.query.all()
-        data = formatArray(members)
-        return response.success(data)
-    except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal mengambil data member")
 
 def memperbaruiMember(id):
     desa = request.form.get('desa') or request.json.get('desa')
@@ -81,22 +51,14 @@ def memperbaruiMember(id):
             member.desa = desa
 
         if rw:
-            try:
-                rw = int(rw)
-                if rw <= 0:
-                    return response.badRequest([], "Kolom rw harus berupa angka positif.")
-                member.rw = rw
-            except ValueError:
-                return response.badRequest([], "Kolom rw harus berupa angka.")
+            if len(rw) < 1 or len(rw) > 3:  
+                return response.badRequest([], "Kolom rw harus berupa string dengan panjang 1 hingga 3 karakter.")
+            member.rw = rw
 
         if rt:
-            try:
-                rt = int(rt)
-                if rt <= 0:
-                    return response.badRequest([], "Kolom rt harus berupa angka positif.")
-                member.rt = rt
-            except ValueError:
-                return response.badRequest([], "Kolom rt harus berupa angka.")
+            if len(rt) < 1 or len(rt) > 3:  
+                return response.badRequest([], "Kolom rt harus berupa string dengan panjang 1 hingga 3 karakter.")
+            member.rt = rt
 
         db.session.commit()
         return response.success('Member berhasil diperbarui!')

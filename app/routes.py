@@ -139,14 +139,20 @@ def get_all_history():
 def delete_history(id):
     return HistoryController.hapusHistory(id)
 
+@app.route('/api/member/guest', methods=['GET'])
+def memberGuest():
+    return MemberController.indexMember()
+
 @app.route('/api/member', methods=['GET', 'POST'])
-def member():
+@jwt_required()
+def memberManage():
     if request.method == 'GET':
         return MemberController.indexMember()
     else:
         return MemberController.tambahMember()
     
 @app.route('/api/member/<id>', methods=['PUT', 'DELETE'])
+@jwt_required()
 def memberDetail(id):
     if request.method == 'PUT':
         return MemberController.memperbaruiMember(id)

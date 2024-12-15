@@ -5,8 +5,8 @@ from datetime import datetime
 class Member(db.Model):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     desa = db.Column(db.String(100), nullable=False)
-    rw = db.Column(db.Integer, nullable=False)
-    rt = db.Column(db.Integer, nullable=False)
+    rw = db.Column(db.String(3), nullable=False)
+    rt = db.Column(db.String(3), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
