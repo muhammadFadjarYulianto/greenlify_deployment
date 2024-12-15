@@ -984,7 +984,9 @@ export default function DashboardProduct() {
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                handleDeleteProduct(currentProduct.id).catch(error => {});
+                                handleDeleteProduct(currentProduct.id).catch(error => {
+                                    console.error("Gagal menghapus produk", error);
+                                });
                             }}
                         >
                             Hapus

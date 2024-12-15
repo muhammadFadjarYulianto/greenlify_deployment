@@ -741,8 +741,12 @@ export default function DashboardBlog() {
             <Button
               variant="destructive"
               onClick={() => {
-                handleDeleteBlog(currentBlog.id);
-              }}
+                handleDeleteBlog(currentBlog.id).catch((err) => {
+                    setError(err instanceof Error ? err.message : "Gagal menghapus blog");
+                    setLoading(false);
+                });
+                }
+                }
             >
               Hapus
             </Button>
