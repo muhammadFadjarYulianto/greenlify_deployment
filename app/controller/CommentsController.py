@@ -1,6 +1,6 @@
 from flask import request
 from app import db, response
-from app.model.comments import Comments, StatusEnum
+from app.model.comments import Comments
 from app.model.articles import Articles
 import re, os
 
@@ -13,8 +13,6 @@ def singleComment(comment):
         'username': comment.username,
         'email': comment.email,
         'comment': comment.comment,
-        'status': comment.status.value,
-        'is_approved': comment.is_approved,
         'created_at': comment.created_at,
         'updated_at': comment.updated_at
     }
@@ -40,37 +38,6 @@ def detailComment(id):
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail komentar.")
-
-def ubahComment(id):
-    try:
-        if not str(id).isdigit():
-            return response.badRequest([], "ID harus berupa angka.")
-        
-        comment = Comments.query.filter_by(id=id).first()
-        if not comment:
-            return response.notFound([], "Komentar tidak ditemukan.")
-
-        is_approved = request.form.get('is_approved') or request.json.get('is_approved')
-
-        if is_approved not in [True, False, None]:
-            return response.badRequest([], "Nilai 'is_approved' tidak valid.")
-
-        if is_approved is True:
-            comment.status = StatusEnum.APPROVED
-        elif is_approved is False:
-            comment.status = StatusEnum.REJECTED
-        else:
-            comment.status = StatusEnum.PENDING
-
-        comment.is_approved = is_approved
-
-        db.session.commit()
-        return response.success(singleComment(comment))
-
-    except Exception as e:
-        db.session.rollback()
-        print(e)
-        return response.serverError([], "Gagal memperbarui komentar.")
 
 def hapusComment(id):
     try:

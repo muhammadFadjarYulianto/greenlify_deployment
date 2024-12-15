@@ -1,7 +1,7 @@
 from flask import request
 from app.model.articles import Articles
 from app.model.admins import Admins
-from app.model.comments import Comments, StatusEnum
+from app.model.comments import Comments
 from app import response, db, app, uploadconfig
 import re, os, uuid
 from werkzeug.utils import secure_filename
@@ -24,7 +24,6 @@ def singleArticle(data):
         'title': data.title,
         'content': data.content,
         'views': data.views,
-        'author': data.author,
         'created_by': data.admin.name,
         'img_file': data.img_file,
         'created_at': data.created_at,
@@ -54,10 +53,7 @@ def detailArticle(id):
         start = request.args.get('start', default=1, type=int)
         limit = request.args.get('limit', default=4, type=int)
 
-        query_approved = Comments.query.filter_by(id_article=id, status=StatusEnum.APPROVED)
-        total_approved = query_approved.count()
-
-        query = Comments.query.filter_by(id_article=id, status=StatusEnum.APPROVED).order_by(Comments.created_at.desc())
+        query = Comments.query.order_by(Comments.created_at.desc())
         total_data = query.count()
 
         if start < 1 or limit < 1:
@@ -70,7 +66,6 @@ def detailArticle(id):
             'start_index': start,
             'per_page': limit,
             'total_data': total_data,
-            'total_approved': total_approved,
             'results': [{
                 'id': comment.id,
                 'username': comment.username,
@@ -101,7 +96,6 @@ def detailArticle(id):
                 'img_file': article.img_file,
                 'content': article.content,
                 'views': article.views,
-                'author': article.author,
                 'img_file': article.img_file,
                 'created_by': article.admin.name,
                 'created_at': article.created_at,
@@ -155,8 +149,6 @@ def tambahCommentForArticle(id):
             username=username,
             email=email,
             comment=comment,
-            is_approved=False,
-            status=StatusEnum.PENDING
         )
 
         db.session.add(new_comment)
@@ -173,7 +165,6 @@ def tambahArticle():
         created_by = request.form.get('created_by') 
         title = request.form.get('title') 
         content = request.form.get('content') 
-        author = request.form.get('author') 
 
         if not (created_by):
             return response.badRequest([], "Kolom created_by wajib diisi.")
@@ -184,8 +175,6 @@ def tambahArticle():
         if not (content):
             return response.badRequest([], "Kolom content wajib diisi.")
         
-        if not (author):
-            return response.badRequest([], "Kolom author wajib diisi.")
         
         if not re.match(r'^[a-zA-Z0-9 ]*$', title):
             return response.badRequest([], "Judul artikel tidak boleh mengandung karakter khusus.")
@@ -216,7 +205,6 @@ def tambahArticle():
             created_by=created_by,
             title=title,
             content=content,
-            author=author,
             img_file=img_url
         )
 
@@ -239,7 +227,6 @@ def ubahArticle(id):
         created_by = request.form.get('created_by')
         title = request.form.get('title')
         content = request.form.get('content')
-        author = request.form.get('author')
         
         if not (created_by):
             return response.badRequest([], "Kolom created_by wajib diisi.")
@@ -250,9 +237,6 @@ def ubahArticle(id):
         if not (content):
             return response.badRequest([], "Kolom content wajib diisi.")
         
-        if not (author):
-            return response.badRequest([], "Kolom author wajib diisi.")
-        
         if not re.match(r'^[a-zA-Z0-9 ]*$', title):
             return response.badRequest([], "Judul artikel tidak boleh mengandung karakter khusus.")
 
@@ -261,11 +245,6 @@ def ubahArticle(id):
         
         if content and (len(content) < 10 or len(content) > 10000):
             return response.badRequest([], "Content harus memiliki panjang antara 10 hingga 10000 karakter.")
-
-        if not re.match(r'^[a-zA-Z ]*$', author):
-            return response.badRequest([], "Author hanya boleh mengandung huruf dan spasi.")
-        if len(author) < 3 or len(author) > 100:
-            return response.badRequest([], "Author harus memiliki panjang antara 3 hingga 100 karakter.")
 
         if 'img_file' in request.files:
             file = request.files['img_file']
@@ -289,7 +268,6 @@ def ubahArticle(id):
         article.created_by = created_by
         article.title = title
         article.content = content
-        article.author = author
         db.session.commit()
 
         return response.success(singleArticle(article))
@@ -331,8 +309,7 @@ def paginateAndFilterArticles():
         if keyword:
             keyword = f"%{keyword}%"
             query = query.filter(
-                Articles.title.ilike(keyword) |
-                Articles.author.ilike(keyword)
+                Articles.title.ilike(keyword)
             )
 
         latest_article = Articles.query.order_by(Articles.created_at.desc()).first()
@@ -397,8 +374,7 @@ def paginateAndFilterArticlesManage():
         if keyword:
             keyword = f"%{keyword}%"
             query = query.filter(
-                Articles.title.ilike(keyword) |
-                Articles.author.ilike(keyword)
+                Articles.title.ilike(keyword)
             )
 
         total_data = query.count()
@@ -420,9 +396,9 @@ def paginateAndFilterArticlesManage():
         }
 
         for article in articles:
-            approved_comments_count = Comments.query.filter_by(id_article=article.id, status=StatusEnum.APPROVED).count()
+            total_comment = Comments.query.count()
             article_data = singleArticle(article)
-            article_data['approved_comments_count'] = approved_comments_count
+            article_data['total_comment'] = total_comment
             pagination_data['results'].append(article_data)
 
         base_url =  f"{os.getenv('BASE_URL')}api/article"
