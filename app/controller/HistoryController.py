@@ -3,6 +3,7 @@ from app import db, response
 from app.model.history import History
 from app.model.products import Products
 from sqlalchemy import func
+from datetime import datetime
 import os
 
 
@@ -18,9 +19,6 @@ def hapusHistory(id):
         print(e)
         return response.serverError([], "Gagal menghapus data riwayat")
     
-from sqlalchemy import func
-from datetime import datetime
-
 def paginateAndFilterHistoryManage():
     try:
         start = request.args.get('start', default=1, type=int)
@@ -84,9 +82,9 @@ def paginateAndFilterHistoryManage():
         return response.serverError([], "Gagal mengambil data riwayat.")
 
 def formatArray(histories):
-    return [singleHistory(history) for history in histories]
+    return [satuHistory(history) for history in histories]
 
-def singleHistory(history):
+def satuHistory(history):
     return {
         "id": history.id,
         "timestamp": history.timestamp,

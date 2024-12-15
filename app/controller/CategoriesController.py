@@ -22,10 +22,10 @@ def indexCategory():
         print(e)
         return response.serverError([], "Gagal mengambil data kategori.")
 
-def format_array(datas):
-    return [single_object(data) for data in datas]
+def formatArray(datas):
+    return [satuObject(data) for data in datas]
 
-def single_object(data):
+def satuObject(data):
     return {
         'id': data.id,
         'category_name': data.category_name,
@@ -81,7 +81,7 @@ def ubahCategory(id):
 
         category.category_name = category_name
         db.session.commit()
-        return response.success(single_object(category))
+        return response.success(satuObject(category))
     except Exception as e:
         db.session.rollback()
         print(e)
