@@ -37,7 +37,7 @@ const data = {
 			isActive: true,
 		},
 		{
-			title: "Manajemen Keanggotaan",
+			title: "Manajemen Anggota",
 			url: "/dashboard/member",
 			icon: Tags,
 		},		

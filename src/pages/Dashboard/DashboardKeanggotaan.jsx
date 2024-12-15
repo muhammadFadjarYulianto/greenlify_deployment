@@ -206,7 +206,7 @@ export default function DashboardMembership() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-[16px] font-normal leading-[28px]">
-                  Keanggotaan
+                  Anggota
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
