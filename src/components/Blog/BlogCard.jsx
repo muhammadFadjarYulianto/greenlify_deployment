@@ -39,7 +39,7 @@ const formatDate = (dateStr) => {
   return `${day}, ${dateNum} ${month} ${year}`;
 };
 
-const BlogCard = ({ author, content, created_at, img_file, title, views }) => {
+const BlogCard = ({ content, created_at, created_by, img_file, title, views }) => {
   const [bgColor, setBgColor] = useState("");
 
   useEffect(() => {
@@ -88,18 +88,14 @@ const BlogCard = ({ author, content, created_at, img_file, title, views }) => {
           >
             <AvatarImage src="" alt="User avatar" />
             <AvatarFallback>
-              {author
-                .split(" ")
-                .map((word) => word[0])
-                .join("")
-                .toUpperCase() || <User />}
+              {created_by.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <Typography
             variant="p-semibold"
             className="text-emerald-600 ml-0 lg:ml-4"
           >
-            {author}
+            {created_by}
           </Typography>
         </div>
         <strong className="hidden lg:block">●</strong>

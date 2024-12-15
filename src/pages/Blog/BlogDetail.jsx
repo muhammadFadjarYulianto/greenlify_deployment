@@ -104,7 +104,7 @@ const BlogDetail = () => {
         <div className="w-full flex flex-col items-center space-y-6 md:space-y-8">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Badge className="h-6 bg-emerald-600 text-background text-sm sm:text-base font-semibold px-2 py-1 rounded-md shadow-md">
-              {article.author}
+              {article.created_by}
             </Badge>
             <Typography
               variant="p-semibold"
