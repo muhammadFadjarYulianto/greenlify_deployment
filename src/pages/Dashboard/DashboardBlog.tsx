@@ -329,7 +329,7 @@ export default function DashboardBlog() {
                 className="w-24 h-24 object-cover rounded-lg"
               />
             </TableCell>
-            <TableCell>{blog.author}</TableCell>
+            {/*<TableCell>{blog.author}</TableCell>*/}
             <TableCell className="max-w-20">{blog.title}</TableCell>
             <TableCell className="text-center">
               {blog.views.toLocaleString("id-ID")}
@@ -472,7 +472,7 @@ export default function DashboardBlog() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xl">Gambar</TableHead>
-                    <TableHead className="text-xl">Penulis</TableHead>
+                    {/*<TableHead className="text-xl">Penulis</TableHead>*/}
                     <TableHead className="text-xl">Nama Blog</TableHead>
                     <TableHead className="text-xl text-center">
                       Di Baca
@@ -592,7 +592,8 @@ export default function DashboardBlog() {
                       name="author"
                       className="col-span-3 h-10 text-slate-900 border border-slate-50 focus:border-slate-100"
                       placeholder="Masukkan nama author"
-                      required
+                      value={"Admin"}
+                      // required
                     />
                   </div>
 

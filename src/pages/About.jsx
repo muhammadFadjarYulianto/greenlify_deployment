@@ -182,11 +182,7 @@ const About = () => {
                 </div>
                 <div className="md:max-w-5xl lg:max-w-7xl p-4 lg:p-0 text-justify lg:text-center hero-description">
                     <Typography variant="p">
-                        GreenLify adalah solusi berbasis teknologi yang memanfaatkan
-                        kecerdasan buatan (Al) dan visi komputer untuk mendeteksi dan
-                        mengklasifikasikan jenis sampah melalui gambar. Hal ini membantu
-                        masyarakat mengenali sampah dan mendapatkan rekomendasi pengelolaan
-                        yang tepat, seperti daur ulang atau kompos.
+                        Kami adalah komunitas kecil yang sedang merintis upaya nyata dalam pengelolaan sampah. Dengan menampung sampah yang dapat didaur ulang, kami berkolaborasi dengan masyarakat untuk menemukan solusi kreatif dan berkelanjutan dalam mengatasi tantangan pengelolaan sampah, demi menciptakan lingkungan yang lebih bersih dan sehat.
                     </Typography>
                 </div>
                 <LazyLoadImage

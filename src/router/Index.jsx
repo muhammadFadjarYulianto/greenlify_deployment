@@ -46,7 +46,7 @@ export default function Index() {
                 <Route path="/dashboard/member" element={lazyWrap(DashboardMembers)()}/>
                 <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()}/>
                 <Route path="/dashboard/blog" element={lazyWrap(DashboardBlog)()}/>
-                <Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>
+                {/*<Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>*/}
             </Route>
             <Route path="/login" element={lazyWrap(Login)()}/>
             <Route path={"*"} element={lazyWrap(Errors)()}/>

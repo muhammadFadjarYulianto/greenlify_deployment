@@ -52,19 +52,19 @@ const data = {
 			icon: StoreIcon,
 		},
 		{
-			title: "Manajemen Konten",
+			title: "Manajemen Blog",
 			url: "/dashboard/blog",
 			icon: TableOfContents,
-			items: [
-				{
-					title: "Manajemen Blog",
-					url: "/dashboard/blog",
-				},
-				{
-					title: "Manajemen Komentar",
-					url: "/dashboard/comment",
-				},
-			],
+			// items: [
+			// 	{
+			// 		title: "Manajemen Blog",
+			// 		url: "/dashboard/blog",
+			// 	},
+			// 	{
+			// 		title: "Manajemen Komentar",
+			// 		url: "/dashboard/comment",
+			// 	},
+			// ],
 		},
 	],
 };
