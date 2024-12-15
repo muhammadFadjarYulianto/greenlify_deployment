@@ -15,7 +15,7 @@ def loginAdmin():
 @app.route('/api/me', methods=['GET'])
 @jwt_required()
 def getMe():
-    return AdminsController.get_me()
+    return AdminsController.getMe()
 
 @app.route('/api/admin', methods=['GET', 'POST'])
 @jwt_required()
@@ -33,7 +33,7 @@ def default():
 @jwt_required()
 def adminDetail(id):
     if request.method == 'GET':
-        return AdminsController.detail_admin(id)
+        return AdminsController.detailAdmin(id)
     elif request.method == "PUT":
         return AdminsController.ubahAdmin(id)
     elif request.method == "DELETE":
@@ -59,7 +59,7 @@ def categoryDetail(id):
 @jwt_required()
 def products():
     if request.method == 'GET':
-        return ProductsController.paginate_and_filter_manage()
+        return ProductsController.paginateAndFilterProductManage()
     else:
         return ProductsController.tambahProduct()
 
@@ -67,7 +67,7 @@ def products():
 @jwt_required()
 def productDetail(id):
     if request.method == 'GET':
-        return ProductsController.detail_product(id)
+        return ProductsController.detailProduct(id)
     elif request.method == "PUT":
         return ProductsController.ubahProduct(id)
     elif request.method == "DELETE":
@@ -75,11 +75,11 @@ def productDetail(id):
 
 @app.route('/api/product/guest', methods=['GET'])
 def guestProduct():
-    return ProductsController.paginate_and_filter()
+    return ProductsController.paginateAndFilterProduct()
 
 @app.route('/api/product/guest/<id>', methods=["GET"])
 def productGuestDetail(id):
-    return ProductsController.detail_product(id)
+    return ProductsController.detailProduct(id)
 
 @app.route('/api/article', methods=['GET', 'POST'])
 @jwt_required()
@@ -108,26 +108,24 @@ def guestDetailArticle(id):
     if request.method == 'GET':
         return ArticlesController.detailArticle(id)
     elif request.method == 'POST':
-        return ArticlesController.tambahCommentForArticle(id)
+        return ArticlesController.tambahCommentUntukArticle(id)
 
 @app.route('/api/comment', methods=['GET'])
 @jwt_required()
 def comments():
     return CommentsController.paginateAndFilterCommentsManage()
 
-@app.route('/api/comment/<id>', methods=["GET", "PUT", "DELETE"])
+@app.route('/api/comment/<id>', methods=["GET", "DELETE"])
 @jwt_required()
 def commentDetail(id):
     if request.method == 'GET':
         return CommentsController.detailComment(id)
-    elif request.method == "PUT":
-        return CommentsController.ubahComment(id)
-    elif request.method == "DELETE":
+    else:
         return CommentsController.hapusComment(id)
     
 @app.route('/api/predict/guest', methods=['POST'])
 def prediction():
-    return PredictionController.predict()
+    return PredictionController.prediksi()
 
 @app.route('/api/history', methods=['GET'])
 @jwt_required()

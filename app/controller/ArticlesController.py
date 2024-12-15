@@ -6,7 +6,7 @@ from app import response, db, app, uploadconfig
 import re, os, uuid
 from werkzeug.utils import secure_filename
 
-def indexArticles():
+def indexArticle():
     try:
         articles = Articles.query.all()
         data = formatArray(articles)
@@ -16,9 +16,9 @@ def indexArticles():
         return response.serverError([], "Gagal mengambil data artikel.")
 
 def formatArray(datas):
-    return [singleArticle(data) for data in datas]
+    return [satuArticle(data) for data in datas]
 
-def singleArticle(data):
+def satuArticle(data):
     return {
         'id': data.id,
         'title': data.title,
@@ -30,7 +30,7 @@ def singleArticle(data):
         'updated_at': data.updated_at
     }
 
-def singleComment(comment):
+def satuComment(comment):
     return {
         'id_comment': comment.id,
         'username': comment.username,
@@ -113,12 +113,12 @@ def detailArticleManage(id):
         if not article:
             return response.notFound([], 'Artikel tidak ditemukan.')
 
-        return response.success(singleArticle(article))
+        return response.success(satuArticle(article))
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail artikel.")
 
-def tambahCommentForArticle(id):
+def tambahCommentUntukArticle(id):
     try:
         username = request.form.get('username') or request.json.get('username')
         email = request.form.get('email') or request.json.get('email')
@@ -270,7 +270,7 @@ def ubahArticle(id):
         article.content = content
         db.session.commit()
 
-        return response.success(singleArticle(article))
+        return response.success(satuArticle(article))
 
     except Exception as e:
         db.session.rollback()
@@ -397,7 +397,7 @@ def paginateAndFilterArticlesManage():
 
         for article in articles:
             total_comment = Comments.query.count()
-            article_data = singleArticle(article)
+            article_data = satuArticle(article)
             article_data['total_comment'] = total_comment
             pagination_data['results'].append(article_data)
 

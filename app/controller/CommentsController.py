@@ -5,9 +5,9 @@ from app.model.articles import Articles
 import re, os
 
 def formatArray(comments):
-    return [singleComment(comment) for comment in comments]
+    return [satuComment(comment) for comment in comments]
 
-def singleComment(comment):
+def satuComment(comment):
     return {
         'id': comment.id,
         'username': comment.username,
@@ -17,7 +17,7 @@ def singleComment(comment):
         'updated_at': comment.updated_at
     }
 
-def indexComments():
+def indexComment():
     try:
         comments = Comments.query.all()
         data = formatArray(comments)
@@ -34,7 +34,7 @@ def detailComment(id):
         comment = Comments.query.filter_by(id=id).first()
         if not comment:
             return response.notFound([], "Komentar tidak ditemukan.")
-        return response.success(singleComment(comment))
+        return response.success(satuComment(comment))
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail komentar.")
@@ -93,7 +93,7 @@ def paginateAndFilterCommentsManage():
             'start_index': start,
             'per_page': limit,
             'total_data': total_data,
-            'results': [singleComment(comment) for comment in comments],
+            'results': [satuComment(comment) for comment in comments],
         }
 
         base_url = f"{os.getenv('BASE_URL')}api/comment"
