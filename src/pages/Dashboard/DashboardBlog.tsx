@@ -142,7 +142,12 @@ export default function DashboardBlog() {
   };
 
   useEffect(() => {
-    fetchBlogs();
+    fetchBlogs().catch(
+        (err) => {
+            setError(err instanceof Error ? err.message : "Gagal mengambil blog");
+            setLoading(false);
+        }
+    );
   }, [filters]);
 
   const handleFilterChange = (key: string, value: any) => {
@@ -169,7 +174,7 @@ export default function DashboardBlog() {
 
     try {
       await createBlogManagement(formData);
-      fetchBlogs();
+      await fetchBlogs();
       setIsAddModalOpen(false);
       toast({
         title: "Blog Berhasil Ditambahkan",
@@ -204,7 +209,7 @@ export default function DashboardBlog() {
 
     try {
       await updateBlogManagement(currentBlog.id, formData);
-      fetchBlogs();
+      await fetchBlogs();
       setIsEditModalOpen(false);
       toast({
         title: "Blog Berhasil Diperbarui",
@@ -223,7 +228,7 @@ export default function DashboardBlog() {
     try {
       await deleteBlogManagement(blogId);
       setIsDeleteModalOpen(false);
-      fetchBlogs();
+      await fetchBlogs();
       toast({
         title: "Blog Berhasil Dihapus",
         description: "Blog telah berhasil dihapus.",

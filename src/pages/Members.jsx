@@ -19,7 +19,7 @@ export default function Members() {
                 console.error(error);
             }
         };
-        fetchMembers();
+        fetchMembers().catch(console.error);
     }, []);
 
     return (

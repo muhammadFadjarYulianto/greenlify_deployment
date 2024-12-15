@@ -39,7 +39,7 @@ const BlogDetail = () => {
   const totalPages = Math.ceil(total_data / per_page);
 
   useEffect(() => {
-    fetchArticle(id, currentPage, per_page);
+    fetchArticle(id, currentPage, per_page).catch(console.error);
   }, [currentPage, fetchArticle, id, per_page]);
 
   const handleAddComment = (newComment) => {

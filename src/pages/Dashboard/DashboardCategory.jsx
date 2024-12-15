@@ -141,7 +141,9 @@ export default function CategoryManagement() {
     };
 
     useEffect(() => {
-        fetchCategories();
+        fetchCategories().catch(error => {
+            console.error("Gagal mengambil data categori", error);
+        });
     }, []);
 
     return (
@@ -347,9 +349,9 @@ export default function CategoryManagement() {
                         </Button>
                         <Button
                             variant="destructive"
-                            onClick={() => {
-                                handleDeleteCategory(currentCategory.id);
-                            }}
+                            onClick={() =>
+                                handleDeleteCategory(currentCategory.id)
+                            }
                         >
                             Hapus
                         </Button>

@@ -34,7 +34,7 @@ export function NavUser({user}) {
             setName(response.name);
             setEmail(response.email);
         };
-        fetchAdmin();
+        fetchAdmin().catch(console.error);
     }, []);
 
     const handleLogout = async () => {
@@ -105,7 +105,7 @@ export function NavUser({user}) {
                             <Button
                                 variant="destructive"
                                 onClick={() => {
-                                    handleLogout();
+                                    handleLogout().catch(console.error);
                                     setIsDeleteModalOpen(false);
                                 }}
                             >

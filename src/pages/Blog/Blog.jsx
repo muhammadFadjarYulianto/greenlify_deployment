@@ -63,7 +63,7 @@ const Blog = () => {
                 setIsLoading(false);
             }
         };
-        fetchBlogs();
+        fetchBlogs().catch(console.error);
     }, [searchQuery, currentPage]);
 
     useEffect(() => {

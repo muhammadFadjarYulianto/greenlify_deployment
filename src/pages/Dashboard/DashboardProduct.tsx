@@ -200,11 +200,15 @@ export default function DashboardProduct() {
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts().catch(error => {
+            console.error("Gagal mengambil data produk", error);
+        });
     }, [filters]);
 
     useEffect(() => {
-        fetchCategories();
+        fetchCategories().catch(error => {
+            console.error("Gagal mengambil data categori", error);
+        });
     }, []);
 
     const fetchCategories = async () => {
@@ -243,7 +247,7 @@ export default function DashboardProduct() {
 
         try {
             await createProductManagement(formData);
-            fetchProducts();
+            await fetchProducts();
             setIsAddModalOpen(false);
             toast({
                 title: "Produk Berhasil Ditambahkan",
@@ -270,7 +274,7 @@ export default function DashboardProduct() {
 
         try {
             await updateProductManagement(currentProduct.id, formData);
-            fetchProducts();
+            await fetchProducts();
             setIsEditModalOpen(false);
             toast({
                 title: "Produk Berhasil Diperbarui",
@@ -980,7 +984,7 @@ export default function DashboardProduct() {
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                handleDeleteProduct(currentProduct.id);
+                                handleDeleteProduct(currentProduct.id).catch(error => {});
                             }}
                         >
                             Hapus

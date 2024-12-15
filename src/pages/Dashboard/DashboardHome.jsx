@@ -120,7 +120,7 @@ export default function DashboardHome() {
     };
 
     useEffect(() => {
-        fetchHistory(pagination.start, pagination.limit);
+        fetchHistory(pagination.start, pagination.limit).then(r => r);
     }, [pagination.start]);
 
     const handlePageChange = (url) => {
@@ -333,7 +333,9 @@ export default function DashboardHome() {
                             <Button
                                 variant="destructive"
                                 onClick={() => {
-                                    deletedHistory(currentHistoryId);
+                                    deletedHistory(currentHistoryId).catch(
+                                        (error) => console.error(error)
+                                    );
                                 }}
                             >
                                 Hapus
