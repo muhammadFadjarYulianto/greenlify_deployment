@@ -24,10 +24,6 @@ def admins():
     else:
         return AdminsController.tambahAdmin()
 
-@app.route('/api/admin/default', methods=['POST'])
-def default():
-    return AdminsController.defaultAdmin()
-
 @app.route('/api/admin/<id>', methods=["GET", "PUT", "DELETE"])
 @jwt_required()
 def adminDetail(id):
