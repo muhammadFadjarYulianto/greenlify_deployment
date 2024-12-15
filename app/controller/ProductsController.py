@@ -78,10 +78,7 @@ def tambahProduct():
             return response.badRequest([], "Nama produk harus antara 3 hingga 100 karakter.")
         
         if description and (len(description) < 10 or len(description) > 10000):
-            return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")
-
-        # if contact and not re.match(r'^\d+$', contact):
-        #     return response.badRequest([], "Kontak harus berupa angka.")        
+            return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")     
 
         if 'img_file' not in request.files:
             return response.badRequest([], 'File tidak tersedia')
@@ -102,7 +99,6 @@ def tambahProduct():
             file_path = os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')
             img_url = f"{os.getenv('BASE_URL')}{file_path}"
             
-
 
         try:
             price = float(price)
@@ -185,9 +181,6 @@ def ubahProduct(id):
         
         if description and (len(description) < 10 or len(description) > 10000):
             return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")
-        
-        # if contact and not re.match(r'^\d+$', contact):
-        #     return response.badRequest([], "Kontak harus berupa angka.")
 
         try:
             price = float(price)

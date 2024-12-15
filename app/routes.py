@@ -1,5 +1,5 @@
 from app import app, response
-from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController, PredictionController, HistoryController
+from app.controller import AdminsController, CategoriesController, ProductsController, ArticlesController, CommentsController, PredictionController, HistoryController, MemberController
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.controller.ProductsController import Products, format_array
@@ -11,11 +11,6 @@ def index():
 @app.route('/api/login', methods=['POST'])
 def loginAdmin():
     return AdminsController.loginAdmin()
-
-# @app.route('/api/refresh', methods=['POST'])
-# @jwt_required(refresh=True)
-# def refresh_token():
-#     return AdminsController.refreshToken()
 
 @app.route('/api/me', methods=['GET'])
 @jwt_required()
@@ -142,4 +137,24 @@ def get_all_history():
 @app.route('/api/history/<id>', methods=['DELETE'])
 @jwt_required()
 def delete_history(id):
-    return HistoryController.delete_history(id)
+    return HistoryController.hapusHistory(id)
+
+@app.route('/api/member/guest', methods=['GET'])
+def memberGuest():
+    return MemberController.indexMember()
+
+@app.route('/api/member', methods=['GET', 'POST'])
+@jwt_required()
+def memberManage():
+    if request.method == 'GET':
+        return MemberController.indexMember()
+    else:
+        return MemberController.tambahMember()
+    
+@app.route('/api/member/<id>', methods=['PUT', 'DELETE'])
+@jwt_required()
+def memberDetail(id):
+    if request.method == 'PUT':
+        return MemberController.memperbaruiMember(id)
+    else:
+        return MemberController.hapusMember(id)
