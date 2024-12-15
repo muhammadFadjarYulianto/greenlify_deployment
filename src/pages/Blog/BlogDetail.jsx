@@ -17,31 +17,11 @@ import { useBlogStore } from "@/store/useBlogStore";
 import { Plus } from "lucide-react";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const months = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ];
-  return `${days[date.getDay()]}, ${date.getDate()} ${
-    months[date.getMonth()]
-  } ${date.getFullYear()}`;
-};
+import useDateStore from "@/store/useDateStore";
 
 const BlogDetail = () => {
   const { id } = useParams();
+  const { formatDate } = useDateStore();
   const {
     article,
     comments,

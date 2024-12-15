@@ -13,12 +13,14 @@ import {
 } from "@/components/ui/pagination";
 import {LatestBlogSkeleton} from "@/components/Blog/LatestBlogSkeleton";
 import BlogCardSkeletonList from "@/components/Blog/BlogCardSkeletonList";
+import useDateStore from "@/store/useDateStore";
 import {gsap} from "gsap";
 
 const Blog = () => {
     const articlesContainerRef = useRef(null);
     const noArticlesRef = useRef(null);
     const searchParams = new URLSearchParams(window.location.search);
+    const {formatDate} = useDateStore();
     const [latestArticle, setLatestArticle] = useState([]);
     const [articles, setArticles] = useState([]);
     const [searchQuery, setSearchQuery] = useState(searchParams.get("keyword") || "");
@@ -145,17 +147,6 @@ const Blog = () => {
         const newURL = new URL(window.location.href);
         newURL.searchParams.set("page", newPage);
         window.history.pushState(null, "", newURL.toString());
-    };
-
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        const day = days[date.getDay()];
-        const dateNum = date.getDate();
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-        return `${day}, ${dateNum} ${month} ${year}`;
     };
 
     const renderLatestArticle = () => {

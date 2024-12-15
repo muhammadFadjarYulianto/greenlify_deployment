@@ -65,6 +65,8 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import useDateStore from "@/store/useDateStore";
+
 interface Product {
     id: number;
     product_name: string;
@@ -99,6 +101,8 @@ export default function DashboardProduct() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
         null
     );
+    // @ts-ignore
+    const {formatDate} = useDateStore();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -308,41 +312,6 @@ export default function DashboardProduct() {
                 variant: "destructive",
             });
         }
-    };
-
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-
-        const days = [
-            "Minggu",
-            "Senin",
-            "Selasa",
-            "Rabu",
-            "Kamis",
-            "Jumat",
-            "Sabtu",
-        ];
-        const months = [
-            "Januari",
-            "Februari",
-            "Maret",
-            "April",
-            "Mei",
-            "Juni",
-            "Juli",
-            "Agustus",
-            "September",
-            "Oktober",
-            "November",
-            "Desember",
-        ];
-
-        const day = days[date.getDay()];
-        const dateNum = date.getDate();
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-
-        return `${day}, ${dateNum} ${month} ${year}`;
     };
 
     const openEditModal = (product: Product) => {

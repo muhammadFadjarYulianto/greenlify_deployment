@@ -55,7 +55,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Editor } from "@/components/ui/editor";
-import {getDetailsProductManagement} from "@/services/productManagement";
+import useDateStore from "@/store/useDateStore";
 
 interface Blog {
   id: number;
@@ -82,6 +82,8 @@ interface BlogTableProps {
 
 export default function DashboardBlog() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  // @ts-ignore
+  const {formatDate} = useDateStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -237,41 +239,6 @@ export default function DashboardBlog() {
         variant: "destructive",
       });
     }
-  };
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-
-    const days = [
-      "Minggu",
-      "Senin",
-      "Selasa",
-      "Rabu",
-      "Kamis",
-      "Jumat",
-      "Sabtu",
-    ];
-    const months = [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
-    ];
-
-    const day = days[date.getDay()];
-    const dateNum = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-
-    return `${day}, ${dateNum} ${month} ${year}`;
   };
 
   const openEditModal = (blog: Blog) => {

@@ -44,6 +44,7 @@ import {
   updateMember,
   deleteMember,
 } from "@/services/memberManagement.js";
+import useDateStore from "@/store/useDateStore";
 
 export default function DashboardMembership() {
   const [members, setMembers] = useState([]);
@@ -52,6 +53,7 @@ export default function DashboardMembership() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentMember, setCurrentMember] = useState(null);
+  const { formatDate } = useDateStore();
   const { toast } = useToast();
 
   const fetchMembers = async () => {
@@ -144,40 +146,6 @@ export default function DashboardMembership() {
   useEffect(() => {
     fetchMembers();
   }, []);
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    const days = [
-      "Minggu",
-      "Senin",
-      "Selasa",
-      "Rabu",
-      "Kamis",
-      "Jumat",
-      "Sabtu",
-    ];
-    const months = [
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
-    ];
-
-    const day = days[date.getDay()];
-    const dateNum = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-
-    return `${day}, ${dateNum} ${month} ${year}`;
-  };
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2">

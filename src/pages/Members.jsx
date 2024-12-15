@@ -6,41 +6,6 @@ import activityCommunityData from "@/data/activity_community.json";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import {differenceInDays} from 'date-fns';
 
-const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-
-    const days = [
-        "Minggu",
-        "Senin",
-        "Selasa",
-        "Rabu",
-        "Kamis",
-        "Jumat",
-        "Sabtu",
-    ];
-    const months = [
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
-    ];
-
-    const day = days[date.getDay()];
-    const dateNum = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-
-    return `${dateNum} ${month} ${year}`;
-};
-
 export default function Members() {
     const [members, setMembers] = useState([]);
 
@@ -51,7 +16,7 @@ export default function Members() {
                 setMembers(response);
                 console.log(response);
             } catch (error) {
-                console.log(error.message);
+                console.error(error);
             }
         };
         fetchMembers();

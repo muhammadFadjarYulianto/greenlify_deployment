@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/table";
 import {Badge} from "@/components/ui/badge";
 import {Brain, ScanLine, Store, Trash2} from "lucide-react";
-import {LineChart, Line} from "recharts";
 import {SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
 import {
@@ -41,19 +40,10 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-
-const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    const day = days[date.getDay()];
-    const dateNum = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day}, ${dateNum} ${month} ${year}`;
-};
+import useDateStore from "@/store/useDateStore";
 
 export default function DashboardHome() {
+    const {formatDate} = useDateStore();
     const [history, setHistory] = useState([]);
     const [avgAccuracy, setAvgAccuracy] = useState(0);
     const [totalProduct, setTotalProduct] = useState(0);
