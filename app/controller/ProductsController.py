@@ -9,16 +9,16 @@ from werkzeug.utils import secure_filename
 def indexProduct():
     try:
         products = Products.query.all()
-        data = format_array(products)
+        data = formatArray(products)
         return response.success(data)
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data produk.")
 
-def format_array(datas):
-    return [single_object(data) for data in datas]
+def formatArray(datas):
+    return [satuProduct(data) for data in datas]
 
-def single_object(data):
+def satuProduct(data):
     return {
         'id': data.id,
         'created_by': data.admin.name,
@@ -32,13 +32,13 @@ def single_object(data):
         'updated_at': data.updated_at
     }
 
-def detail_product(id):
+def detailProduct(id):
     try:
         product = Products.query.filter_by(id=id).first()
         if not product:
             return response.notFound([], 'Produk tidak ditemukan')
 
-        data = single_object(product)
+        data = satuProduct(product)
         return response.success(data)
     except Exception as e:
         print(e)
@@ -78,10 +78,7 @@ def tambahProduct():
             return response.badRequest([], "Nama produk harus antara 3 hingga 100 karakter.")
         
         if description and (len(description) < 10 or len(description) > 10000):
-            return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")
-
-        # if contact and not re.match(r'^\d+$', contact):
-        #     return response.badRequest([], "Kontak harus berupa angka.")        
+            return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")     
 
         if 'img_file' not in request.files:
             return response.badRequest([], 'File tidak tersedia')
@@ -102,7 +99,6 @@ def tambahProduct():
             file_path = os.path.join(app.config['PRODUCT_URL_PATH'], renamefile).replace('\\', '/')
             img_url = f"{os.getenv('BASE_URL')}{file_path}"
             
-
 
         try:
             price = float(price)
@@ -185,9 +181,6 @@ def ubahProduct(id):
         
         if description and (len(description) < 10 or len(description) > 10000):
             return response.badRequest([], "Deskripsi harus antara 10 hingga 10000 karakter.")
-        
-        # if contact and not re.match(r'^\d+$', contact):
-        #     return response.badRequest([], "Kontak harus berupa angka.")
 
         try:
             price = float(price)
@@ -224,7 +217,7 @@ def ubahProduct(id):
 
         db.session.commit()
 
-        return response.success(single_object(product))
+        return response.success(satuProduct(product))
 
     except Exception as e:
         db.session.rollback()
@@ -252,7 +245,7 @@ def hapusProduct(id):
         print(e)
         return response.serverError([], "Gagal menghapus produk.")
 
-def paginate_and_filter():
+def paginateAndFilterProduct():
     try:
         start = request.args.get('start', default=1, type=int)
         limit = request.args.get('limit', default=2, type=int)
@@ -304,7 +297,7 @@ def paginate_and_filter():
             'start_index': start,
             'per_page': limit,
             'total_data': total_data,
-            'results': format_array(products),
+            'results': formatArray(products),
         }
 
         base_url =   f"{os.getenv('BASE_URL')}api/product/guest"
@@ -346,7 +339,7 @@ def paginate_and_filter():
         print(e)
         return response.serverError([], "Gagal mengambil data produk.")
     
-def paginate_and_filter_manage():
+def paginateAndFilterProductManage():
     try:
         start = request.args.get('start', default=1, type=int)
         limit = request.args.get('limit', default=5, type=int)
@@ -397,7 +390,7 @@ def paginate_and_filter_manage():
             'start_index': start,
             'per_page': limit,
             'total_data': total_data,
-            'results': format_array(products),
+            'results': formatArray(products),
         }
 
         base_url = f"{os.getenv('BASE_URL')}api/product"

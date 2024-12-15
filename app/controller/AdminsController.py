@@ -11,16 +11,16 @@ import os
 def indexAdmin():
     try:
         admins = Admins.query.all()
-        data = format_array(admins)
+        data = formatArray(admins)
         return response.success(data)
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil data admin.")
 
-def format_array(datas):
-    return [single_object(data) for data in datas]
+def formatArray(datas):
+    return [satuAdmin(data) for data in datas]
 
-def single_object(data):
+def satuAdmin(data):
     return {
         'id': data.id,
         'name': data.name,
@@ -31,21 +31,21 @@ def single_object(data):
         'updated_at': data.updated_at
     }
 
-def detail_admin(id):
+def detailAdmin(id):
     try:
         admin = Admins.query.filter_by(id=id).first()
         if not admin:
             return response.notFound([], 'Admin tidak ditemukan')
 
         products = Products.query.filter_by(created_by=id).all()
-        data = single_detail_admin(admin, products)
+        data = satuDetailAdmin(admin, products)
 
         return response.success(data)
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal mengambil detail admin.")
 
-def single_detail_admin(admin, products):
+def satuDetailAdmin(admin, products):
     return {
         'id': admin.id,
         'name': admin.name,
@@ -54,10 +54,10 @@ def single_detail_admin(admin, products):
         'gender': admin.gender,
         'created_at': admin.created_at,
         'updated_at': admin.updated_at,
-        'products': [single_product(product) for product in products]
+        'products': [satuProduct(product) for product in products]
     }
 
-def single_product(product):
+def satuProduct(product):
     return {
         'id': product.id,
         'created_by': product.admin.name,
@@ -185,7 +185,7 @@ def ubahAdmin(id):
 
         db.session.commit()
 
-        return response.success(single_object(admin))
+        return response.success(satuAdmin(admin))
     except Exception as e:
         db.session.rollback()
         print(e)
@@ -232,59 +232,25 @@ def loginAdmin():
         if password and len(password) > 50:  
             return response.badRequest([], "Password terlalu panjang, maksimal 50 karakter.")
         
-        data = single_object(admin)
+        data = satuAdmin(admin)
 
         expires = timedelta(days=3) if remember_me else timedelta(hours=12)
-        # expires_refresh = timedelta(hours=12)
         additional_claims = {'remember_me': remember_me}
 
         access_token = create_access_token(identity=admin.email, fresh=True, expires_delta=expires, additional_claims=additional_claims)
-        # refresh_token = create_refresh_token(identity=admin.email, expires_delta=expires_refresh)
 
         access_token_expiry_time = datetime.utcnow() + expires
-        # refresh_token_expiry_time = datetime.utcnow() + expires_refresh
-
-        access_token_expiry_time = datetime.utcnow() + expires
-        refresh_token_expiry_time = datetime.utcnow() + expires_refresh
 
         return response.success({
             "data" : data,
             "access_token" : access_token,
-            # "refresh_token" : refresh_token,
             "access_token_expiry_time": access_token_expiry_time.isoformat(),
-            # "refresh_token_expiry_time": refresh_token_expiry_time.is
         })
     except Exception as e:
         print(e)
         return response.serverError([], "Gagal login")
-    
-# def refreshToken():
-#     try:
-#         current_user = get_jwt_identity()
-#         jwt_claims = get_jwt()
-#         remember_me = jwt_claims.get('remember_me', False)
 
-#         expires_access = timedelta(hours=12)
-#         expires_refresh = timedelta(days=3) if remember_me else timedelta(hours=12)
-#         additional_claims = {'remember_me': remember_me}
-
-#         access_token_expiry_time = datetime.utcnow() + expires_access
-#         refresh_token_expiry_time = datetime.utcnow() + expires_refresh
-
-#         new_access_token = create_access_token(identity=current_user, fresh=False, expires_delta=expires_access)
-#         new_refresh_token = create_refresh_token(identity=current_user, expires_delta=expires_refresh, additional_claims=additional_claims)
-
-#         data = {
-#             "access_token": new_access_token,
-#             "refresh_token": new_refresh_token,
-#             "access_token_expiry_time": access_token_expiry_time.isoformat(),
-#             "refresh_token_expiry_time": refresh_token_expiry_time.isoformat()
-#         }
-#         return response.success(data)
-#     except Exception as e:
-#         return response.serverError([],"Gagal memperbarui token")
-
-def get_me():
+def getMe():
         try:
             current_user_email = get_jwt_identity()
 
@@ -293,7 +259,7 @@ def get_me():
             if not admin:
                 return response.notFound([],"Admin tidak ditemukan")
 
-            data = single_object(admin)
+            data = satuAdmin(admin)
 
             return response.success(data)
         
@@ -327,4 +293,3 @@ def defaultAdmin():
     except Exception as e:
         print(e)
         return response.serverError([], "Terjadi kesalahan saat membuat admin default.")
-

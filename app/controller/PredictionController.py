@@ -27,7 +27,7 @@ class_indices = {
 
 index_to_label = {v: k for k, v in class_indices.items()}
 
-def predict():
+def prediksi():
     if 'file' not in request.files:
         return response.badRequest([], "Tidak ada file yang diunggah")
 

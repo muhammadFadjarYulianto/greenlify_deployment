@@ -109,7 +109,6 @@ def run_seeder():
             img_file=article1_img_url,
             content='Tas kain berbahan katun organik, ideal untuk menggantikan kantong plastik saat berbelanja.',
             views=120,
-            author='Admin',
         )
         article2 = Articles(
             created_by=1,
@@ -117,7 +116,6 @@ def run_seeder():
             img_file=article2_img_url,
             content='Set alat makan berbahan kompos, cocok untuk penggunaan sekali pakai tanpa merusak lingkungan.',
             views=80,
-            author='Admin',
         )
         article3 = Articles(
             created_by=1,
@@ -125,7 +123,6 @@ def run_seeder():
             img_file=article3_img_url,
             content='Wadah makanan berbahan biodegradable, aman untuk lingkungan dan dapat terurai secara alami.',
             views=150,
-            author='Admin',
         )
 
         comment1 = Comments(
@@ -133,24 +130,18 @@ def run_seeder():
             username='Budi',
             email='budi@gmail.com',
             comment='Tas kain ini sangat praktis dan ramah lingkungan, saya suka sekali!',
-            is_approved=True,
-            status='APPROVED',
         )
         comment2 = Comments(
             id_article=2,
             username='Siti',
             email='siti@gmail.com',
             comment='Alat makan kompos ini sangat bermanfaat dan bagus untuk lingkungan.',
-            is_approved=True,
-            status='APPROVED',
         )
         comment3 = Comments(
             id_article=3,
             username='Andi',
             email='andi@gmail.com',
             comment='Wadah biodegradable ini sangat berguna untuk menyimpan makanan dengan aman.',
-            is_approved=True,
-            status='APPROVED',
         )
 
         db.session.add_all([admin, category1, category2, category3, product1, product2, product3, article1, article2, article3, comment1, comment2, comment3])

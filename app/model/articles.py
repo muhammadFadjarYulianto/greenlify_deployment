@@ -9,7 +9,6 @@ class Articles(db.Model):
     img_file = db.Column(db.Text, nullable=True)
     content = db.Column(db.Text, nullable=True)
     views = db.Column(db.Integer, default=0, nullable=False)
-    author = db.Column(db.String(100), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

@@ -3,29 +3,11 @@ from app import db, response
 from app.model.history import History
 from app.model.products import Products
 from sqlalchemy import func
+from datetime import datetime
 import os
 
 
-def get_history():
-    try:
-        histories = History.query.all()
-        
-        result = [
-            {
-                "id": history.id,
-                "timestamp": history.timestamp,
-                "waste_type": history.waste_type,
-                "accuracy": float(history.accuracy)
-            } for history in histories
-        ]
-        
-        return jsonify(result)
-    except Exception as e:
-        print(e)
-        return response.serverError([], "Gagal mengambil data riwayat")
-
-
-def delete_history(id):
+def hapusHistory(id):
     try:
         history = History.query.get_or_404(id)
         
@@ -37,9 +19,6 @@ def delete_history(id):
         print(e)
         return response.serverError([], "Gagal menghapus data riwayat")
     
-from sqlalchemy import func
-from datetime import datetime
-
 def paginateAndFilterHistoryManage():
     try:
         start = request.args.get('start', default=1, type=int)
@@ -103,9 +82,9 @@ def paginateAndFilterHistoryManage():
         return response.serverError([], "Gagal mengambil data riwayat.")
 
 def formatArray(histories):
-    return [singleHistory(history) for history in histories]
+    return [satuHistory(history) for history in histories]
 
-def singleHistory(history):
+def satuHistory(history):
     return {
         "id": history.id,
         "timestamp": history.timestamp,
