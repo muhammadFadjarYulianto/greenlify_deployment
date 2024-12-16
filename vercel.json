@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*).js",
+      "dest": "/$1.js"
+    },
+    {
+      "src": "/(.*).css",
+      "dest": "/$1.css"
+    },
+    {
+      "src": "/(.*).(jpg|jpeg|png|gif|svg|ico|webp)",
+      "dest": "/$1.$2"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard/member",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard/category",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard/product",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/dashboard/blog",
+      "dest": "/index.html"
+    }
+  ]
+}

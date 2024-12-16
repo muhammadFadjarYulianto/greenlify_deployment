@@ -5,19 +5,23 @@ import {LazyLoadImage} from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import {gsap} from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
-
 gsap.registerPlugin(ScrollTrigger);
+import KLHK from "@/assets/partners/KLHK.svg";
+import Waste4Change from "@/assets/partners/waste4change.svg";
+import Greenpeace from "@/assets/partners/Greenpeace.svg";
+import Kehati from "@/assets/partners/Kehati.svg";
+import Avani from "@/assets/partners/Avani.svg";
 
 const partners = [
-    {id: 1, name: "KLHK", imageSrc: "/src/assets/partners/KLHK.svg"},
+    {id: 1, name: "KLHK", imageSrc: KLHK},
     {
         id: 2,
         name: "Waste4Change",
-        imageSrc: "/src/assets/partners/waste4change.svg",
+        imageSrc: Waste4Change,
     },
-    {id: 3, name: "Greenpeace", imageSrc: "/src/assets/partners/Greenpeace.svg"},
-    {id: 4, name: "Kehati", imageSrc: "/src/assets/partners/Kehati.svg"},
-    {id: 5, name: "Avani", imageSrc: "/src/assets/partners/Avani.svg"},
+    {id: 3, name: "Greenpeace", imageSrc: Greenpeace},
+    {id: 4, name: "Kehati", imageSrc: Kehati},
+    {id: 5, name: "Avani", imageSrc: Avani},
 ];
 
 const teamMembers = [
