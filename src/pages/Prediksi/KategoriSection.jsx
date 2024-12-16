@@ -1,14 +1,11 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React from "react";
 import { Typography } from "@/components/ui/Typography";
-import { gsap } from "gsap";
-gsap.registerPlugin(ScrollTrigger);
 import Kaca from "../../assets/images/kaca.png";
 import Kardus from "../../assets/images/kardus.png";
 import Kertas from "../../assets/images/kertas.png";
 import Metal from "../../assets/images/metal.png";
 import Organik from "../../assets/images/organik.png";
 import Plastik from "../../assets/images/plastik.png";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const CardSampah = [
   {
@@ -50,51 +47,6 @@ const CardSampah = [
 ];
 
 const KategoriSection = () => {
-  const heroSectionRef = React.useRef(null);
-  const classtificationRef = React.useRef([]);
-
-  useEffect(() => {
-    gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: heroSectionRef.current,
-          start: "top 80%",
-          end: "bottom top",
-          toggleActions: "play none none none",
-        },
-      })
-      .fromTo(
-        ".hero-title",
-        { opacity: 0, x: 50 },
-        { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" }
-      )
-      .fromTo(
-        ".hero-description",
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-        "-=0.4"
-      );
-
-    classtificationRef.current.forEach((step, index) => {
-      gsap.fromTo(
-        step,
-        { opacity: 0, x: 100 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1.0,
-          delay: index * 0.5,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: step,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    });
-  });
-
   return (
     <section>
       {/* Section kategori sampah */}
@@ -118,7 +70,6 @@ const KategoriSection = () => {
           {CardSampah.map((item) => (
             <figure
               key={item.id}
-              ref={(el) => (classtificationRef.current[item.id] = el)}
             >
               <img
                 src={item.img}

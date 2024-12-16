@@ -1,4 +1,4 @@
-const END_POINT = 'https://greenlifyhost.tech';
+const END_POINT = 'https://greenlifyhost.tech/';
 export const LOGIN = `${END_POINT}/api/login`;
 export const ADMIN = `${END_POINT}/api/me`;
 export const REFRESH = `${END_POINT}/api/refresh`;

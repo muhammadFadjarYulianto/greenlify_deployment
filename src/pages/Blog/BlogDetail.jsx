@@ -69,7 +69,7 @@ const BlogDetail = () => {
           <Button
             variant="primary"
             size="lg"
-            onClick={() => (window.location.href = "/blog")}
+            onClick={() => (window.location.href = escape("/blog"))}
           >
             Kembali ke Halaman Blog
           </Button>
