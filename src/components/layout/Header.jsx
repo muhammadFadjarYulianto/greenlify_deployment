@@ -55,7 +55,7 @@ export default function Header() {
                     setIsLoggedIn(false);
                     localStorage.removeItem("access_token");
                     localStorage.removeItem("refresh_token");
-                    window.location.href = "/login";
+                    window.location.href = escape("/login");
                 }
             }
         }
@@ -115,7 +115,7 @@ export default function Header() {
         if (isLoggedIn) {
             return (
                 <>
-                    <Button size="md" className="w-full text-lg" onClick={() => window.location.href = "/dashboard"}>
+                    <Button size="md" className="w-full text-lg" onClick={() => window.location.href = escape("/dashboard")}>
                         Dashboard
                     </Button>
                     <Button variant="destructive" size="md" className="w-full mt-4 text-lg" onClick={handleLogout}>
@@ -151,7 +151,7 @@ export default function Header() {
                         <DropdownMenuSeparator className="border"/>
                         <DropdownMenuLabel className="text-[16px] font-semibold leading-[28px]">Menu</DropdownMenuLabel>
                         <DropdownMenuItem className="cursor-pointer"
-                                          onClick={() => window.location.href = "/dashboard"}>
+                                          onClick={() => window.location.href = escape("/dashboard")}>
                             <User className="mr-2 h-6 w-6"/>
                             <Typography variant="p-semibold" className="text-white">Dashboard</Typography>
                         </DropdownMenuItem>

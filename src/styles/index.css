@@ -6,7 +6,6 @@
 
 @layer base {
 	:root {
-		/*--background: #fdfaf1;*/
 		--background: #fff;
 		--emerald-50: #d8f3dc;
 		--emerald-100: #b7e4c7;
@@ -16,7 +15,6 @@
 		--emerald-500: #40916c;
 		--emerald-600: #2d6a4f;
 		--emerald-700: #1b4332;
-
 		--slate-50: #f8fafc;
 		--slate-100: #f1f5f9;
 		--slate-200: #e2e8f0;
@@ -27,23 +25,17 @@
 		--slate-700: #334155;
 		--slate-800: #1e293b;
 		--slate-900: #0f172a;
-
 		--radius: 12px;
 	}
-
 	.dark {
 		--background: #1a202c;
 		--foreground: 0 0% 100%;
 		--muted-foreground: 0 0% 60%;
 		--accent-foreground: 0 0% 90%;
 	}
-}
-
-@layer base {
 	* {
 		@apply font-['Roboto'];
 	}
-
 	body {
 		@apply bg-background;
 	}
