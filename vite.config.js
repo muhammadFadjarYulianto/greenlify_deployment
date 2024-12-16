@@ -7,6 +7,7 @@ export default defineConfig({
   base: "/",
   server: {
     proxy: {
+      changeOrigin: true,
       secure: false,
     }
   },
