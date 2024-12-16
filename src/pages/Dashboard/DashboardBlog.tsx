@@ -192,7 +192,7 @@ export default function DashboardBlog() {
   const handleBlogDetails = async (blogId: number) => {
       try {
           const response = await getBlogByIdManagement(blogId);
-          window.location.href = `/blog/${response}`;
+          window.location.href = escape(`/blog/${response}`);
       } catch (error) {
           toast({
               title: "Gagal Mengambil Detail Produk",

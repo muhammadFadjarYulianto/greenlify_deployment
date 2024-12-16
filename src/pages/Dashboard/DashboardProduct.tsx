@@ -227,7 +227,7 @@ export default function DashboardProduct() {
     const handleProductDetails = async (productId: number) => {
         try {
             const response = await getDetailsProductManagement(productId);
-            window.location.href = `/produk/${response}`;
+            window.location.href = escape(`/produk/${response}`);
         } catch (error) {
             toast({
                 title: "Gagal Mengambil Detail Produk",
