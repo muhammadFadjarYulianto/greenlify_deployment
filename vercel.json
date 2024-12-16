@@ -1,86 +1,24 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
   "routes": [
     {
-      "src": "/",
-      "dest": "/index.html"
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
-      "src": "/beranda",
-      "dest": "/index.html"
+      "src": "/(.*).js",
+      "dest": "/$1.js"
     },
     {
-      "src": "/blog",
-      "dest": "/index.html"
+      "src": "/(.*).css",
+      "dest": "/$1.css"
     },
     {
-      "src": "/blog/:id",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/statistik",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/prediksi",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/produk",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/produk/:id",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/tentangkami",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/anggotakami",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/privacy+policy",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/terms+conditions",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/dashboard/category",
+      "src": "/(.*)",
       "dest": "/index.html"
     },
     {
       "src": "/dashboard/member",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/dashboard/produk",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/dashboard/blog",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/login",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/.*",
       "dest": "/index.html"
     }
   ]
