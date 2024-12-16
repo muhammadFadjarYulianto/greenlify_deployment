@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "lint": "biome lint --write ./src",
@@ -17,7 +17,8 @@
     "lucid": "npm install lucide-react",
     "quil": "npm install react-quill",
     "taailwindtypography": "npm install -D @tailwindcss/typography",
-    "setup": "npm install && npm run prepare && npm run lucid && npm run quil && npm run taailwindtypography"
+    "setup": "npm install && npm run prepare && npm run lucid && npm run quil && npm run taailwindtypography",
+    "homepage": "https://damar-glh.github.io/greenlify"
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.10",
