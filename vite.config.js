@@ -4,7 +4,7 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [react()],
-  base: "/greenlify/",
+  // base: "/greenlify/",
   // server: {
   //   proxy: {
   //     changeOrigin: true,
