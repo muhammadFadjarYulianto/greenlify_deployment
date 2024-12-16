@@ -2,9 +2,41 @@ import {Typography} from "@/components/ui/Typography";
 import React, {useEffect, useState} from "react";
 import {Table, TableBody, TableHead, TableHeader, TableCell, TableRow} from "@/components/ui/table";
 import {getMembers} from "@/services/member";
-import activityCommunityData from "@/data/activity_community.json";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import {differenceInDays} from 'date-fns';
+import Img_1 from "@/assets/activity_comunity/1.png";
+import Img_2 from "@/assets/activity_comunity/2.png";
+import Img_3 from "@/assets/activity_comunity/3.png";
+import Img_4 from "@/assets/activity_comunity/4.png";
+import Img_5 from "@/assets/activity_comunity/5.png";
+import Img_6 from "@/assets/activity_comunity/6.png";
+
+const activityCommunityData = [
+    {
+        id: 1,
+        img: Img_1,
+    },
+    {
+        id: 2,
+        img: Img_2,
+    },
+    {
+        id: 3,
+        img: Img_3,
+    },
+    {
+        id: 4,
+        img: Img_4,
+    },
+    {
+        id: 5,
+        img: Img_5,
+    },
+    {
+        id: 6,
+        img: Img_6,
+    }
+];
 
 export default function Members() {
     const [members, setMembers] = useState([]);
@@ -89,8 +121,8 @@ export default function Members() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-16">
                         {activityCommunityData.map((activity, index) => (
                             <LazyLoadImage
-                                key={index}
-                                src={activity.imageSrc}
+                                key={activity.id}
+                                src={activity.img}
                                 alt={`activity-${index}`}
                                 className="w-full h-full object-cover rounded-lg"
                             />
