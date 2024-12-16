@@ -1,5 +1,5 @@
 import {lazy} from "react";
-import {Route, Routes, Navigate} from "react-router-dom";
+import {Route, Routes, Navigate, BrowserRouter} from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import LayoutSidebarDashboard from "@/components/layout/LayoutSidebarDashboard";
 import lazyWrap from "@/router/lazyWrap";
@@ -27,31 +27,33 @@ const DashboardMembers = lazy(() => import("@/pages/Dashboard/DashboardKeanggota
 
 export default function Index() {
     return (
-        <Routes>
-            <Route path="/" element={<Layout/>}>
-                <Route path="/" element={lazyWrap(Home)()}/>
-                <Route path="/beranda" element={<Navigate to="/"/>}/>
-                <Route path="/blog" element={lazyWrap(Blog)()}/>
-                <Route path="/blog/:id" element={lazyWrap(BlogDetail)()}/>
-                <Route path="/statistik" element={lazyWrap(Statistic)()}/>
-                <Route path="/prediksi" element={lazyWrap(Stepper)()}/>
-                <Route path="/produk" element={lazyWrap(Products)()}/>
-                <Route path="/produk/:id" element={lazyWrap(ProductDetails)()}/>
-                <Route path="/tentangkami" element={lazyWrap(About)()}/>
-                <Route path="/anggotakami" element={lazyWrap(Members)()}/>
-                <Route path="/privacy+policy" element={lazyWrap(PrivacyPolicy)()}/>
-                <Route path="/terms+conditions" element={lazyWrap(TermsConditions)()}/>
-            </Route>
-            <Route path="/dashboard" element={<LayoutSidebarDashboard/>}>
-                <Route path="/dashboard" element={lazyWrap(DashboardHome)()}/>
-                <Route path="/dashboard/category" element={lazyWrap(DashboardCategory)()}/>
-                <Route path="/dashboard/member" element={lazyWrap(DashboardMembers)()}/>
-                <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()}/>
-                <Route path="/dashboard/blog" element={lazyWrap(DashboardBlog)()}/>
-                {/*<Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>*/}
-            </Route>
-            <Route path="/login" element={lazyWrap(Login)()}/>
-            <Route path={"*"} element={lazyWrap(Errors)()}/>
-        </Routes>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    <Route path="/" element={lazyWrap(Home)()}/>
+                    <Route path="/beranda" element={<Navigate to="/"/>}/>
+                    <Route path="/blog" element={lazyWrap(Blog)()}/>
+                    <Route path="/blog/:id" element={lazyWrap(BlogDetail)()}/>
+                    <Route path="/statistik" element={lazyWrap(Statistic)()}/>
+                    <Route path="/prediksi" element={lazyWrap(Stepper)()}/>
+                    <Route path="/produk" element={lazyWrap(Products)()}/>
+                    <Route path="/produk/:id" element={lazyWrap(ProductDetails)()}/>
+                    <Route path="/tentangkami" element={lazyWrap(About)()}/>
+                    <Route path="/anggotakami" element={lazyWrap(Members)()}/>
+                    <Route path="/privacy+policy" element={lazyWrap(PrivacyPolicy)()}/>
+                    <Route path="/terms+conditions" element={lazyWrap(TermsConditions)()}/>
+                </Route>
+                <Route path="/dashboard" element={<LayoutSidebarDashboard/>}>
+                    <Route path="/dashboard" element={lazyWrap(DashboardHome)()}/>
+                    <Route path="/dashboard/category" element={lazyWrap(DashboardCategory)()}/>
+                    <Route path="/dashboard/member" element={lazyWrap(DashboardMembers)()}/>
+                    <Route path="/dashboard/produk" element={lazyWrap(DashboardProduct)()}/>
+                    <Route path="/dashboard/blog" element={lazyWrap(DashboardBlog)()}/>
+                    {/*<Route path="/dashboard/comment" element={lazyWrap(DashboardComment)()}/>*/}
+                </Route>
+                <Route path="/login" element={lazyWrap(Login)()}/>
+                <Route path={"*"} element={lazyWrap(Errors)()}/>
+            </Routes>
+        </BrowserRouter>
     );
 }
