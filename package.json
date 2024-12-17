@@ -364,7 +364,8 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
-    "cypress": "^13.16.1"
+    "cypress": "^13.16.1",
+    "cypress-file-upload": "^5.0.8"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
