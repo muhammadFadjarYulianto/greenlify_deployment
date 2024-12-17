@@ -11,7 +11,7 @@ Greenlify Flask is a waste management web application built using Flask. This ap
 
 Before you begin, ensure you have the following software installed on your system:
 
-- [Python](https://www.python.org/) (version 3.8 or newer)
+- [Python](https://www.python.org/) (version 3.10 or less)
 - [pip](https://pip.pypa.io/) (comes with Python)
 - [Virtual Environment](https://docs.python.org/3/library/venv.html) (optional but recommended)
 
@@ -19,27 +19,46 @@ Before you begin, ensure you have the following software installed on your syste
 
 To set up this project in your local environment, follow these steps:
 
+1. **Clone the Repository**
 ```bash
-# 1. Clone the Repository
-git clone https://github.com/username/greenlify-flask.git
-cd greenlify-flask
+git clone https://github.com/fahmi-kartika/greenlify_backend.git
+cd greenlify_backend
+```
 
-# 2. Create Virtual Environment (Optional but Recommended)
-python -m venv venv
-source venv/bin/activate        # For Mac/Linux
-venv\Scripts\activate           # For Windows
+2. **Create Virtual Environment**
+```bash
+python -m venv env
+source env/bin/activate        # For Mac/Linux
+env\Scripts\activate           # For Windows
+```
 
-# 3. Install Dependencies
+3. **Install Dependencies**
+```bash
 pip install -r requirements.txt
+```
 
-# 4. Run Database Migration (If Using Database)
+4. **Setup Environment**
+```bash
+rename file .env.example to .env
+setup your environment
+```
+
+5. **Run Database Migration**
+```bash
 flask db upgrade
+```
 
-# 5. Run the Application
+6. **Run Database Seeder**
+```bash
+python seeders.py
+```
+
+7. **Run the Application**
+```bash
 flask run
+```
 
 # The application will be available at http://127.0.0.1:5000
-```
 
 ## Contact
 
