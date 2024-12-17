@@ -1,10 +1,10 @@
-# Greenlify Flask
+# Greenlify
 
 <p align="center">
   <img src="https://ik.imagekit.io/3s8oi0rad/Members/logo-erstalent.png?updatedAt=1734036269066" alt="Greenlify Logo" width="200" height="220">
 </p>
 <p align="justify">
-Greenlify Flask is a waste management web application built using Flask. This application helps users manage and recycle waste effectively. With an intuitive interface and innovative features, Greenlify Flask aims to raise awareness about sustainability and support better waste management practices.
+Greenlify is a waste management web application built using Flask. This application helps users manage and recycle waste effectively. With an intuitive interface and innovative features, Greenlify Flask aims to raise awareness about sustainability and support better waste management practices.
 </p>
 
 ## Prerequisites
@@ -57,8 +57,7 @@ python seeders.py
 ```bash
 flask run
 ```
-
-# The application will be available at http://127.0.0.1:5000
+## The application will be available at http://127.0.0.1:5000
 
 ## Contact
 
