@@ -183,7 +183,7 @@ const Stepper = () => {
             <strong className="text-emerald-700">Prediksi</strong> Sampah
           </Typography>
         </div>
-        <div className="max-w-4xl text-center lg:text-center">
+        <div className="max-w-4xl text-justify lg:text-center px-6 md:px-6">
           <Typography variant="p" className="hero-description">
             Sistem canggih kami akan menganalisis gambar dan memberikan saran
             pengelolaan sampah yang tepat, mulai dari pemilahan hingga metode
@@ -193,7 +193,7 @@ const Stepper = () => {
           </Typography>
         </div>
       </div>
-      <div className="p-4 mt-12 max-w-[1512px] w-full mx-auto">
+      <div className="p-6 mt-12 max-w-[1512px] w-full mx-auto">
         {/* Linimasa */}
         <div className="mb-6 w-full">
           <div className="flex justify-between items-center">
