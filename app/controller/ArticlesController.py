@@ -395,7 +395,7 @@ def paginateAndFilterArticlesManage():
         }
 
         for article in articles:
-            total_comment = Comments.query.count()
+            total_comment = Comments.query.filter_by(id_article=article.id).count()
             article_data = satuArticle(article)
             article_data['total_comment'] = total_comment
             pagination_data['results'].append(article_data)
