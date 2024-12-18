@@ -162,7 +162,7 @@ const Stepper = () => {
           ) : (
             <>
               <Typography variant="p" className="text-center mt-2">
-                Anda belum prediksi, voba prediksi dulu ya
+                Anda belum prediksi, coba prediksi dulu ya
               </Typography>
             </>
           )}
