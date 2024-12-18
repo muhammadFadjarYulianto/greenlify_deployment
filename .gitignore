@@ -4,3 +4,4 @@ app/new_model.weights.h5
 env
 node_modules
 .husky
+package-lock.json
